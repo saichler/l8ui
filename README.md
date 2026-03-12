@@ -1,24 +1,25 @@
-# Layer8 UI Component Library - Usage Guide
+# l8ui - Layer8 UI Component Library
 
-This guide describes how to use the Layer8 generic UI component libraries to build web applications. The library provides two surfaces: **Desktop** (`l8ui/`) and **Mobile** (`l8ui/m/`), both driven by configuration data (no behavioral code in modules).
+A configuration-driven JavaScript/CSS component library for building enterprise web applications. Provides both **Desktop** and **Mobile** surfaces with full feature parity — modules supply only data (configs, enums, columns, forms) while all behavioral logic lives in shared library components.
 
-**To use this guide:** Tell your AI assistant: "Please load `l8ui/GUIDE.md` for instructions on how to use the l8ui components."
+**To use this library:** Tell your AI assistant: "Please load `l8ui/README.md` for instructions on how to use the l8ui components."
 
 ---
 
 ## Table of Contents
 
 1. [Architecture Overview](#1-architecture-overview)
-2. [Setup & Configuration](#2-setup--configuration)
-3. [Desktop Script Loading Order](#3-desktop-script-loading-order)
-4. [Mobile Script Loading Order](#4-mobile-script-loading-order)
-5. [Desktop Component API](#5-desktop-component-api)
-6. [Mobile Component API](#6-mobile-component-api)
-7. [Shared Schemas](#7-shared-schemas)
-8. [Adding a New Module (Desktop)](#8-adding-a-new-module-desktop)
-9. [Adding a New Module (Mobile)](#9-adding-a-new-module-mobile)
-10. [Special Cases](#10-special-cases)
-11. [Checklist](#11-checklist)
+2. [Project Structure](#2-project-structure)
+3. [Setup & Configuration](#3-setup--configuration)
+4. [Desktop Script Loading Order](#4-desktop-script-loading-order)
+5. [Mobile Script Loading Order](#5-mobile-script-loading-order)
+6. [Desktop Component API](#6-desktop-component-api)
+7. [Mobile Component API](#7-mobile-component-api)
+8. [Shared Schemas](#8-shared-schemas)
+9. [Adding a New Module (Desktop)](#9-adding-a-new-module-desktop)
+10. [Adding a New Module (Mobile)](#10-adding-a-new-module-mobile)
+11. [Special Cases](#11-special-cases)
+12. [Checklist](#12-checklist)
 
 ---
 
@@ -122,7 +123,56 @@ Layer8MUtils
 
 ---
 
-## 2. Setup & Configuration
+## 2. Project Structure
+
+```
+l8ui/
+├── shared/              # Core: config, utils, renderers, factories, forms, data source,
+│                        #   module system, CRUD, navigation, view factory, theme
+├── edit_table/          # Editable data table with pagination, filtering, sorting
+├── popup/               # Modal popup system with stacking support
+├── reference_picker/    # Entity reference picker with search
+├── datepicker/          # Date picker with calendar
+├── input_formatters/    # Input masks and formatting (currency, phone, etc.)
+├── chart/               # Charts: bar, line, pie
+├── kanban/              # Kanban board with drag-and-drop
+├── calendar/            # Calendar view
+├── timeline/            # Timeline view
+├── tree_grid/           # Hierarchical tree grid
+├── gantt/               # Gantt chart
+├── wizard/              # Multi-step wizard
+├── dashboard/           # Dashboard KPI widgets
+├── notification/        # Toast notifications
+├── login/               # Login page with TFA support
+├── register/            # User registration page
+├── m/                   # Mobile components
+│   ├── js/              #   Mobile JS (auth, nav, forms, table, popup, views, etc.)
+│   └── css/             #   Mobile CSS
+├── sys/                 # Built-in System module
+│   ├── security/        #   Users, roles, credentials management
+│   ├── modules/         #   Module management with dependency graph
+│   ├── health/          #   System health monitoring
+│   ├── logs/            #   Log viewer
+│   └── dataimport/      #   CSV/data import with templates
+├── images/              # Logo and brand images
+└── font/                # Bundled fonts
+```
+
+### Usage
+
+l8ui is designed to be copied into each Layer8 project's web directory:
+
+```bash
+cp -r l8ui/ <project>/go/<module>/ui/web/l8ui/
+```
+
+### Theming
+
+All components use `--layer8d-*` CSS custom properties defined in `shared/layer8d-theme.css`. Dark mode is handled centrally via `[data-theme="dark"]` overrides on these tokens. Component CSS files should never contain their own dark mode blocks.
+
+---
+
+## 3. Setup & Configuration
 
 ### login.json (shared by desktop and mobile)
 
@@ -163,7 +213,7 @@ Both desktop and mobile store a bearer token in `sessionStorage.bearerToken`. De
 
 ---
 
-## 3. Desktop Script Loading Order
+## 4. Desktop Script Loading Order
 
 CSS files first, then JS in strict dependency order:
 
@@ -333,7 +383,7 @@ CSS files first, then JS in strict dependency order:
 
 ---
 
-## 4. Mobile Script Loading Order
+## 5. Mobile Script Loading Order
 
 ```html
 <!-- CSS: Components -->
@@ -422,9 +472,9 @@ CSS files first, then JS in strict dependency order:
 
 ---
 
-## 5. Desktop Component API
+## 6. Desktop Component API
 
-### 5.1 Layer8DConfig
+### 6.1 Layer8DConfig
 
 ```js
 await Layer8DConfig.load()                     // Fetches login.json
@@ -434,7 +484,7 @@ Layer8DConfig.getApiPrefix()                   // '/erp'
 Layer8DConfig.resolveEndpoint('/30/Employee')  // '/erp/30/Employee'
 ```
 
-### 5.2 Layer8DUtils
+### 6.2 Layer8DUtils
 
 ```js
 Layer8DUtils.escapeHtml(text)                  // XSS-safe escaping
@@ -451,7 +501,7 @@ Layer8DUtils.debounce(fn, ms)                  // Returns debounced function
 Layer8DUtils.matchEnumValue(input, enumMap)    // Case-insensitive enum match
 ```
 
-### 5.3 Layer8DTable
+### 6.3 Layer8DTable
 
 Constructor takes a single options object. **Must call `table.init()` after construction.**
 
@@ -502,7 +552,7 @@ Layer8DTable.countBadge(5, 'item', 'items')
 Layer8DTable.statusTag(true, 'Up', 'Down')
 ```
 
-### 5.4 Layer8DPopup
+### 6.4 Layer8DPopup
 
 ```js
 Layer8DPopup.show({
@@ -537,7 +587,7 @@ Built-in tab support via event delegation:
 </div>
 ```
 
-### 5.5 Layer8DNotification
+### 6.5 Layer8DNotification
 
 ```js
 Layer8DNotification.success('Record saved')
@@ -549,7 +599,7 @@ Layer8DNotification.close()
 
 Durations: error=0 (manual close), warning=5000ms, success=3000ms, info=4000ms.
 
-### 5.6 Layer8DForms
+### 6.6 Layer8DForms
 
 Unified facade for form sub-modules (`Layer8DFormsFields`, `Layer8DFormsData`, `Layer8DFormsPickers`, `Layer8DFormsModal`).
 
@@ -582,7 +632,7 @@ Where `serviceConfig` is:
 { endpoint: '/erp/30/Employee', primaryKey: 'employeeId', modelName: 'Employee' }
 ```
 
-### 5.7 Layer8DDatePicker
+### 6.7 Layer8DDatePicker
 
 ```js
 Layer8DDatePicker.attach(inputElement, {
@@ -597,7 +647,7 @@ Layer8DDatePicker.getDate(input)            // Unix timestamp (0=Current, null=e
 Layer8DDatePicker.detach(input)
 ```
 
-### 5.8 Layer8DReferencePicker
+### 6.8 Layer8DReferencePicker
 
 ```js
 Layer8DReferencePicker.attach(inputElement, {
@@ -618,7 +668,7 @@ Layer8DReferencePicker.setValue(input, id, displayValue, item)
 Layer8DReferencePicker.detach(input)
 ```
 
-### 5.9 Layer8DInputFormatter
+### 6.9 Layer8DInputFormatter
 
 Supported types: `ssn`, `phone`, `currency`, `percentage`, `routingNumber`, `ein`, `email`, `url`, `colorCode`, `rating`, `hours`
 
@@ -637,7 +687,7 @@ Layer8DInputFormatter.format.ssn('123456789', true)  // '***-**-6789'
 Layer8DInputFormatter.format.phone('5551234567')     // '(555) 123-4567'
 ```
 
-### 5.10 Layer8DReferenceRegistry
+### 6.10 Layer8DReferenceRegistry
 
 ```js
 Layer8DReferenceRegistry.register({
@@ -652,7 +702,7 @@ Layer8DReferenceRegistry.register({
 Layer8DReferenceRegistry.get('Employee')    // Returns config object
 ```
 
-### 5.11 Layer8DRenderers
+### 6.11 Layer8DRenderers
 
 ```js
 Layer8DRenderers.renderEnum(value, enumMap)
@@ -668,7 +718,7 @@ Layer8DRenderers.renderRating(value, max?)
 Layer8DRenderers.createStatusRenderer(enumMap, classMap) // Returns function
 ```
 
-### 5.12 Layer8DModuleFactory
+### 6.12 Layer8DModuleFactory
 
 Single call bootstraps an entire module with navigation, CRUD, and service registry:
 
@@ -685,7 +735,7 @@ Layer8DModuleFactory.create({
 
 This call: registers sub-modules, creates forms facade, attaches tab/subnav navigation, attaches CRUD operations, and exposes the global initializer function.
 
-### 5.13 Layer8ModuleConfigFactory
+### 6.13 Layer8ModuleConfigFactory
 
 Factory for creating module configurations with minimal boilerplate. Use instead of manually setting `modules`, `submodules`, and `renderStatus` on namespace objects.
 
@@ -700,12 +750,12 @@ const mod = Layer8ModuleConfigFactory.module;
 Layer8ModuleConfigFactory.create({
     namespace: 'Bi',
     modules: {
-        'reporting': mod('Reporting', '📊', [
-            svc('reports', 'Reports', '📋', '/35/BiReport', 'BiReport'),
-            svc('schedules', 'Schedules', '📅', '/35/BiSchedule', 'BiReportSchedule')
+        'reporting': mod('Reporting', 'icon', [
+            svc('reports', 'Reports', 'icon', '/35/BiReport', 'BiReport'),
+            svc('schedules', 'Schedules', 'icon', '/35/BiSchedule', 'BiReportSchedule')
         ]),
-        'dashboards': mod('Dashboards', '📈', [
-            svc('dashboards', 'Dashboards', '📊', '/35/BiDashbrd', 'BiDashboard')
+        'dashboards': mod('Dashboards', 'icon', [
+            svc('dashboards', 'Dashboards', 'icon', '/35/BiDashbrd', 'BiDashboard')
         ])
     },
     submodules: ['BiReporting', 'BiDashboards']
@@ -714,7 +764,7 @@ Layer8ModuleConfigFactory.create({
 
 This creates `window.Bi` with `.modules`, `.submodules`, and `.renderStatus` properties.
 
-### 5.14 Layer8DModuleFilter
+### 6.14 Layer8DModuleFilter
 
 Runtime module filter that hides disabled modules/sub-modules/services based on server-stored config.
 
@@ -730,7 +780,7 @@ await Layer8DModuleFilter.save(disabledPaths, bearerToken) // Save config
 
 Uses dot-notation paths. A disabled parent disables all children. Dashboard and System are never filtered.
 
-### 5.15 Layer8DToggleTree
+### 6.15 Layer8DToggleTree
 
 Generic collapsible toggle tree with dependency enforcement. Used by SYS module selection UI.
 
@@ -744,7 +794,7 @@ const tree = Layer8DToggleTree.create({
 tree.getDisabledPaths()                // Returns Set of disabled paths
 ```
 
-### 5.16 Factory Components
+### 6.16 Factory Components
 
 Four factories reduce boilerplate in module data files. All are loaded before module scripts.
 
@@ -821,7 +871,7 @@ Module.forms = {
 };
 ```
 
-### 5.17 Layer8DViewFactory
+### 6.17 Layer8DViewFactory
 
 Registry of view type constructors. Creates the appropriate view component based on service `viewType` configuration. Default is `'table'`.
 
@@ -840,7 +890,7 @@ All view instances follow the same interface: `init()`, `refresh()`, `destroy()`
 
 Registered view types: `table`, `chart`, `kanban`, `timeline`, `calendar`, `gantt`, `tree`, `wizard`.
 
-### 5.18 Layer8ViewSwitcher
+### 6.18 Layer8ViewSwitcher
 
 Small icon button with floating dropdown menu for switching between view types. Shared by desktop and mobile.
 
@@ -852,9 +902,9 @@ const html = Layer8ViewSwitcher.render(serviceKey, viewTypes, activeType)
 Layer8ViewSwitcher.attach(container, function(newViewType) { ... })
 ```
 
-View labels: `table` → "Table View", `chart` → "Chart View", `kanban` → "Kanban Board", `timeline` → "Timeline", `calendar` → "Calendar", `tree` → "Tree Grid", `gantt` → "Gantt Chart", `wizard` → "Wizard".
+View labels: `table` -> "Table View", `chart` -> "Chart View", `kanban` -> "Kanban Board", `timeline` -> "Timeline", `calendar` -> "Calendar", `tree` -> "Tree Grid", `gantt` -> "Gantt Chart", `wizard` -> "Wizard".
 
-### 5.19 Layer8DDataSource
+### 6.19 Layer8DDataSource
 
 Shared data fetching layer used by all view types. Builds L8Query strings, handles pagination, and enforces the metadata-on-page-1-only rule.
 
@@ -879,7 +929,7 @@ ds.getTotalPages()                      // ceil(totalItems / pageSize)
 
 **Pagination rule:** Metadata (totalCount, key counts) is valid ONLY on page 1. Pages 2+ preserve existing metadata.
 
-### 5.20 Layer8DChart
+### 6.20 Layer8DChart
 
 SVG chart component supporting bar, line, and pie/donut renderers. Auto-detects category and value fields from column definitions. Includes an inline chart type selector (bar | line | pie).
 
@@ -913,25 +963,25 @@ Layer8DChart.getThemePalette()          // Array of 10 theme colors
 ```
 
 Sub-renderers (internal, auto-dispatched by `chartType`):
-- `Layer8DChartBar.render(chart, w, h)` — vertical/horizontal bars
-- `Layer8DChartLine.render(chart, w, h)` — line/area with data points
-- `Layer8DChartPie.render(chart, w, h)` — pie/donut with legend
+- `Layer8DChartBar.render(chart, w, h)` -- vertical/horizontal bars
+- `Layer8DChartLine.render(chart, w, h)` -- line/area with data points
+- `Layer8DChartPie.render(chart, w, h)` -- pie/donut with legend
 
 **Chart type selector:** An inline button group (Bar | Line | Pie) renders above the chart. Clicking a button updates `chartType` and re-renders the SVG without refetching data.
 
 **Auto-detection priority:** When `categoryField` and `valueField` are not specified in `viewConfig`, the chart auto-detects them from columns in this order:
-1. **Period columns** (`type: 'period'`) — L8Period objects, grouped by period label
-2. **Date columns** (`type: 'date'`) when money columns (`type: 'money'`) also exist — timestamps normalized to year/quarter
-3. **Status/type/category/health** patterns — grouped by enum value
-4. **Fallback** — title field via `Layer8DViewFactory.detectTitleField()`
+1. **Period columns** (`type: 'period'`) -- L8Period objects, grouped by period label
+2. **Date columns** (`type: 'date'`) when money columns (`type: 'money'`) also exist -- timestamps normalized to year/quarter
+3. **Status/type/category/health** patterns -- grouped by enum value
+4. **Fallback** -- title field via `Layer8DViewFactory.detectTitleField()`
 
 **Auto-enabled chart view:** The service registry automatically adds `'chart'` to a service's `supportedViews` when its columns include both a `type: 'date'` and a `type: 'money'` column. No manual `supportedViews` config is needed for date+money models.
 
 **L8Period support:** When the `categoryField` contains L8Period objects (objects with `periodType`, `periodYear`, `periodValue` properties), the chart auto-detects them and converts each period to a human-readable label: `"2025"` (yearly), `"2025 / Q1"` (quarterly), or `"2025 / January"` (monthly). Records with the same period are grouped and aggregated. Groups are sorted chronologically.
 
-**Date normalization:** When the `categoryField` contains Unix timestamps (from date columns), the chart normalizes them to year/quarter buckets. Labels use the format `"2025 / Q1"`. Records within the same quarter are grouped and their money values aggregated (default: sum). Groups are sorted chronologically. Timestamps may arrive as numeric strings (e.g., `"1770840462"`) — both number and string formats are handled automatically.
+**Date normalization:** When the `categoryField` contains Unix timestamps (from date columns), the chart normalizes them to year/quarter buckets. Labels use the format `"2025 / Q1"`. Records within the same quarter are grouped and their money values aggregated (default: sum). Groups are sorted chronologically. Timestamps may arrive as numeric strings (e.g., `"1770840462"`) -- both number and string formats are handled automatically.
 
-### 5.21 Layer8DKanban
+### 6.21 Layer8DKanban
 
 Kanban board with configurable lanes. Cards display title, subtitle, and custom fields.
 
@@ -951,7 +1001,7 @@ Kanban board with configurable lanes. Cards display title, subtitle, and custom 
 }
 ```
 
-### 5.22 Layer8DTimeline
+### 6.22 Layer8DTimeline
 
 Vertical timeline displaying events in chronological order with alternating left/right layout.
 
@@ -977,7 +1027,7 @@ timeline.refresh();
 timeline.destroy();
 ```
 
-### 5.23 Layer8DCalendar
+### 6.23 Layer8DCalendar
 
 Month/week calendar view for date-based data.
 
@@ -993,7 +1043,7 @@ Month/week calendar view for date-based data.
 
 Supports navigation (prev/next month/week) and renders events as colored dots on calendar cells.
 
-### 5.24 Layer8DGantt
+### 6.24 Layer8DGantt
 
 SVG-based Gantt chart for project scheduling with task bars, progress indicators, and dependency arrows.
 
@@ -1014,15 +1064,13 @@ SVG-based Gantt chart for project scheduling with task bars, progress indicators
 - **Start**: keys containing `start`, `begin`, or `from`
 - **End**: keys containing `end`, `due`, `until`, `required`, or `expir`
 - If only one pattern matches and there are 2+ date columns, the other date column is assigned to the missing role
-- If a start column is found but no end column, the end field is inferred by replacing `Start` with `End` in the key (e.g., `plannedStartDate` → `plannedEndDate`)
-
-This allows models like `MfgWorkOrder` (`plannedStartDate`/`plannedEndDate`) and `MfgProdSchedule` (`scheduleStart`/`scheduleEnd`) to work without explicit `viewConfig`.
+- If a start column is found but no end column, the end field is inferred by replacing `Start` with `End` in the key (e.g., `plannedStartDate` -> `plannedEndDate`)
 
 **Zoom levels:** Day, Week, Month, Quarter, and Year. Quarter groups cells by ~91 days; Year groups by ~365 days.
 
 **Timestamp handling:** Timestamps from the server may arrive as numeric strings (e.g., `"1770840462"` instead of `1770840462`). The Gantt automatically coerces numeric strings to numbers for correct date parsing.
 
-### 5.25 Layer8DTreeGrid
+### 6.25 Layer8DTreeGrid
 
 Hierarchical tree table that builds parent-child relationships from a flat list using a `parentIdField`.
 
@@ -1053,7 +1101,7 @@ tree.refresh();
 tree.destroy();
 ```
 
-### 5.26 Layer8DWizard
+### 6.26 Layer8DWizard
 
 Multi-step wizard view with step navigation, progress indicator, and per-step content rendering.
 
@@ -1069,7 +1117,7 @@ Multi-step wizard view with step navigation, progress indicator, and per-step co
 }
 ```
 
-### 5.27 Layer8DWidget
+### 6.27 Layer8DWidget
 
 Dashboard KPI card component for rendering stats with trends, sparklines, and mini charts.
 
@@ -1090,11 +1138,58 @@ Layer8DWidget.render(
 Layer8DWidget.renderEnhancedStatsGrid(kpis, iconMap)   // Returns HTML string
 ```
 
+### 6.28 CSV Export (`layer8-csv-export.js`)
+
+**Global object:** `window.Layer8CsvExport` (shared between desktop and mobile)
+
+Posts to the backend `CsvExport` service which pages through all data server-side, builds a CSV with attribute-based column headers, and returns the complete CSV string. The client triggers a browser file download.
+
+Backend endpoint: `POST /erp/0/CsvExport` with JSON body:
+```json
+{ "modelType": "Employee", "serviceName": "Employee", "serviceArea": 30 }
+```
+
+```js
+Layer8CsvExport.export({
+    modelName: 'Employee',
+    serviceName: 'Employee',
+    serviceArea: 30,
+    filename: 'Employee'
+});
+
+Layer8CsvExport.parseEndpoint(endpoint)    // '/erp/30/Employee' -> { serviceName, serviceArea }
+```
+
+The Export button appears automatically in both desktop and mobile pagination bars when `endpoint` and `modelName` are set.
+
+### 6.29 File Upload (`layer8-file-upload.js`)
+
+**Global object:** `window.Layer8FileUpload` (shared between desktop and mobile)
+
+Uploads and downloads files via the backend `FileStore` protobuf service. Files are sent as base64-encoded bytes within standard JSON requests. Maximum file size: 5MB.
+
+```js
+// Upload a file
+const result = await Layer8FileUpload.upload(file, documentId, version)
+// Returns: { storagePath, fileName, fileSize, mimeType, checksum }
+
+// Download a file
+await Layer8FileUpload.download(storagePath, fileName)
+
+// Format bytes to human-readable
+Layer8FileUpload.formatSize(bytes)    // e.g., "1.5 MB"
+```
+
+**Form field type:** `f.file(key, label, required)` creates a file upload field.
+- Desktop: drag-and-drop area with "Drop file here or click to browse (max 5MB)"
+- Mobile: native `<input type="file">` (triggers camera/gallery picker)
+- Data collection spreads `storagePath`, `fileName`, `fileSize`, `mimeType`, and `checksum` onto the form data object.
+
 ---
 
-## 6. Mobile Component API
+## 7. Mobile Component API
 
-### 6.1 Layer8MConfig
+### 7.1 Layer8MConfig
 
 ```js
 await Layer8MConfig.load()                     // Fetches /login.json
@@ -1108,7 +1203,7 @@ Layer8MConfig.getReferenceConfig('Employee')    // Get reference config
 
 **Note:** `getConfig()` returns raw login.json. Access app config via `config.app.healthPath`, NOT `config.healthPath`.
 
-### 6.2 Layer8MAuth
+### 7.2 Layer8MAuth
 
 ```js
 Layer8MAuth.requireAuth()                      // Redirect if not authenticated
@@ -1122,7 +1217,7 @@ await Layer8MAuth.put(url, data)               // PUT
 await Layer8MAuth.delete(url, data?)           // DELETE (data sent as JSON body)
 ```
 
-### 6.3 Layer8MUtils
+### 7.3 Layer8MUtils
 
 ```js
 Layer8MUtils.escapeHtml(text)
@@ -1139,7 +1234,7 @@ Layer8MUtils.showSuccess(message)              // Toast
 Layer8MUtils.showError(message)                // Toast
 ```
 
-### 6.4 Layer8MPopup
+### 7.4 Layer8MPopup
 
 ```js
 Layer8MPopup.show({
@@ -1158,7 +1253,7 @@ Layer8MPopup.close()
 Layer8MPopup.getBody()
 ```
 
-### 6.5 Layer8MConfirm
+### 7.5 Layer8MConfirm
 
 ```js
 const confirmed = await Layer8MConfirm.show({
@@ -1168,7 +1263,7 @@ const confirmed = await Layer8MConfirm.show({
 const confirmed = await Layer8MConfirm.confirmDelete('Employee Name');
 ```
 
-### 6.6 Layer8MTable
+### 7.6 Layer8MTable
 
 Card-based mobile table. Constructor takes `(containerId, config)`.
 
@@ -1185,7 +1280,7 @@ const table = new Layer8MTable('container-id', {
 });
 ```
 
-### 6.7 Layer8MEditTable (extends Layer8MTable)
+### 7.7 Layer8MEditTable (extends Layer8MTable)
 
 Adds Add/Edit/Delete buttons. If callbacks are null, buttons are hidden (read-only mode).
 
@@ -1201,7 +1296,7 @@ const table = new Layer8MEditTable('container-id', {
 });
 ```
 
-### 6.8 Layer8MForms
+### 7.8 Layer8MForms
 
 ```js
 const html = Layer8MForms.renderForm(formDef, data, readonly)
@@ -1211,7 +1306,7 @@ Layer8MForms.showErrors(container, errors)
 Layer8MForms.initFormFields(container)         // Init reference pickers
 ```
 
-### 6.9 Layer8MDatePicker
+### 7.9 Layer8MDatePicker
 
 ```js
 Layer8MDatePicker.show({
@@ -1223,7 +1318,7 @@ Layer8MDatePicker.show({
 });
 ```
 
-### 6.10 Layer8MReferencePicker
+### 7.10 Layer8MReferencePicker
 
 ```js
 Layer8MReferencePicker.show({
@@ -1241,7 +1336,7 @@ Layer8MReferencePicker.getValue(inputElement)
 Layer8MReferencePicker.setValue(input, id, displayValue, item)
 ```
 
-### 6.11 Layer8MRenderers
+### 7.11 Layer8MRenderers
 
 ```js
 Layer8MRenderers.renderEnum(value, enumMap)
@@ -1262,7 +1357,7 @@ Layer8MRenderers.renderCount(filled, total)
 Layer8MRenderers.createStatusRenderer(enumMap, classMap)
 ```
 
-### 6.12 LAYER8M_NAV_CONFIG
+### 7.12 LAYER8M_NAV_CONFIG
 
 Navigation hierarchy:
 
@@ -1293,7 +1388,7 @@ window.LAYER8M_NAV_CONFIG = {
 };
 ```
 
-### 6.13 Layer8MNav
+### 7.13 Layer8MNav
 
 ```js
 Layer8MNav.showHome()                          // Module cards grid
@@ -1318,7 +1413,7 @@ window.MobileXXX = {
 }
 ```
 
-### 6.14 Extensibility Patterns
+### 7.14 Extensibility Patterns
 
 The l8ui library is designed for extensibility. Project-specific code lives in a separate directory (e.g., `erp-ui/`) and registers with the library components.
 
@@ -1363,7 +1458,7 @@ Layer8SectionConfigs.register('mymodule', {
 });
 ```
 
-### 6.15 Layer8MModuleRegistry
+### 7.15 Layer8MModuleRegistry
 
 Factory that creates mobile module registries, replacing manual `findModule()` boilerplate.
 
@@ -1388,9 +1483,9 @@ registry.getAllModels()             // Array of all model names
 registry.getModuleName(modelName)   // Sub-module name or null
 ```
 
-### 6.16 Layer8MViewFactory
+### 7.16 Layer8MViewFactory
 
-Mobile view factory — mirrors `Layer8DViewFactory` for mobile. Creates view instances by type. All mobile view wrappers auto-register on load.
+Mobile view factory -- mirrors `Layer8DViewFactory` for mobile. Creates view instances by type. All mobile view wrappers auto-register on load.
 
 ```js
 Layer8MViewFactory.register('chart', factoryFn)       // Register a view type
@@ -1415,7 +1510,7 @@ All view instances follow the same interface: `init()`, `refresh()`, `destroy()`
 
 ---
 
-## 7. Shared Schemas
+## 8. Shared Schemas
 
 ### Column Definition (Desktop)
 
@@ -1471,7 +1566,7 @@ Same schema for both desktop and mobile:
 
 ### Supported Field Types
 
-`text`, `email`, `tel`, `number`, `textarea`, `date`, `datetime`, `select`, `checkbox`, `currency`, `percentage`, `phone`, `ssn`, `reference`, `url`, `rating`, `hours`, `ein`, `routingNumber`, `colorCode`, `period`
+`text`, `email`, `tel`, `number`, `textarea`, `date`, `datetime`, `select`, `checkbox`, `currency`, `percentage`, `phone`, `ssn`, `reference`, `url`, `rating`, `hours`, `ein`, `routingNumber`, `colorCode`, `period`, `file`
 
 ### Field-Level Read-Only
 
@@ -1499,7 +1594,7 @@ Use this for system-managed fields that the user can see but not modify (e.g., a
 
 ---
 
-## 8. Adding a New Module (Desktop)
+## 9. Adding a New Module (Desktop)
 
 Example: "Projects" module, service area 60.
 
@@ -1660,7 +1755,7 @@ Layer8DReferenceRegistry.register({
 
 ---
 
-## 9. Adding a New Module (Mobile)
+## 10. Adding a New Module (Mobile)
 
 ### Step 1: Module Data Files
 
@@ -1777,7 +1872,7 @@ Then include it in `m/app.html` after the main reference registry loads.
 
 ---
 
-## 10. Special Cases
+## 11. Special Cases
 
 ### Read-Only Services
 
@@ -1817,9 +1912,39 @@ window.initializeMyModule = function() {
 };
 ```
 
+### Data Import System (`sys/dataimport/`)
+
+Generic data import system in the System section. Supports CSV, JSON, and XML file imports using reusable mapping templates with AI-assisted column mapping.
+
+Four JS files work together under a tab-based UI:
+
+| File | Global Object | Purpose |
+|------|--------------|---------|
+| `l8dataimport.js` | `L8DataImport` | Main controller, renders 3 inner sub-tabs |
+| `l8dataimport-templates.js` | `L8DITemplates` | Template CRUD, AI mapping, mapping editor |
+| `l8dataimport-transfer.js` | `L8DITransfer` | Export/import templates between environments |
+| `l8dataimport-execute.js` | `L8DIExecute` | Select template, upload data, run import |
+
+Backend endpoints:
+
+| Endpoint | Method | Purpose |
+|----------|--------|---------|
+| `/erp/0/ImprtTmpl` | GET/POST/PUT/DELETE | Template CRUD |
+| `/erp/0/ImprtAI` | POST | AI-assisted column mapping suggestions |
+| `/erp/0/ImprtInfo` | POST | Get target model field metadata |
+| `/erp/0/ImprtExec` | POST | Execute data import |
+| `/erp/0/ImprtXfer` | POST | Export templates to JSON |
+| `/erp/0/ImprtXfer` | PUT | Import templates from JSON |
+
+```js
+L8DataImport.initialize()          // Renders 3-tab layout into #dataimport-container
+L8DataImport.showTab(tabName)      // 'templates' | 'transfer' | 'import'
+L8DataImport.getHeaders()          // Auth + JSON content-type headers
+```
+
 ---
 
-## 11. Checklist
+## 12. Checklist
 
 ### Desktop
 - [ ] Config file (`modules`, `submodules`)
@@ -1844,207 +1969,3 @@ window.initializeMyModule = function() {
 - CSS classes use `l8-` prefix for ALL desktop modules (shared CSS from `layer8-section-layout.css`)
 - Desktop: `new Layer8DTable(options)` then `table.init()` -- single options object
 - Mobile: `new Layer8MEditTable(containerId, config)` -- two arguments, no init() call needed
-
----
-
-## 11. CSV Export (`layer8-csv-export.js`)
-
-**Global object:** `window.Layer8CsvExport` (shared between desktop and mobile)
-
-### How It Works
-Posts to the backend `CsvExport` service which pages through all data server-side, builds a CSV with attribute-based column headers, and returns the complete CSV string. The client triggers a browser file download.
-
-### Backend Endpoint
-`POST /erp/0/CsvExport` with JSON body:
-```json
-{ "modelType": "Employee", "serviceName": "Employee", "serviceArea": 30 }
-```
-
-### Public Methods
-
-#### `Layer8CsvExport.export(options)`
-Triggers a CSV export and downloads the file.
-
-| Option | Type | Required | Description |
-|--------|------|----------|-------------|
-| `modelName` | string | Yes | Protobuf type name (e.g., `"Employee"`) |
-| `serviceName` | string | Yes | Backend service name (e.g., `"Employee"`) |
-| `serviceArea` | number | Yes | Service area number (e.g., `30`) |
-| `filename` | string | No | Base filename (defaults to `modelName`) |
-
-```javascript
-Layer8CsvExport.export({
-    modelName: 'Employee',
-    serviceName: 'Employee',
-    serviceArea: 30,
-    filename: 'Employee'
-});
-```
-
-#### `Layer8CsvExport.parseEndpoint(endpoint)`
-Parses a table endpoint string to extract `serviceName` and `serviceArea`.
-- Input: `"/erp/30/Employee"`
-- Returns: `{ serviceName: "Employee", serviceArea: 30 }` or `null`
-
-### Table Integration
-The Export button appears automatically in both desktop (`Layer8DTable`) and mobile (`Layer8MTable`) pagination bars when `endpoint` and `modelName` are set. No additional configuration needed.
-
-### Script Loading Order
-- **Desktop** (`app.html`): After table scripts, before Data Source
-- **Mobile** (`m/app.html`): After `layer8m-edit-table.js`, before `layer8m-view-factory.js`
-
-## 12. File Upload (`layer8-file-upload.js`)
-
-**Global object:** `window.Layer8FileUpload` (shared between desktop and mobile)
-
-**CSS:** `layer8-file-upload.css` (shared)
-
-Uploads and downloads files via the backend `FileStore` protobuf service. Files are sent as base64-encoded bytes within standard JSON requests, going through the full Layer 8 security stack. Maximum file size: 5MB.
-
-### Backend Endpoints
-
-**Upload** — `POST /erp/0/FileStore` with JSON body:
-```json
-{ "fileName": "report.pdf", "mimeType": "application/pdf", "fileData": "<base64>", "documentId": "doc-001", "version": 1 }
-```
-Response: `{ "storagePath": "...", "fileName": "...", "fileSize": 12345, "mimeType": "...", "checksum": "sha256hex" }`
-
-**Download** — `PUT /erp/0/FileStore` with JSON body:
-```json
-{ "storagePath": "/data/l8files/doc-001/1/report.pdf" }
-```
-Response: `{ "fileData": "<base64>", "fileName": "...", "mimeType": "...", "fileSize": 12345 }`
-
-### `Layer8FileUpload.upload(file, documentId, version)`
-
-Reads a browser `File` object, validates size (<= 5MB), converts to base64, and POSTs to FileStore.
-
-- `file` — Browser File object (from `<input type="file">` or drag-and-drop)
-- `documentId` (optional) — organizes storage path (default: "general")
-- `version` (optional) — version number (default: 1)
-- Returns `Promise<{ storagePath, fileName, fileSize, mimeType, checksum }>`
-
-### `Layer8FileUpload.download(storagePath, fileName)`
-
-PUTs to FileStore, decodes base64 response, creates a Blob, and triggers browser download.
-
-- `storagePath` — server storage path (from upload response or entity field)
-- `fileName` (optional) — download filename (extracted from path if omitted)
-
-### `Layer8FileUpload.formatSize(bytes)`
-
-Returns human-readable size string (e.g., "1.5 MB").
-
-### Form Field Type: `file`
-
-**Factory:** `f.file(key, label, required)` — creates a file upload field.
-
-**Desktop rendering:**
-- Read-only: displays file name, size, and Download button
-- Editable: shows existing file info (if any) + drag-and-drop area with "Drop file here or click to browse (max 5MB)"
-- Upload triggers automatically on file select/drop
-- Upload result stored in hidden input for form data collection
-
-**Mobile rendering:**
-- Read-only: file name + Download button
-- Editable: native `<input type="file">` (triggers camera/gallery picker on mobile) + upload status
-- No drag-and-drop (not practical on touch devices)
-
-**Data collection:** When a file is uploaded, the form collects `storagePath`, `fileName`, `fileSize`, `mimeType`, and `checksum` from the upload result and spreads them onto the data object.
-
-### Script Loading Order
-- **Desktop** (`app.html`): After `layer8-csv-export.js`
-- **Mobile** (`m/app.html`): After `layer8-csv-export.js`
-- **CSS**: After `layer8d-form-fields.css` in both `app.html` and `m/app.html`
-
----
-
-## 13. Data Import System (`sys/dataimport/`)
-
-Generic data import system in the System section. Supports CSV, JSON, and XML file imports using reusable mapping templates with AI-assisted column mapping.
-
-### Architecture
-
-Four JS files work together under a tab-based UI within the System section:
-
-| File | Global Object | Purpose |
-|------|--------------|---------|
-| `l8dataimport.js` | `L8DataImport` | Main controller, renders 3 inner sub-tabs |
-| `l8dataimport-templates.js` | `L8DITemplates` | Template CRUD, AI mapping, mapping editor |
-| `l8dataimport-transfer.js` | `L8DITransfer` | Export/import templates between environments |
-| `l8dataimport-execute.js` | `L8DIExecute` | Select template, upload data, run import |
-
-### Backend Endpoints
-
-| Endpoint | Method | Purpose |
-|----------|--------|---------|
-| `/erp/0/ImprtTmpl` | GET/POST/PUT/DELETE | Template CRUD |
-| `/erp/0/ImprtAI` | POST | AI-assisted column mapping suggestions |
-| `/erp/0/ImprtInfo` | POST | Get target model field metadata |
-| `/erp/0/ImprtExec` | POST | Execute data import |
-| `/erp/0/ImprtXfer` | POST | Export templates to JSON |
-| `/erp/0/ImprtXfer` | PUT | Import templates from JSON |
-
-### L8DataImport API
-
-- `L8DataImport.initialize()` — Renders the 3-tab layout into `#dataimport-container`
-- `L8DataImport.showTab(tabName)` — Switch between `'templates'`, `'transfer'`, `'import'`
-- `L8DataImport.getHeaders()` — Returns auth + JSON content-type headers
-
-### L8DITemplates API
-
-- `L8DITemplates.initialize()` — Renders template list view, loads templates from server
-
-**Template Editor features:**
-- Name, description, target model, service name, service area, source format fields
-- File drop zone for uploading a sample source file
-- AI mapping: posts source columns + sample values to `/erp/0/ImprtAI`, receives suggested column mappings with confidence score
-- Mapping table: source column → target field dropdown (populated from model info)
-- Skip checkbox per column to exclude from import
-- Save (POST new / PUT update) and Delete operations
-
-### L8DITransfer API
-
-- `L8DITransfer.initialize()` — Renders export/import view, loads template list
-
-**Export:** Select templates via checkboxes → POST to `/erp/0/ImprtXfer` → downloads JSON file.
-**Import:** Drop/browse JSON file → PUT to `/erp/0/ImprtXfer` → shows imported/skipped count. Optionally overwrite existing templates.
-
-### L8DIExecute API
-
-- `L8DIExecute.initialize()` — Renders 3-step import execution view
-
-**Workflow:**
-1. Select template from dropdown (loaded from `/erp/0/ImprtTmpl`)
-2. Upload data file (read as base64)
-3. Click "Run Import" → POST to `/erp/0/ImprtExec`
-4. Results display: total/imported/failed counts + error list with row number, field, message, source value
-
-### CSS (`l8dataimport.css`)
-
-All classes prefixed with `l8di-`. Uses `--layer8d-*` theme tokens throughout. Key classes:
-- `.l8di-tabs` / `.l8di-tab` — Inner tab navigation
-- `.l8di-dropzone` — File drag-and-drop area
-- `.l8di-mapping-table` — Column mapping editor table
-- `.l8di-template-card` — Template list cards
-- `.l8di-confidence` — AI confidence badge (`.high`, `.medium`, `.low`)
-- `.l8di-results` / `.l8di-stat` — Import results summary
-- `.l8di-errors` / `.l8di-error-row` — Error list
-
-### Script Loading Order
-
-- **Desktop** (`app.html`): After `l8logs.js`, before `l8sys-init.js`:
-  ```html
-  <script src="l8ui/sys/dataimport/l8dataimport.js"></script>
-  <script src="l8ui/sys/dataimport/l8dataimport-templates.js"></script>
-  <script src="l8ui/sys/dataimport/l8dataimport-transfer.js"></script>
-  <script src="l8ui/sys/dataimport/l8dataimport-execute.js"></script>
-  ```
-- **Mobile** (`m/app.html`): After `l8sys-modules.js`, before nav scripts:
-  ```html
-  <script src="../l8ui/sys/dataimport/l8dataimport.js"></script>
-  <script src="../l8ui/sys/dataimport/l8dataimport-templates.js"></script>
-  <script src="../l8ui/sys/dataimport/l8dataimport-transfer.js"></script>
-  <script src="../l8ui/sys/dataimport/l8dataimport-execute.js"></script>
-  ```
-- **CSS**: `l8dataimport.css` after `l8logs.css` (desktop) and after `l8sys-modules.css` (mobile)
