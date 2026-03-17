@@ -215,21 +215,22 @@ limitations under the License.
 
                 const data = await response.json();
 
+                // TFA required — server returns tokenHash instead of token
+                if (data.needTfa || data.setupTfa) {
+                    this._pendingAuth = {
+                        username: username,
+                        hash: data.tokenHash,
+                        remember: remember
+                    };
+                    this.setUsername(username, remember);
+                    return { success: true, needTfa: data.needTfa, setupTfa: data.setupTfa };
+                }
+
                 if (data.token) {
-                    // Store token and username
+                    // Direct login (no TFA) — store bearer token
                     this.setBearerToken(data.token, remember);
                     this.setUsername(username, remember);
-
-                    // Store pending auth for TFA flows (matches desktop)
-                    if (data.needTfa || data.setupTfa) {
-                        this._pendingAuth = {
-                            username: username,
-                            bearer: data.token,
-                            remember: remember
-                        };
-                    }
-
-                    return { success: true, needTfa: data.needTfa, setupTfa: data.setupTfa };
+                    return { success: true };
                 }
 
                 return { success: false };
@@ -255,15 +256,16 @@ limitations under the License.
                     body: JSON.stringify({
                         userId: this._pendingAuth.username,
                         code: code,
-                        bearer: this._pendingAuth.bearer
+                        hash: this._pendingAuth.hash
                     })
                 });
 
                 const data = await response.json();
 
                 if (data.ok) {
-                    // Clear pending auth
+                    // TFA verify returns the bearer token
                     const remember = this._pendingAuth.remember;
+                    this.setBearerToken(data.token, remember);
                     this._pendingAuth = null;
                     return { success: true };
                 } else {
@@ -328,7 +330,7 @@ limitations under the License.
                     body: JSON.stringify({
                         userId: this._pendingAuth.username,
                         code: code,
-                        bearer: this._pendingAuth.bearer
+                        hash: this._pendingAuth.hash
                     })
                 });
 

@@ -40,15 +40,16 @@ async function handleTfaVerify(event) {
             body: JSON.stringify({
                 userId: pendingAuth.username,
                 code: code,
-                bearer: pendingAuth.bearer
+                hash: pendingAuth.hash
             })
         });
 
         const data = await response.json();
 
         if (data.ok) {
+            // TFA verify response now returns the bearer token
             handleLoginSuccess(
-                { token: pendingAuth.bearer },
+                { token: data.token },
                 pendingAuth.username,
                 document.getElementById('remember-me').checked
             );
@@ -177,7 +178,7 @@ async function handleTfaSetupVerify(event) {
             body: JSON.stringify({
                 userId: pendingAuth.username,
                 code: code,
-                bearer: pendingAuth.bearer
+                hash: pendingAuth.hash
             })
         });
 

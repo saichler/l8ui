@@ -40,11 +40,11 @@ async function handleLogin(event) {
             handleLoginSuccess(result, username, rememberMe);
         } else if (result.setupTfa) {
             // TFA setup required - show QR code setup screen
-            pendingAuth = { username, password, bearer: result.token };
+            pendingAuth = { username, password, hash: result.tokenHash };
             showTfaSetupRequired();
         } else if (result.needTfa) {
             // TFA verification required - show code input
-            pendingAuth = { username, password, bearer: result.token };
+            pendingAuth = { username, password, hash: result.tokenHash };
             showTfaSection();
         } else {
             showError(result.error || 'Authentication failed');
@@ -77,13 +77,13 @@ async function authenticate(username, password) {
 
     const data = await response.json();
 
-    // Check for TFA requirements
+    // Check for TFA requirements — server returns tokenHash (not token) when TFA is needed
     if (data.setupTfa) {
-        return { success: false, setupTfa: true, token: data.token };
+        return { success: false, setupTfa: true, tokenHash: data.tokenHash };
     }
 
     if (data.needTfa) {
-        return { success: false, needTfa: true, token: data.token };
+        return { success: false, needTfa: true, tokenHash: data.tokenHash };
     }
 
     return { success: true, token: data.token };
