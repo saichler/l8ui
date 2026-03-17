@@ -38,9 +38,9 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
                 columns: columns,
                 pageSize: 15,
                 primaryKey: primaryKey,
+                baseWhereClause: serviceConfig.baseWhereClause || null,
                 viewConfig: serviceConfig.viewConfig || {},
-                getItemId: (item) => item[primaryKey],
-                baseWhereClause: serviceConfig.baseWhereClause || null
+                getItemId: (item) => item[primaryKey]
             };
 
             if (transformData) {
@@ -50,12 +50,12 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
             if (!serviceConfig.readOnly) {
                 viewOptions.statusField = 'status';
                 viewOptions.addButtonText = `Add ${serviceConfig.label.replace(/s$/, '')}`;
-                viewOptions.onAdd = () => Layer8MNavCrud.openServiceForm(serviceConfig, formDef, null);
-                viewOptions.onEdit = (id, item) => Layer8MNavCrud.openServiceForm(serviceConfig, formDef, item);
-                viewOptions.onDelete = (id, item) => Layer8MNavCrud.deleteServiceRecord(serviceConfig, id, item);
-                viewOptions.onRowClick = (item, id) => Layer8MNavCrud.showRecordDetails(serviceConfig, formDef, item);
-            } else {
-                viewOptions.onRowClick = (item, id) => Layer8MNavCrud.showRecordDetails(serviceConfig, formDef, item);
+                viewOptions.onAdd = serviceConfig.onAdd || (() => Layer8MNavCrud.openServiceForm(serviceConfig, formDef, null));
+                viewOptions.onEdit = serviceConfig.onEdit || ((id, item) => Layer8MNavCrud.openServiceForm(serviceConfig, formDef, item));
+                viewOptions.onDelete = serviceConfig.onDelete || ((id, item) => Layer8MNavCrud.deleteServiceRecord(serviceConfig, id, item));
+                viewOptions.onRowClick = serviceConfig.onRowClick || ((item, id) => Layer8MNavCrud.showRecordDetails(serviceConfig, formDef, item));
+            } else if (serviceConfig.onRowClick) {
+                viewOptions.onRowClick = serviceConfig.onRowClick;
             }
 
             // Determine available view types (mirror desktop auto-detection)
@@ -65,6 +65,37 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
             const hasMoney = columns.some(c => c.type === 'money');
             if (hasDate && hasMoney && allViewTypes.indexOf('chart') === -1) {
                 allViewTypes.push('chart');
+            }
+
+            // Render filter dropdown if configured
+            if (serviceConfig.filterDropdown) {
+                const fd = serviceConfig.filterDropdown;
+                const filterDiv = document.createElement('div');
+                filterDiv.style.cssText = 'padding:8px 12px;display:flex;align-items:center;gap:8px;';
+                const label = document.createElement('label');
+                label.textContent = fd.label || 'Filter';
+                label.style.cssText = 'font-size:13px;font-weight:600;color:var(--layer8d-text-medium,#718096);';
+                const select = document.createElement('select');
+                select.className = 'mobile-form-input';
+                select.style.cssText = 'flex:1;max-width:200px;height:34px;font-size:13px;';
+                const options = fd.options || {};
+                for (const [value, text] of Object.entries(options)) {
+                    const opt = document.createElement('option');
+                    opt.value = value;
+                    opt.textContent = text;
+                    if (String(value) === String(fd.defaultValue)) opt.selected = true;
+                    select.appendChild(opt);
+                }
+                filterDiv.appendChild(label);
+                filterDiv.appendChild(select);
+                container.parentNode.insertBefore(filterDiv, container);
+
+                select.addEventListener('change', () => {
+                    const activeTable = window._Layer8MNavActiveTable;
+                    if (activeTable && activeTable.setBaseWhereClause) {
+                        activeTable.setBaseWhereClause(`${fd.field}=${select.value}`);
+                    }
+                });
             }
 
             // Create view via factory
@@ -100,7 +131,9 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
                     window.MobileHCM, window.MobileFIN, window.MobileSCM,
                     window.MobileSales, window.MobileMfg, window.MobileCrm,
                     window.MobileBi, window.MobileDoc, window.MobileComp,
-                    window.MobilePrj, window.MobileEcom, window.MobileAia, window.MobileSYS
+                    window.MobilePrj, window.MobileEcom, window.MobileSYS,
+                    window.MobileMonitoring, window.MobileALM,
+                    window.MobileSystem, window.MobileTargets
                 ];
                 for (const reg of registries) {
                     if (reg && reg.getColumns) {
@@ -110,8 +143,8 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
                 }
             }
 
-            // Fallback to defaults
-            console.error(`Layer8MNav: No column definitions found for model "${serviceConfig.model}". Falling back to default columns. Register columns in the appropriate Mobile module registry.`);
+            // No columns found — log error so missing registration is visible
+            console.error(`Layer8MNav: No column definitions found for model "${serviceConfig.model}". Register columns in a mobile module registry (e.g., MobileMonitoring.getColumns).`);
             return [
                 { key: serviceConfig.idField, label: 'ID', sortKey: serviceConfig.idField },
                 { key: 'name', label: 'Name', sortKey: 'name' },
@@ -128,7 +161,9 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
                     window.MobileHCM, window.MobileFIN, window.MobileSCM,
                     window.MobileSales, window.MobileMfg, window.MobileCrm,
                     window.MobileBi, window.MobileDoc, window.MobileComp,
-                    window.MobilePrj, window.MobileEcom, window.MobileAia, window.MobileSYS
+                    window.MobilePrj, window.MobileEcom, window.MobileSYS,
+                    window.MobileMonitoring, window.MobileALM,
+                    window.MobileSystem, window.MobileTargets
                 ];
                 for (const reg of registries) {
                     if (reg && reg.getTransformData) {
@@ -150,7 +185,9 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
                     window.MobileHCM, window.MobileFIN, window.MobileSCM,
                     window.MobileSales, window.MobileMfg, window.MobileCrm,
                     window.MobileBi, window.MobileDoc, window.MobileComp,
-                    window.MobilePrj, window.MobileEcom, window.MobileAia, window.MobileSYS
+                    window.MobilePrj, window.MobileEcom, window.MobileSYS,
+                    window.MobileMonitoring, window.MobileALM,
+                    window.MobileSystem, window.MobileTargets
                 ];
                 for (const reg of registries) {
                     if (reg && reg.getFormDef) {

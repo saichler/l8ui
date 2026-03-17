@@ -41,10 +41,12 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
             // Generate form with readOnly flag for inline tables
             const content = Layer8MForms.renderForm(formDef, freshRecord, true);
 
-            const popupConfig = {
+            Layer8MPopup.show({
                 title: `${serviceConfig.label.replace(/s$/, '')} Details`,
                 content: content,
                 size: 'large',
+                showFooter: true,
+                saveButtonText: 'Edit',
                 showCancelButton: true,
                 cancelButtonText: 'Close',
                 onShow: (popup) => {
@@ -54,12 +56,12 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
                     popup.body.querySelectorAll('input, select, textarea').forEach(el => {
                         el.disabled = true;
                     });
+                },
+                onSave: (popup) => {
+                    Layer8MPopup.close();
+                    this.openServiceForm(serviceConfig, formDef, freshRecord);
                 }
-            };
-
-            popupConfig.showFooter = false;
-
-            Layer8MPopup.show(popupConfig);
+            });
         },
 
         /** Fetch a single record by ID - Desktop Equivalent: erp-forms.js fetchRecord() */

@@ -38,10 +38,15 @@
                 return true;
             } catch (e) {
                 console.error('Failed to load module config:', e);
-                alert('System is still booting, please try again in a few seconds.');
-                if (typeof logout === 'function') {
-                    logout();
+                if (typeof showErrorAndLogout === 'function') {
+                    showErrorAndLogout(
+                        'Failed to load module configuration. The system may still be booting.',
+                        'Error: ' + e.message + (e.stack ? '\n\nStack:\n' + e.stack : '')
+                    );
+                } else if (typeof logout === 'function') {
+                    logout('Failed to load module config: ' + e.message);
                 } else {
+                    alert('Failed to load module config: ' + e.message);
                     window.location.href = 'l8ui/login/index.html';
                 }
                 return false;
