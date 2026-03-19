@@ -104,11 +104,15 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
                     self._addMessage('assistant', 'Error: ' + data.error);
                     return;
                 }
-                // Response is L8AgentChatMessage (the LLM reply)
-                if (data.conversationId) {
-                    self._conversationId = data.conversationId;
+                // Response may be wrapped in {list: [...], metadata: {...}}
+                var msg = data;
+                if (data.list && data.list.length > 0) {
+                    msg = data.list[0];
                 }
-                self._addMessage('assistant', data.message || 'No response');
+                if (msg.conversationId) {
+                    self._conversationId = msg.conversationId;
+                }
+                self._addMessage('assistant', msg.message || 'No response');
                 if (data.tokenCount) {
                     self._renderTokenInfo(0, data.tokenCount);
                 }
@@ -167,7 +171,11 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
 
             var body = document.createElement('div');
             body.className = 'l8agent-msg-body';
-            body.textContent = content;
+            if (role === 'assistant' && typeof Layer8Markdown !== 'undefined') {
+                Layer8Markdown.renderInto(body, content);
+            } else {
+                body.textContent = content;
+            }
 
             div.appendChild(label);
             div.appendChild(body);

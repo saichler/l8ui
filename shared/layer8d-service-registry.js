@@ -72,6 +72,8 @@ limitations under the License.
 
     // Initialize a service view for a module (table, chart, kanban, etc.)
     function initializeServiceTable(moduleNS, parentModule, moduleKey, service, tableId) {
+        if (service.customView) return;
+
         const containerId = `${moduleKey}-${service.key}-table-container`;
         const container = document.getElementById(containerId);
 
