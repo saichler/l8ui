@@ -3,7 +3,7 @@
 
 Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
 */
-// l8agent Shared Column Definitions - Conversations and Prompts tables
+// l8agent Shared Column Definitions - Prompts table
 
 (function() {
     'use strict';
@@ -15,15 +15,6 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
     const render = L8Agent.render;
 
     L8Agent.columns = {
-        L8AgentConversation: [
-            ...col.id('conversationId'),
-            ...col.col('title', 'Title'),
-            ...col.col('userId', 'User'),
-            ...col.status('status', 'Status', enums.CONVO_STATUS_VALUES, render.convoStatus),
-            ...col.date('createdAt', 'Created'),
-            ...col.date('updatedAt', 'Updated')
-        ],
-
         L8AgentPrompt: [
             ...col.id('promptId'),
             ...col.col('name', 'Name'),
@@ -35,7 +26,6 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
     };
 
     L8Agent.primaryKeys = {
-        L8AgentConversation: 'conversationId',
         L8AgentPrompt: 'promptId'
     };
 })();

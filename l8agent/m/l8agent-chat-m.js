@@ -73,11 +73,14 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
             this._loading = true;
             this._showLoading();
 
-            var body = { message: text };
-            if (this._conversationId) body.conversationId = this._conversationId;
+            // Build L8AgentChatConversation facade with user message
+            var facade = {
+                messages: [{ message: text, isLlm: false }]
+            };
+            if (this._conversationId) facade.conversationId = this._conversationId;
 
             var endpoint = Layer8MConfig.resolveEndpoint(this._config.chatEndpoint);
-            Layer8MAuth.post(endpoint, body)
+            Layer8MAuth.post(endpoint, facade)
             .then(function(data) {
                 self._loading = false;
                 self._hideLoading();
@@ -85,14 +88,14 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
                     self._addMessage('assistant', 'Error: ' + data.error);
                     return;
                 }
+                // Response is L8AgentChatMessage (the LLM reply)
                 if (data.conversationId) {
                     self._conversationId = data.conversationId;
                 }
-                self._addMessage('assistant', data.response || 'No response');
-                if (data.dataResults && data.dataResults.length > 0) {
-                    self._renderDataResults(data.dataResults);
+                self._addMessage('assistant', data.message || 'No response');
+                if (data.tokenCount) {
+                    self._renderTokenInfo(0, data.tokenCount);
                 }
-                self._renderTokenInfo(data.toolCallsMade, data.totalTokens);
             })
             .catch(function(err) {
                 self._loading = false;
@@ -103,9 +106,9 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
 
         loadConversation: function(id) {
             var self = this;
-            var query = 'select * from L8AgentConversation where conversationId=' + id;
+            var query = 'select * from L8AgentChatConversation where conversationId=' + id;
             var body = encodeURIComponent(JSON.stringify({ text: query }));
-            var endpoint = Layer8MConfig.resolveEndpoint(this._config.convoEndpoint) + '?body=' + body;
+            var endpoint = Layer8MConfig.resolveEndpoint(this._config.chatEndpoint) + '?body=' + body;
 
             Layer8MAuth.get(endpoint)
             .then(function(data) {
@@ -118,8 +121,8 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
                 msgArea.innerHTML = '';
                 if (convo.messages) {
                     convo.messages.forEach(function(msg) {
-                        var role = msg.role === 2 ? 'assistant' : 'user';
-                        self._addMessage(role, msg.content);
+                        var role = msg.isLlm ? 'assistant' : 'user';
+                        self._addMessage(role, msg.message);
                     });
                 }
             });

@@ -33,10 +33,6 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
         ['Inactive', 'inactive', 'layer8d-status-inactive']
     ]);
 
-    const MESSAGE_ROLE = factory.simple([
-        'Unspecified', 'User', 'Assistant', 'System'
-    ]);
-
     // ========================================================================
     // EXPORT ENUMS
     // ========================================================================
@@ -48,8 +44,7 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
         PROMPT_CATEGORY: PROMPT_CATEGORY,
         PROMPT_STATUS: PROMPT_STATUS.enum,
         PROMPT_STATUS_VALUES: PROMPT_STATUS.values,
-        PROMPT_STATUS_CLASSES: PROMPT_STATUS.classes,
-        MESSAGE_ROLE: MESSAGE_ROLE
+        PROMPT_STATUS_CLASSES: PROMPT_STATUS.classes
     };
 
     // ========================================================================
@@ -63,7 +58,6 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
     L8Agent.render = {
         convoStatus: renderConvoStatus,
         promptStatus: renderPromptStatus,
-        promptCategory: renderPromptCategory,
-        messageRole: (value) => renderEnum(value, MESSAGE_ROLE)
+        promptCategory: renderPromptCategory
     };
 })();
