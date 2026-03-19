@@ -1,0 +1,94 @@
+/*
+(c) 2025 Sharon Aicler (saichler@gmail.com)
+
+Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
+*/
+
+/* Layer8Markdown — styling for rendered markdown content.
+   Uses --layer8d-* theme variables exclusively. */
+
+.l8md-p {
+    margin: 0 0 8px 0;
+    line-height: 1.5;
+}
+
+.l8md-p:last-child {
+    margin-bottom: 0;
+}
+
+.l8md-h1, .l8md-h2, .l8md-h3, .l8md-h4, .l8md-h5, .l8md-h6 {
+    margin: 12px 0 6px 0;
+    color: var(--layer8d-text-dark);
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.l8md-h1 { font-size: 1.4em; }
+.l8md-h2 { font-size: 1.25em; }
+.l8md-h3 { font-size: 1.1em; }
+.l8md-h4, .l8md-h5, .l8md-h6 { font-size: 1em; }
+
+.l8md-inline-code {
+    background: var(--layer8d-bg-light);
+    border: 1px solid var(--layer8d-border);
+    border-radius: 3px;
+    padding: 1px 5px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9em;
+    color: var(--layer8d-text-dark);
+}
+
+.l8md-code-block {
+    background: var(--layer8d-bg-light);
+    border: 1px solid var(--layer8d-border);
+    border-radius: 6px;
+    padding: 12px;
+    margin: 8px 0;
+    overflow-x: auto;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.85em;
+    line-height: 1.5;
+    color: var(--layer8d-text-dark);
+}
+
+.l8md-code-block code {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: inherit;
+}
+
+.l8md-list {
+    margin: 4px 0 8px 0;
+    padding-left: 24px;
+    line-height: 1.5;
+}
+
+.l8md-list li {
+    margin-bottom: 2px;
+}
+
+.l8md-hr {
+    border: none;
+    border-top: 1px solid var(--layer8d-border);
+    margin: 12px 0;
+}
+
+/* Links inside markdown */
+.l8md-p a,
+.l8md-list a {
+    color: var(--layer8d-primary);
+    text-decoration: none;
+}
+
+.l8md-p a:hover,
+.l8md-list a:hover {
+    text-decoration: underline;
+}
+
+/* Strong and emphasis */
+.l8md-p strong,
+.l8md-list strong {
+    font-weight: 600;
+    color: var(--layer8d-text-dark);
+}
