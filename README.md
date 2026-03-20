@@ -81,6 +81,8 @@ Layer8DUtils  <--- Layer8DRenderers
     |       Layer8DTreeGrid
     |       Layer8DWizard + Layer8DWizardRender
     +--- Layer8DWidget (dashboard KPI cards)
+    +--- Layer8Markdown (markdown-to-HTML renderer)
+    +--- L8AgentChat (AI chat interface)
 ```
 
 ### Dependency Graph (Mobile)
@@ -119,6 +121,8 @@ Layer8MUtils
     |       Layer8MChart, Layer8MKanban, Layer8MCalendar
     |       Layer8MTimeline, Layer8MGantt, Layer8MTreeGrid
     |       Layer8MWizard
+    +--- Layer8MDataSource (mobile fetch/pagination)
+    +--- L8AgentChatMobile (AI chat mobile)
 ```
 
 ---
@@ -144,7 +148,9 @@ l8ui/
 ├── dashboard/           # Dashboard KPI widgets
 ├── notification/        # Toast notifications
 ├── login/               # Login page with TFA support
-├── register/            # User registration page
+├── register/            # User registration page with CAPTCHA
+├── l8agent/             # AI Agent chat interface (desktop + mobile)
+│   └── m/               #   Mobile AI agent chat
 ├── m/                   # Mobile components
 │   ├── js/              #   Mobile JS (auth, nav, forms, table, popup, views, etc.)
 │   └── css/             #   Mobile CSS
@@ -152,8 +158,8 @@ l8ui/
 │   ├── security/        #   Users, roles, credentials management
 │   ├── modules/         #   Module management with dependency graph
 │   ├── health/          #   System health monitoring
-│   ├── logs/            #   Log viewer
-│   └── dataimport/      #   CSV/data import with templates
+│   ├── logs/            #   Log file viewer with tree browser
+│   └── dataimport/      #   CSV/JSON/XML import with AI-assisted mapping
 ├── images/              # Logo and brand images
 └── font/                # Bundled fonts
 ```
@@ -249,10 +255,21 @@ CSS files first, then JS in strict dependency order:
 <link rel="stylesheet" href="l8ui/wizard/layer8d-wizard.css">
 <link rel="stylesheet" href="l8ui/dashboard/layer8d-widget.css">
 
+<!-- CSS: Markdown -->
+<link rel="stylesheet" href="l8ui/shared/layer8-markdown.css">
+
+<!-- CSS: File Upload -->
+<link rel="stylesheet" href="l8ui/shared/layer8-file-upload.css">
+
 <!-- CSS: SYS Module -->
 <link rel="stylesheet" href="l8ui/sys/l8sys.css">
 <link rel="stylesheet" href="l8ui/sys/health/l8health.css">
 <link rel="stylesheet" href="l8ui/sys/modules/l8sys-modules.css">
+<link rel="stylesheet" href="l8ui/sys/logs/l8logs.css">
+<link rel="stylesheet" href="l8ui/sys/dataimport/l8dataimport.css">
+
+<!-- CSS: AI Agent -->
+<link rel="stylesheet" href="l8ui/l8agent/l8agent-chat.css">
 
 <!-- CSS: Module-specific (optional, per project) -->
 <link rel="stylesheet" href="mymodule/mymodule.css">
@@ -272,6 +289,7 @@ CSS files first, then JS in strict dependency order:
 <script src="l8ui/shared/layer8-ref-factory.js"></script>
 <script src="l8ui/shared/layer8-column-factory.js"></script>
 <script src="l8ui/shared/layer8-form-factory.js"></script>
+<script src="l8ui/shared/layer8-form-factory-presets.js"></script>
 <script src="l8ui/shared/layer8-svg-factory.js"></script>
 
 <!-- JS: Project-specific SVG templates (optional) -->
@@ -296,8 +314,18 @@ CSS files first, then JS in strict dependency order:
 <script src="l8ui/input_formatters/layer8d-input-formatter-core.js"></script>
 <script src="l8ui/input_formatters/layer8d-input-formatter.js"></script>
 
+<!-- JS: Markdown Renderer -->
+<script src="l8ui/shared/layer8-markdown.js"></script>
+
+<!-- JS: File Upload -->
+<script src="l8ui/shared/layer8-file-upload.js"></script>
+
+<!-- JS: CSV Export -->
+<script src="l8ui/shared/layer8-csv-export.js"></script>
+
 <!-- JS: Forms Component (load sub-modules then facade) -->
 <script src="l8ui/shared/layer8d-forms-fields.js"></script>
+<script src="l8ui/shared/layer8d-forms-fields-ext.js"></script>
 <script src="l8ui/shared/layer8d-forms-data.js"></script>
 <script src="l8ui/shared/layer8d-forms-pickers.js"></script>
 <script src="l8ui/shared/layer8d-forms-modal.js"></script>
@@ -378,7 +406,18 @@ CSS files first, then JS in strict dependency order:
 <script src="l8ui/sys/modules/l8sys-dependency-graph.js"></script>
 <script src="l8ui/sys/modules/l8sys-modules-map.js"></script>
 <script src="l8ui/sys/modules/l8sys-modules.js"></script>
+<script src="l8ui/sys/logs/l8logs.js"></script>
+<script src="l8ui/sys/dataimport/l8dataimport.js"></script>
+<script src="l8ui/sys/dataimport/l8dataimport-templates.js"></script>
+<script src="l8ui/sys/dataimport/l8dataimport-transfer.js"></script>
+<script src="l8ui/sys/dataimport/l8dataimport-execute.js"></script>
 <script src="l8ui/sys/l8sys-init.js"></script>
+
+<!-- JS: AI Agent Module -->
+<script src="l8ui/l8agent/l8agent-enums.js"></script>
+<script src="l8ui/l8agent/l8agent-columns.js"></script>
+<script src="l8ui/l8agent/l8agent-forms.js"></script>
+<script src="l8ui/l8agent/l8agent-chat.js"></script>
 ```
 
 ---
@@ -425,8 +464,10 @@ CSS files first, then JS in strict dependency order:
 <script src="../l8ui/m/js/layer8m-table.js"></script>
 <script src="../l8ui/m/js/layer8m-edit-table.js"></script>
 <script src="../l8ui/m/js/layer8m-forms-fields.js"></script>
+<script src="../l8ui/m/js/layer8m-forms-fields-ext.js"></script>
 <script src="../l8ui/m/js/layer8m-forms-fields-reference.js"></script>
 <script src="../l8ui/m/js/layer8m-forms.js"></script>
+<script src="../l8ui/m/js/layer8m-forms-inline.js"></script>
 <script src="../l8ui/m/js/layer8m-datepicker.js"></script>
 <script src="../l8ui/m/js/layer8m-reference-registry.js"></script>
 
@@ -437,6 +478,12 @@ CSS files first, then JS in strict dependency order:
 
 <script src="../l8ui/m/js/layer8m-reference-picker.js"></script>
 <script src="../l8ui/m/js/layer8m-renderers.js"></script>
+<script src="../l8ui/m/js/layer8m-data-source.js"></script>
+
+<!-- JS: Shared Utilities (markdown, file upload, CSV export) -->
+<script src="../l8ui/shared/layer8-markdown.js"></script>
+<script src="../l8ui/shared/layer8-file-upload.js"></script>
+<script src="../l8ui/shared/layer8-csv-export.js"></script>
 
 <!-- JS: Module Data (per module) -->
 <script src="js/mymodule/submodule-enums.js"></script>
@@ -463,6 +510,23 @@ CSS files first, then JS in strict dependency order:
 <script src="../erp-ui/m/nav-configs/layer8m-nav-config-scm-sales.js"></script>
 <script src="../erp-ui/m/nav-configs/layer8m-nav-config-prj-other.js"></script>
 <script src="../erp-ui/m/nav-configs/layer8m-nav-config.js"></script>
+
+<!-- JS: Mobile View System -->
+<script src="../l8ui/m/js/layer8m-view-factory.js"></script>
+<script src="../l8ui/shared/layer8-view-switcher.js"></script>
+<script src="../l8ui/m/js/layer8m-chart.js"></script>
+<script src="../l8ui/m/js/layer8m-kanban.js"></script>
+<script src="../l8ui/m/js/layer8m-calendar.js"></script>
+<script src="../l8ui/m/js/layer8m-timeline.js"></script>
+<script src="../l8ui/m/js/layer8m-gantt.js"></script>
+<script src="../l8ui/m/js/layer8m-tree-grid.js"></script>
+<script src="../l8ui/m/js/layer8m-wizard.js"></script>
+
+<!-- JS: AI Agent (Mobile) -->
+<script src="../l8ui/l8agent/l8agent-enums.js"></script>
+<script src="../l8ui/l8agent/l8agent-columns.js"></script>
+<script src="../l8ui/l8agent/l8agent-forms.js"></script>
+<script src="../l8ui/l8agent/m/l8agent-chat-m.js"></script>
 
 <!-- JS: App -->
 <script src="js/app-core.js"></script>
@@ -1185,6 +1249,74 @@ Layer8FileUpload.formatSize(bytes)    // e.g., "1.5 MB"
 - Mobile: native `<input type="file">` (triggers camera/gallery picker)
 - Data collection spreads `storagePath`, `fileName`, `fileSize`, `mimeType`, and `checksum` onto the form data object.
 
+### 6.30 Layer8Markdown
+
+Converts markdown text to sanitized HTML. Supports bold, italic, inline code, code blocks (with optional language), headers (h1-h6), unordered/ordered lists, horizontal rules, and links.
+
+```js
+Layer8Markdown.render(text)              // Returns HTML string
+Layer8Markdown.renderInto(element, text) // Renders directly into DOM element
+```
+
+### 6.31 L8AgentChat
+
+AI chat interface with conversation management, markdown-rendered responses, and inline data tables.
+
+```js
+L8AgentChat.init({
+    containerId: 'agent-container',      // REQUIRED: DOM element ID
+    chatEndpoint: '/0/AgentChat'         // REQUIRED: LLM chat endpoint
+});
+L8AgentChat.sendMessage(text)            // Send user message to LLM
+L8AgentChat.loadConversation(id)         // Load historical conversation by ID
+L8AgentChat.newConversation()            // Clear and reset chat
+```
+
+Features: conversation selector dropdown, message history with user/assistant roles, markdown rendering for assistant responses, token count display, inline data result tables via Layer8DTable, loading animation.
+
+### 6.32 Layer8FormFactory Presets
+
+Extends `Layer8FormFactory` with preset field group generators for common entity patterns:
+
+```js
+const f = window.Layer8FormFactory;
+
+f.basicEntity()                          // [code, name, description, isActive]
+f.dateRange('prefix')                    // [startDate, endDate]
+f.address('parentKey')                   // [line1, line2, city, stateProvince, postalCode, countryCode]
+f.contact('parentKey')                   // [value, contactType]
+f.audit()                                // Read-only [createdBy, createdAt, modifiedBy, modifiedAt]
+f.person(includeMiddle?)                 // [firstName, (middleName), lastName]
+```
+
+### 6.33 Layer8DFormsFields Extended
+
+Extends `Layer8DFormsFields` with advanced field rendering:
+
+- **Inline tables**: `generateInlineTableHtml(field, rows, readOnly)` — embedded child record tables with add/edit/delete
+- **Period selector**: `onPeriodTypeChange(selectEl)` — cascading Month/Quarter/Year selects
+- **Tags/multiselect**: chip-based UI for multi-value fields
+- **File upload**: drag-and-drop file upload with progress indicator (uses `Layer8FileUpload`)
+
+### 6.34 L8Logs (System Log Viewer)
+
+File system tree browser in the System section. Displays log files with paginated content.
+
+```js
+L8Logs.initialize()                      // Renders tree and loads file list
+L8Logs.refresh()                         // Reloads tree data
+```
+
+Uses L8Query `select * from l8file where path="*" mapreduce true` for the tree, paginated 5KB chunks for file content.
+
+### 6.35 Registration Page (`register/`)
+
+Standalone user registration page with CAPTCHA verification. Located at `register/index.html`.
+
+- POST `/captcha` to load CAPTCHA image (base64 PNG)
+- POST `/register` with `{user, pass, captcha}` to create account
+- Redirects to login page on success
+
 ---
 
 ## 7. Mobile Component API
@@ -1500,6 +1632,70 @@ All view instances follow the same interface: `init()`, `refresh()`, `destroy()`
 **Mobile view switching:** `Layer8MNavData.loadServiceData()` reads `supportedViews` from the service config. When multiple views are available, it renders a `Layer8ViewSwitcher` dropdown above the data container. Switching views destroys the current view and creates a new one via `Layer8MViewFactory.create()`.
 
 **Auto-detect chart:** If a service's columns include both `type: 'date'` and `type: 'money'`, `'chart'` is automatically added to the available views (same logic as desktop `layer8d-service-registry.js`).
+
+### 7.17 Layer8MDataSource
+
+Mobile data fetching layer — mirrors `Layer8DDataSource` for mobile. Builds L8Query strings, handles pagination, and enforces the metadata-on-page-1-only rule.
+
+```js
+const ds = new Layer8MDataSource({
+    endpoint: '/erp/30/Employee',
+    modelName: 'Employee',
+    columns: [...],
+    pageSize: 15,
+    baseWhereClause: 'status=1',
+    transformData: (item) => ({...}),
+    onDataLoaded: (items, total) => {},
+    onError: (err) => {},
+    onMetadata: (metadata) => {}
+});
+
+ds.fetchData(page)                      // Fetch page (1-indexed)
+ds.buildQuery(page, pageSize)           // Returns { query, isInvalid }
+ds.setBaseWhereClause('status=2')       // Update WHERE, resets to page 1
+ds.setFilter('name', 'Smith')           // Set column filter
+ds.clearFilters()
+ds.setSort('name', 'asc')
+ds.getTotalPages()
+```
+
+### 7.18 Layer8MFormFields Extended
+
+Extends `Layer8MFormFields` with mobile-optimized rendering for 15+ field types:
+
+- `renderCurrencyField`, `renderPercentageField`, `renderPhoneField`, `renderSSNField`
+- `renderUrlField`, `renderRatingField`, `renderHoursField`, `renderEinField`, `renderRoutingNumberField`
+- `renderColorCodeField`, `renderInlineTableField`, `renderTimeField`
+- `renderTagsField`, `renderMultiselectField`, `renderRichtextField`
+- Tag/multiselect interaction handlers: `onTagKeydown`, `removeTag`, `toggleMultiselectDropdown`, `onMultiselectChange`
+
+### 7.19 Layer8MForms Inline Table Handlers
+
+Extends `Layer8MForms` with inline table management for nested child records:
+
+```js
+Layer8MForms.initInlineTableHandlers(container, formDef)
+// Sets up add/edit/delete event listeners for inline table rows
+
+// Internal methods:
+// _openMobileRowEditor(fieldDef, rowIndex, rowData, onSave) — popup row editor
+// _showMobileChildDetail(fieldDef, rowData) — read-only row detail popup
+// _rerenderMobileTable(tableEl, fieldDef, rows, isReadOnly) — re-render after changes
+```
+
+### 7.20 L8AgentChatMobile
+
+Mobile AI chat interface — same API as desktop `L8AgentChat` but uses `Layer8MAuth` for HTTP and `Layer8MTable` for inline data results.
+
+```js
+L8AgentChatMobile.init({
+    containerId: 'agent-container',
+    chatEndpoint: '/0/AgentChat'
+});
+L8AgentChatMobile.sendMessage(text)
+L8AgentChatMobile.loadConversation(id)
+L8AgentChatMobile.newConversation()
+```
 
 **Service config `supportedViews`:**
 ```js
