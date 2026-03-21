@@ -24,7 +24,8 @@
                         'Content-Type': 'application/json'
                     }
                 });
-                if (!resp.ok) throw new Error('Server returned ' + resp.status);
+                var endpoint = Layer8DConfig.resolveEndpoint('/0/ModConfig');
+                if (!resp.ok) throw new Error('Server returned ' + resp.status + ' for endpoint: ' + endpoint);
                 var data = await resp.json();
                 // Empty list = first startup, everything enabled
                 if (data.list && data.list.length > 0) {

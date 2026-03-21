@@ -110,7 +110,7 @@ limitations under the License.
 
                 if (response.status === 401) {
                     console.warn('Layer8MAuth: Session expired (401)');
-                    this._handleSessionExpired();
+                    this._handleSessionExpired(url);
                     return null;
                 }
 
@@ -381,12 +381,48 @@ limitations under the License.
         /**
          * Handle session expiration
          */
-        _handleSessionExpired() {
+        _handleSessionExpired(endpoint) {
             sessionStorage.removeItem('bearerToken');
 
             if (_onSessionExpired) {
                 _onSessionExpired();
             } else {
+                var detail = 'The server returned 401 Unauthorized.';
+                if (endpoint) detail += ' Endpoint: ' + endpoint;
+                this.showErrorAndLogout('Your session has expired.', detail);
+            }
+        },
+
+        /**
+         * Show error popup before logging out — gives user visibility into what went wrong
+         */
+        showErrorAndLogout(message, detail) {
+            // Clear tokens immediately
+            sessionStorage.removeItem('bearerToken');
+            sessionStorage.removeItem('currentUser');
+            localStorage.removeItem('bearerToken');
+            localStorage.removeItem('rememberedUser');
+            window.bearerToken = null;
+
+            if (typeof Layer8MPopup !== 'undefined') {
+                var escaped = typeof Layer8MUtils !== 'undefined' ? Layer8MUtils.escapeHtml : function(t) { return t; };
+                Layer8MPopup.show({
+                    title: 'Session Error',
+                    content: '<div style="padding:16px;">' +
+                        '<p style="margin-bottom:12px;font-size:15px;">' + escaped(message) + '</p>' +
+                        (detail ? '<pre style="background:var(--layer8d-bg-light,#f5f5f5);padding:12px;border-radius:6px;font-size:12px;max-height:200px;overflow:auto;white-space:pre-wrap;word-break:break-word;">' + escaped(detail) + '</pre>' : '') +
+                        '</div>',
+                    size: 'medium',
+                    showFooter: true,
+                    saveButtonText: 'Go to Login',
+                    showCancelButton: false,
+                    onSave: function() {
+                        Layer8MPopup.close();
+                        window.location.href = '/l8ui/login/';
+                    }
+                });
+            } else {
+                alert(message + (detail ? '\n\n' + detail : ''));
                 window.location.href = '/l8ui/login/';
             }
         },
