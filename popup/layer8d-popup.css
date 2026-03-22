@@ -32,9 +32,9 @@ limitations under the License.
     --popup-text-dark: #2d3748;
     --popup-text-medium: #4a5568;
     --popup-text-muted: #718096;
-    --popup-border: #e2e8f0;
-    --popup-bg-light: #f7fafc;
-    --popup-bg-input: #f1f5f9;
+    --popup-border: #ddd7ce;
+    --popup-bg-light: #f4f1ea;
+    --popup-bg-input: #efeae1;
     --popup-error: #ef4444;
     --popup-success: #00c853;
 
@@ -64,7 +64,7 @@ limitations under the License.
 
 /* Container - the popup box */
 .probler-popup-container {
-    background: white;
+    background: #fcfbf8;
     border-radius: 12px;
     width: 90%;
     max-height: 90vh;
@@ -92,6 +92,7 @@ limitations under the License.
 .probler-popup-container.probler-popup-xlarge {
     max-width: 1200px;
     min-height: 500px;
+    height: min(860px, 90vh);
 }
 
 /* Header */
@@ -100,8 +101,8 @@ limitations under the License.
     justify-content: space-between;
     align-items: center;
     padding: 18px 24px;
-    background: #ffffff;
-    border-bottom: 1px solid #e2e8f0;
+    background: #f8f5ef;
+    border-bottom: 1px solid var(--popup-border);
     border-radius: 12px 12px 0 0;
     flex-shrink: 0;
 }
@@ -144,6 +145,9 @@ limitations under the License.
     flex: 1;
     min-height: 0;
     color: #334155;
+    display: flex;
+    flex-direction: column;
+    background: #fcfbf8;
 }
 
 /* Footer - action buttons */
@@ -152,8 +156,8 @@ limitations under the License.
     justify-content: flex-end;
     gap: 12px;
     padding: 20px 24px;
-    border-top: 1px solid #e2e8f0;
-    background: #ffffff;
+    border-top: 1px solid var(--popup-border);
+    background: #f8f5ef;
     flex-shrink: 0;
 }
 

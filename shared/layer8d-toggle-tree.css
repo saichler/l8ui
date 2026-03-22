@@ -116,7 +116,7 @@
     width: 16px;
     left: 3px;
     bottom: 3px;
-    background-color: white;
+    background-color: var(--layer8d-bg-white, #fcfbf8);
     transition: 0.3s;
     border-radius: 50%;
 }

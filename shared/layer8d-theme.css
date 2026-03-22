@@ -62,13 +62,15 @@ limitations under the License.
     --layer8d-text-light: #a0aec0;
 
     /* Background Colors */
-    --layer8d-bg-white: #ffffff;
-    --layer8d-bg-light: #f7fafc;
-    --layer8d-bg-input: #f1f5f9;
+    --layer8d-bg-white: #fcfbf8;
+    --layer8d-bg-light: #f4f1ea;
+    --layer8d-bg-input: #efeae1;
+    --layer8d-bg-card: #fdfbf7;
+    --layer8d-bg-hover: #ece6dc;
 
     /* Border Colors */
-    --layer8d-border: #e2e8f0;
-    --layer8d-border-dark: #cbd5e0;
+    --layer8d-border: #ddd7ce;
+    --layer8d-border-dark: #c8c0b4;
 
     /* Status Colors - Core */
     --layer8d-success: #22c55e;

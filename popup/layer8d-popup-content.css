@@ -64,7 +64,7 @@ limitations under the License.
 
 .probler-popup-tabs {
     display: flex;
-    background: #ffffff;
+    background: #f8f5ef;
     border-bottom: 1px solid #e2e8f0;
     padding: 0 16px;
     gap: 4px;
@@ -90,7 +90,7 @@ limitations under the License.
 }
 
 .probler-popup-tab.active {
-    background: white;
+    background: #fcfbf8;
     color: #0ea5e9;
     border-bottom-color: #0ea5e9;
     box-shadow: none;
@@ -99,6 +99,9 @@ limitations under the License.
 .probler-popup-tab-content {
     padding: 24px;
     min-height: 320px;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
 }
 
 /* Tabs edge-to-edge within padded body */
@@ -114,6 +117,7 @@ limitations under the License.
 
 .probler-popup-tab-pane {
     display: none;
+    min-height: 100%;
 }
 
 .probler-popup-tab-pane.active {
@@ -132,7 +136,7 @@ limitations under the License.
 }
 
 .probler-popup-body .detail-section {
-    background: #ffffff;
+    background: #fdfbf7;
     border: 1px solid #e2e8f0;
     padding: 18px;
     border-left: 1px solid #e2e8f0;
@@ -145,9 +149,11 @@ limitations under the License.
     color: #0f172a;
     text-transform: none !important;
     letter-spacing: normal !important;
-    margin-bottom: 14px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid #e2e8f0;
+    margin: -18px -18px 14px -18px;
+    padding: 10px 18px;
+    background: #e9e4db;
+    border-bottom: 1px solid #d7d0c3;
+    border-radius: 10px 10px 0 0;
     font-family: 'Figtree', sans-serif !important;
 }
 
