@@ -33,11 +33,12 @@ limitations under the License.
     position: relative;
     width: calc(100% + 14px);
     margin: -7px -7px 20px -7px;
-    height: 120px;
-    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #bae6fd 100%);
-    border-radius: 16px 16px 0 0;
+    height: 108px;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+    border-radius: 12px 12px 0 0;
     overflow: hidden;
-    box-shadow: 0 8px 32px rgba(14, 165, 233, 0.15);
+    box-shadow: none;
 }
 
 /* Parallax Container */
@@ -52,7 +53,7 @@ limitations under the License.
     left: 0;
     width: 100%;
     height: 100%;
-    transition: transform 0.3s ease-out;
+    transition: transform 0.2s ease-out;
 }
 
 /* Background Illustration Layer */
@@ -64,6 +65,7 @@ limitations under the License.
     width: 100%;
     height: 100%;
     display: block;
+    opacity: 0.22;
 }
 
 /* Header Content Layer */
@@ -78,47 +80,38 @@ limitations under the License.
 .l8-header-title {
     display: flex;
     align-items: center;
-    gap: 20px;
-    padding: 30px;
+    gap: 16px;
+    padding: 22px 24px;
     pointer-events: auto;
 }
 
 .l8-icon {
     flex-shrink: 0;
-    font-size: 48px;
-    filter: drop-shadow(0 4px 12px rgba(14, 165, 233, 0.3));
-    animation: l8-icon-float 3s ease-in-out infinite;
-}
-
-@keyframes l8-icon-float {
-    0%, 100% {
-        transform: translateY(0px);
-    }
-    50% {
-        transform: translateY(-8px);
-    }
+    font-size: 40px;
+    filter: none;
+    animation: none;
 }
 
 .l8-title {
-    font-size: 36px;
+    font-size: 33px;
     color: #0f172a;
     font-weight: 700;
     margin: 0;
-    letter-spacing: -0.5px;
-    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    text-transform: none;
     font-family: 'Figtree', sans-serif;
-    text-shadow: 0 2px 20px rgba(14, 165, 233, 0.2);
-    line-height: 1.2;
+    text-shadow: none;
+    line-height: 1.1;
 }
 
 .l8-subtitle {
     font-size: 12px;
-    color: #475569;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-top: 6px;
-    opacity: 0.9;
+    color: #64748b;
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: 0;
+    margin-top: 4px;
+    opacity: 1;
 }
 
 /* ============================================ */

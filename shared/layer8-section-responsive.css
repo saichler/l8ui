@@ -24,7 +24,7 @@ limitations under the License.
 @media (max-width: 1024px) {
     .l8-header-frame,
     .hcm-header-frame {
-        height: 100px;
+        height: 96px;
     }
 
     .l8-title,
@@ -58,29 +58,29 @@ limitations under the License.
     /* Header */
     .l8-header-frame,
     .hcm-header-frame {
-        height: 80px;
+        height: 84px;
     }
 
     .l8-header-title,
     .hcm-header-title {
-        padding: 15px;
-        gap: 12px;
+        padding: 16px 18px;
+        gap: 10px;
     }
 
     .l8-icon,
     .hcm-icon {
-        font-size: 36px;
+        font-size: 30px;
     }
 
     .l8-title,
     .hcm-title {
-        font-size: 22px;
+        font-size: 24px;
     }
 
     .l8-subtitle,
     .hcm-subtitle {
         font-size: 10px;
-        display: none;
+        display: block;
     }
 
     /* Module Tabs */

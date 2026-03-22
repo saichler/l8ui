@@ -21,40 +21,41 @@ limitations under the License.
 .probler-popup-title-wrapper {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 12px;
     flex: 1;
+    flex-wrap: wrap;
 }
 
 .probler-popup-status-badge {
     display: inline-block;
     padding: 6px 12px;
-    border-radius: 2px;
+    border-radius: 999px;
     font-size: 11px;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    font-weight: 700;
+    text-transform: none;
+    letter-spacing: 0;
     text-align: center;
     min-width: 80px;
 }
 
 .probler-popup-status-badge.status-online {
-    background: rgba(0, 200, 83, 0.2);
-    color: #00c853;
-    border: 1px solid #00c853;
-    box-shadow: 0 0 8px rgba(0, 200, 83, 0.3);
+    background: rgba(22, 163, 74, 0.1);
+    color: #15803d;
+    border: 1px solid rgba(22, 163, 74, 0.2);
+    box-shadow: none;
 }
 
 .probler-popup-status-badge.status-warning {
-    background: rgba(255, 193, 7, 0.2);
-    color: #ffc107;
-    border: 1px solid #ffc107;
-    box-shadow: 0 0 8px rgba(255, 193, 7, 0.3);
+    background: rgba(217, 119, 6, 0.1);
+    color: #b45309;
+    border: 1px solid rgba(217, 119, 6, 0.2);
+    box-shadow: none;
 }
 
 .probler-popup-status-badge.status-offline {
-    background: rgba(117, 117, 117, 0.2);
-    color: #757575;
-    border: 1px solid #757575;
+    background: rgba(100, 116, 139, 0.1);
+    color: #64748b;
+    border: 1px solid rgba(100, 116, 139, 0.2);
 }
 
 /* ============================================ */
@@ -63,12 +64,15 @@ limitations under the License.
 
 .probler-popup-tabs {
     display: flex;
-    background: #f7fafc;
+    background: #ffffff;
     border-bottom: 1px solid #e2e8f0;
+    padding: 0 16px;
+    gap: 4px;
+    flex-wrap: wrap;
 }
 
 .probler-popup-tab {
-    padding: 15px 25px;
+    padding: 14px 16px;
     font-size: 13px !important;
     font-weight: 600 !important;
     text-transform: none !important;
@@ -89,12 +93,12 @@ limitations under the License.
     background: white;
     color: #0ea5e9;
     border-bottom-color: #0ea5e9;
-    box-shadow: inset 0 -3px 0 #0ea5e9;
+    box-shadow: none;
 }
 
 .probler-popup-tab-content {
-    padding: 30px;
-    min-height: 400px;
+    padding: 24px;
+    min-height: 320px;
 }
 
 /* Tabs edge-to-edge within padded body */
@@ -114,18 +118,6 @@ limitations under the License.
 
 .probler-popup-tab-pane.active {
     display: block;
-    animation: probler-popup-fade-in-up 0.4s ease-out;
-}
-
-@keyframes probler-popup-fade-in-up {
-    0% {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
 }
 
 /* ============================================ */
@@ -135,26 +127,26 @@ limitations under the License.
 .probler-popup-body .detail-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 25px;
-    margin-bottom: 30px;
+    gap: 16px;
+    margin-bottom: 24px;
 }
 
 .probler-popup-body .detail-section {
-    background: #f7fafc;
+    background: #ffffff;
     border: 1px solid #e2e8f0;
-    padding: 20px;
-    border-left: 3px solid #0ea5e9;
-    border-radius: 8px;
+    padding: 18px;
+    border-left: 1px solid #e2e8f0;
+    border-radius: 10px;
 }
 
 .probler-popup-body .detail-section-title {
     font-size: 14px !important;
     font-weight: 700 !important;
-    color: #0ea5e9;
+    color: #0f172a;
     text-transform: none !important;
     letter-spacing: normal !important;
-    margin-bottom: 15px;
-    padding-bottom: 10px;
+    margin-bottom: 14px;
+    padding-bottom: 8px;
     border-bottom: 1px solid #e2e8f0;
     font-family: 'Figtree', sans-serif !important;
 }
@@ -164,6 +156,7 @@ limitations under the License.
     justify-content: space-between;
     padding: 12px 0 !important;
     border-bottom: 1px solid #e2e8f0;
+    gap: 12px;
 }
 
 .probler-popup-body .detail-row:last-child {
@@ -181,7 +174,7 @@ limitations under the License.
 
 .probler-popup-body .detail-value {
     font-size: 14px !important;
-    color: #2d3748 !important;
+    color: #0f172a !important;
     font-family: 'Figtree', sans-serif !important;
     font-weight: 500 !important;
     text-align: right !important;
