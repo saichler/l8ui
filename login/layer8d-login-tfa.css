@@ -98,7 +98,7 @@ limitations under the License.
 .layer8d-tfa-qr-container {
     flex-shrink: 0;
     padding: 10px;
-    background: white;
+    background: var(--bg-elevated);
     border: 1px solid var(--border-emphasis);
     border-radius: 8px;
 }

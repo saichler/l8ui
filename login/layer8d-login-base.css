@@ -64,16 +64,16 @@ limitations under the License.
     --text-muted: #64748b;
 
     /* Background Colors */
-    --bg-primary: #f8fafc;
-    --bg-secondary: #f1f5f9;
-    --bg-card: #ffffff;
-    --bg-elevated: #ffffff;
-    --bg-input: #f8fafc;
+    --bg-primary: #f7f6f2;
+    --bg-secondary: #f1eee8;
+    --bg-card: #fcfbf8;
+    --bg-elevated: #fdfcf9;
+    --bg-input: #f4f1ea;
 
     /* Border Colors */
-    --border-subtle: #e2e8f0;
-    --border-default: #cbd5e1;
-    --border-emphasis: #cbd5e1;
+    --border-subtle: #ddd7ce;
+    --border-default: #c8c0b4;
+    --border-emphasis: #c8c0b4;
 }
 
 * {

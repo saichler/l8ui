@@ -18,7 +18,7 @@ limitations under the License.
 
 .layer8d-login-footer {
     padding: 20px 30px;
-    background: #ffffff;
+    background: #f8f5ef;
     border-top: 1px solid var(--border-subtle);
     text-align: center;
 }
@@ -99,24 +99,24 @@ limitations under the License.
     border-radius: 10px;
     box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
     animation: slideIn 0.3s ease-out;
-    background: #ffffff;
+    background: #fcfbf8;
     border: 1px solid var(--border-subtle);
     border-left: 4px solid var(--noc-cyan);
 }
 
 .toast-success {
     border-left-color: var(--noc-green);
-    background: #ffffff;
+    background: #fcfbf8;
 }
 
 .toast-error {
     border-left-color: #dc2626;
-    background: #ffffff;
+    background: #fcfbf8;
 }
 
 .toast-warning {
     border-left-color: #d97706;
-    background: #ffffff;
+    background: #fcfbf8;
 }
 
 .toast-icon {
