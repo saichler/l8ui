@@ -53,34 +53,27 @@ limitations under the License.
 }
 
 :root {
-    /* Primary Colors - True NOC Dark Theme */
-    --noc-black: #000000;
-    --noc-dark: #0a0a0a;
-    --noc-charcoal: #121212;
-    --noc-slate: #1a1a1a;
-    --noc-gray: #1e1e1e;
-
     /* Accent Colors */
     --noc-cyan: #0ea5e9;
     --noc-cyan-dark: #0284c7;
-    --noc-green: #00c853;
+    --noc-green: #16a34a;
 
     /* Text Colors */
-    --text-primary: #ffffff;
-    --text-secondary: #b0bec5;
-    --text-muted: #78909c;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #64748b;
 
     /* Background Colors */
-    --bg-primary: #000000;
-    --bg-secondary: #0a0a0a;
-    --bg-card: #1a1a1a;
-    --bg-elevated: #1e1e1e;
-    --bg-input: #2d3748;
+    --bg-primary: #f8fafc;
+    --bg-secondary: #f1f5f9;
+    --bg-card: #ffffff;
+    --bg-elevated: #ffffff;
+    --bg-input: #f8fafc;
 
     /* Border Colors */
-    --border-subtle: #212121;
-    --border-default: #2a2a2a;
-    --border-emphasis: #333333;
+    --border-subtle: #e2e8f0;
+    --border-default: #cbd5e1;
+    --border-emphasis: #cbd5e1;
 }
 
 * {
@@ -91,8 +84,7 @@ limitations under the License.
 
 body {
     font-family: 'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
-    background-attachment: fixed;
+    background: var(--bg-primary);
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -110,32 +102,28 @@ body {
     max-width: 710px;
 }
 
-/* Login Card - Dark Theme */
 .layer8d-login-card {
-    background: rgba(26, 26, 26, 0.95);
-    backdrop-filter: blur(20px);
-    border-radius: 16px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(14, 165, 233, 0.1);
+    background: var(--bg-card);
+    border-radius: 12px;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
     overflow: hidden;
     border: 1px solid var(--border-emphasis);
 }
 
-/* Header Section - White like main app */
 .layer8d-login-header {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(20px);
+    background: var(--bg-card);
     padding: 30px;
     text-align: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    border-bottom: 1px solid var(--border-subtle);
 }
 
 .app-logo {
     max-width: 80px;
     max-height: 80px;
     margin-bottom: 16px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    filter: drop-shadow(0 0 10px rgba(21, 101, 192, 0.4));
+    border-radius: 10px;
+    box-shadow: none;
+    filter: none;
 }
 
 .title-with-icon {
@@ -150,34 +138,23 @@ body {
     width: 28px;
     height: 28px;
     stroke: var(--noc-cyan);
-    animation: iconPulse 2s ease-in-out infinite;
-    filter: drop-shadow(0 0 8px rgba(14, 165, 233, 0.4));
-}
-
-@keyframes iconPulse {
-    0%, 100% {
-        transform: scale(1);
-        filter: drop-shadow(0 0 8px rgba(14, 165, 233, 0.4));
-    }
-    50% {
-        transform: scale(1.1);
-        filter: drop-shadow(0 0 12px rgba(14, 165, 233, 0.7));
-    }
+    animation: none;
+    filter: none;
 }
 
 .app-title {
-    color: #2d3748;
+    color: var(--text-primary);
     font-size: 22px;
     font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 2px;
+    text-transform: none;
+    letter-spacing: -0.01em;
     margin-bottom: 0;
     font-family: 'Figtree', sans-serif;
 }
 
 .app-description {
-    color: #718096;
+    color: var(--text-muted);
     font-size: 12px;
     font-weight: 400;
-    letter-spacing: 0.5px;
+    letter-spacing: 0;
 }

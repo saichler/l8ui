@@ -16,12 +16,10 @@ limitations under the License.
 /* Part 4 of 4 - Load this file last */
 /* Footer, toast notifications, spinner, responsive, scrollbar */
 
-/* Footer Section - Light like main app header */
 .layer8d-login-footer {
     padding: 20px 30px;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(20px);
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    background: #ffffff;
+    border-top: 1px solid var(--border-subtle);
     text-align: center;
 }
 
@@ -34,14 +32,14 @@ limitations under the License.
 
 .ecosystem-logo {
     height: 24px;
-    opacity: 0.8;
+    opacity: 1;
 }
 
 .ecosystem-text {
-    font-size: 10px;
-    color: #718096;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: none;
+    letter-spacing: 0;
 }
 
 /* Loading Spinner */
@@ -99,26 +97,26 @@ limitations under the License.
     gap: 12px;
     padding: 14px 16px;
     border-radius: 10px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
     animation: slideIn 0.3s ease-out;
-    background: var(--bg-card);
-    border: 1px solid var(--border-emphasis);
+    background: #ffffff;
+    border: 1px solid var(--border-subtle);
     border-left: 4px solid var(--noc-cyan);
 }
 
 .toast-success {
     border-left-color: var(--noc-green);
-    background: rgba(0, 200, 83, 0.1);
+    background: #ffffff;
 }
 
 .toast-error {
-    border-left-color: #ff3d00;
-    background: rgba(255, 61, 0, 0.1);
+    border-left-color: #dc2626;
+    background: #ffffff;
 }
 
 .toast-warning {
-    border-left-color: #ffc107;
-    background: rgba(255, 193, 7, 0.1);
+    border-left-color: #d97706;
+    background: #ffffff;
 }
 
 .toast-icon {
@@ -134,18 +132,18 @@ limitations under the License.
 }
 
 .toast-success .toast-icon {
-    background: rgba(0, 200, 83, 0.2);
+    background: rgba(22, 163, 74, 0.1);
     color: var(--noc-green);
 }
 
 .toast-error .toast-icon {
-    background: rgba(255, 61, 0, 0.2);
-    color: #ff6e40;
+    background: rgba(220, 38, 38, 0.1);
+    color: #dc2626;
 }
 
 .toast-warning .toast-icon {
-    background: rgba(255, 193, 7, 0.2);
-    color: #ffc107;
+    background: rgba(217, 119, 6, 0.1);
+    color: #d97706;
 }
 
 .toast-content {
@@ -207,15 +205,15 @@ limitations under the License.
 }
 
 ::-webkit-scrollbar-track {
-    background: var(--bg-card);
-    border-left: 1px solid var(--border-emphasis);
+    background: var(--bg-secondary);
+    border-left: 1px solid var(--border-subtle);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--border-emphasis);
+    background: var(--border-default);
     border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--noc-cyan);
+    background: var(--text-muted);
 }
