@@ -42,8 +42,8 @@ limitations under the License.
 .probler-popup-body label {
     display: block;
     margin-bottom: var(--layer8d-space-sm, 12px);
-    font-weight: var(--layer8d-font-weight-medium, 500);
-    color: var(--layer8d-text-dark, #2d3748);
+    font-weight: 700;
+    color: #334155;
     font-size: 13px;
     font-family: var(--layer8d-font-family, 'Figtree', sans-serif);
     text-transform: none;
