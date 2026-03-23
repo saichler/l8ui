@@ -15,11 +15,17 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
 
 .l8agent-m-header {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
+    gap: 6px;
     padding: 10px 12px;
     border-bottom: 1px solid var(--layer8d-border);
     background: var(--layer8d-bg-light);
+}
+
+.l8agent-m-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .l8agent-m-title {
@@ -36,6 +42,24 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
     color: var(--layer8d-text-dark);
     font-size: 13px;
     cursor: pointer;
+}
+
+.l8agent-m-convo-select {
+    width: 100%;
+    padding: 5px 8px;
+    border: 1px solid var(--layer8d-border);
+    border-radius: 4px;
+    background: var(--layer8d-bg-input);
+    color: var(--layer8d-text-dark);
+    font-size: 12px;
+    font-family: inherit;
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+}
+
+.l8agent-m-convo-select:focus {
+    border-color: var(--layer8d-primary);
 }
 
 .l8agent-m-messages {

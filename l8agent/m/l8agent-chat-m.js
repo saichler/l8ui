@@ -29,8 +29,13 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
             this._container.innerHTML =
                 '<div class="l8agent-m-chat">' +
                     '<div class="l8agent-m-header">' +
-                        '<div class="l8agent-m-title">AI Assistant</div>' +
-                        '<button class="l8agent-m-new-btn">New</button>' +
+                        '<div class="l8agent-m-header-top">' +
+                            '<div class="l8agent-m-title">AI Assistant</div>' +
+                            '<button class="l8agent-m-new-btn">New</button>' +
+                        '</div>' +
+                        '<select class="l8agent-m-convo-select">' +
+                            '<option value="">New Conversation</option>' +
+                        '</select>' +
                     '</div>' +
                     '<div class="l8agent-m-messages"></div>' +
                     '<div class="l8agent-m-input-area">' +
@@ -38,6 +43,7 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
                         '<button class="l8agent-m-send-btn">Send</button>' +
                     '</div>' +
                 '</div>';
+            this._loadConversationList();
         },
 
         _attachEvents: function() {
@@ -45,6 +51,7 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
             var sendBtn = this._container.querySelector('.l8agent-m-send-btn');
             var input = this._container.querySelector('.l8agent-m-input');
             var newBtn = this._container.querySelector('.l8agent-m-new-btn');
+            var select = this._container.querySelector('.l8agent-m-convo-select');
 
             sendBtn.addEventListener('click', function() { self._send(); });
             input.addEventListener('keydown', function(e) {
@@ -54,6 +61,10 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
                 }
             });
             newBtn.addEventListener('click', function() { self.newConversation(); });
+            select.addEventListener('change', function() {
+                if (this.value) self.loadConversation(this.value);
+                else self.newConversation();
+            });
         },
 
         _send: function() {
@@ -88,14 +99,19 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
                     self._addMessage('assistant', 'Error: ' + data.error);
                     return;
                 }
-                // Response is L8AgentChatMessage (the LLM reply)
-                if (data.conversationId) {
-                    self._conversationId = data.conversationId;
+                // Response may be wrapped in {list: [...], metadata: {...}}
+                var msg = data;
+                if (data.list && data.list.length > 0) {
+                    msg = data.list[0];
                 }
-                self._addMessage('assistant', data.message || 'No response');
-                if (data.tokenCount) {
-                    self._renderTokenInfo(0, data.tokenCount);
+                if (msg.conversationId) {
+                    self._conversationId = msg.conversationId;
                 }
+                self._addMessage('assistant', msg.message || 'No response');
+                if (msg.tokenCount) {
+                    self._renderTokenInfo(0, msg.tokenCount);
+                }
+                self._loadConversationList();
             })
             .catch(function(err) {
                 self._loading = false;
@@ -133,6 +149,8 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
             this._messages = [];
             var msgArea = this._container.querySelector('.l8agent-m-messages');
             if (msgArea) msgArea.innerHTML = '';
+            var select = this._container.querySelector('.l8agent-m-convo-select');
+            if (select) select.value = '';
         },
 
         _addMessage: function(role, content) {
@@ -216,6 +234,31 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
             div.innerHTML = '<span class="l8agent-m-dot"></span><span class="l8agent-m-dot"></span><span class="l8agent-m-dot"></span>';
             msgArea.appendChild(div);
             msgArea.scrollTop = msgArea.scrollHeight;
+        },
+
+        _loadConversationList: function() {
+            var self = this;
+            var query = 'select * from L8AgentChatConversation limit 20 sort-by updatedAt descending';
+            var body = encodeURIComponent(JSON.stringify({ text: query }));
+            var endpoint = Layer8MConfig.resolveEndpoint(this._config.chatEndpoint) + '?body=' + body;
+
+            Layer8MAuth.get(endpoint)
+            .then(function(data) {
+                var select = self._container.querySelector('.l8agent-m-convo-select');
+                if (!select) return;
+                var currentVal = select.value;
+                select.innerHTML = '<option value="">New Conversation</option>';
+                if (data.list) {
+                    data.list.forEach(function(convo) {
+                        var opt = document.createElement('option');
+                        opt.value = convo.conversationId;
+                        opt.textContent = convo.title || 'Untitled';
+                        select.appendChild(opt);
+                    });
+                }
+                if (currentVal) select.value = currentVal;
+                else if (self._conversationId) select.value = self._conversationId;
+            });
         },
 
         _hideLoading: function() {
