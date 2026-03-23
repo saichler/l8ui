@@ -17,8 +17,8 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
 
 .l8logs-tree-header {
     padding: 15px 20px;
-    border-bottom: 1px solid #e2e8f0;
-    background: #f7fafc;
+    border-bottom: 1px solid #ddd7ce;
+    background: #f4f1ea;
 }
 
 .l8logs-tree-title {
@@ -112,8 +112,8 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
     justify-content: space-between;
     align-items: center;
     padding: 12px 20px;
-    background: #f7fafc;
-    border-bottom: 1px solid #e2e8f0;
+    background: #f4f1ea;
+    border-bottom: 1px solid #ddd7ce;
 }
 
 .l8logs-pagination-info {
@@ -132,7 +132,7 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
     padding: 8px 16px;
     background: white;
     color: #4a5568;
-    border: 1px solid #e2e8f0;
+    border: 1px solid #ddd7ce;
     cursor: pointer;
     font-size: 10px;
     font-weight: 700;

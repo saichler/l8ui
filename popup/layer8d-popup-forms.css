@@ -248,7 +248,7 @@ limitations under the License.
 .probler-popup-body .tag {
     display: inline-block;
     padding: 4px 10px;
-    background: rgba(14, 165, 233, 0.1);
+    background: rgba(160, 136, 115, 0.12);
     color: var(--layer8d-primary, #0ea5e9);
     border-radius: var(--layer8d-radius-sm, 4px);
     font-size: 10px;
@@ -276,7 +276,7 @@ limitations under the License.
 }
 
 .probler-popup-body .checkbox-item:hover {
-    background: rgba(14, 165, 233, 0.1);
+    background: rgba(160, 136, 115, 0.12);
 }
 
 .probler-popup-body .checkbox-item input {
@@ -447,4 +447,3 @@ limitations under the License.
 /* Period field (3 cascading selects) */
 .period-input-group { display: flex; gap: 8px; align-items: center; }
 .period-input-group select { flex: 1; min-width: 0; }
-

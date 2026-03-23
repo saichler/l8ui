@@ -55,7 +55,7 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
 }
 
 .form-inline-table-row.l8-clickable-row:hover {
-    background: rgba(14, 165, 233, 0.05);
+    background: rgba(160, 136, 115, 0.08);
 }
 
 .form-inline-table-cell {
@@ -118,7 +118,7 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
 }
 
 .form-inline-table-btn.add:hover {
-    background: rgba(14, 165, 233, 0.05);
+    background: rgba(160, 136, 115, 0.08);
 }
 
 .form-inline-table-empty {

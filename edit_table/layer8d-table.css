@@ -185,7 +185,7 @@ limitations under the License.
 }
 
 .l8-table th.sortable:hover {
-    background: rgba(14, 165, 233, 0.1);
+    background: rgba(160, 136, 115, 0.12);
 }
 
 .l8-table-header-content {
@@ -209,7 +209,7 @@ limitations under the License.
     position: sticky;
     top: 0;
     z-index: 10;
-    background: #f7fafc;
+    background: #f4f1ea;
 }
 
 /* Shadow for header row (tables without filter) */
@@ -231,14 +231,14 @@ limitations under the License.
 
 /* Filter Row - Sticky below header */
 .l8-table-filter-row {
-    background: #f7fafc;
+    background: #f4f1ea;
 }
 
 .l8-table-filter-row th {
     position: sticky;
     top: var(--l8-header-height);
     z-index: 9;
-    background: #f7fafc;
+    background: #f4f1ea;
 }
 
 /* Visual separator shadow for sticky header */
@@ -300,7 +300,7 @@ limitations under the License.
 }
 
 .l8-table tbody tr:hover {
-    background: rgba(14, 165, 233, 0.05);
+    background: rgba(160, 136, 115, 0.08);
 }
 
 .l8-table tbody tr:last-child td {
@@ -313,7 +313,7 @@ limitations under the License.
 }
 
 .l8-table tbody tr.l8-clickable-row:hover {
-    background: rgba(14, 165, 233, 0.1);
+    background: rgba(160, 136, 115, 0.12);
 }
 
 /* Action Buttons */
@@ -350,13 +350,13 @@ limitations under the License.
 .l8-btn-small {
     padding: 6px 12px;
     font-size: 10px;
-    background: #f7fafc;
+    background: #f4f1ea;
     color: #4a5568;
     border: 1px solid #e2e8f0;
 }
 
 .l8-btn-small:hover {
-    background: #e2e8f0;
+    background: #e6ddd0;
 }
 
 .l8-btn-danger {
@@ -388,7 +388,7 @@ limitations under the License.
 }
 
 .l8-btn-toggle:hover {
-    background: rgba(14, 165, 233, 0.1);
+    background: rgba(160, 136, 115, 0.12);
     border-color: #0ea5e9;
     transform: scale(1.1);
 }
@@ -397,7 +397,7 @@ limitations under the License.
 .l8-tag {
     display: inline-block;
     padding: 4px 10px;
-    background: rgba(14, 165, 233, 0.1);
+    background: rgba(160, 136, 115, 0.12);
     color: #0ea5e9;
     border-radius: 4px;
     font-size: 10px;

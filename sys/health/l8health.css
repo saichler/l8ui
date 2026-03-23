@@ -26,10 +26,10 @@ limitations under the License.
 
 /* Section Cards */
 .l8health-detail-section {
-    background: #f7fafc;
+    background: #f4f1ea;
     border-radius: 12px;
     padding: 16px;
-    border: 1px solid #e2e8f0;
+    border: 1px solid #ddd7ce;
 }
 
 .l8health-detail-section.l8health-detail-full-width {
@@ -45,7 +45,7 @@ limitations under the License.
     letter-spacing: 1px;
     margin-bottom: 12px;
     padding-bottom: 8px;
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 1px solid #ddd7ce;
 }
 
 /* Key-Value Rows */
@@ -54,7 +54,7 @@ limitations under the License.
     justify-content: space-between;
     align-items: center;
     padding: 8px 0;
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 1px solid #ddd7ce;
 }
 
 .l8health-detail-row:last-child {
