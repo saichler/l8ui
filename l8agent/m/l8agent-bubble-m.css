@@ -1,0 +1,81 @@
+/*
+(c) 2025 Sharon Aicler (saichler@gmail.com)
+
+Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
+*/
+/* Mobile Floating AI Chat Bubble — uses --layer8d-* theme tokens only */
+
+.l8agent-bubble-m-btn {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--layer8d-primary);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    z-index: 9998;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.l8agent-bubble-m-btn svg {
+    width: 24px;
+    height: 24px;
+    fill: #fff;
+}
+
+.l8agent-bubble-m-panel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    height: calc(100vh - 60px);
+    background: var(--layer8d-bg-white);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    border-top: 1px solid var(--layer8d-border);
+    border-radius: 12px 12px 0 0;
+}
+
+.l8agent-bubble-m-panel.l8agent-bubble-m-open {
+    display: flex;
+}
+
+/* Override chat styles inside bubble panel */
+.l8agent-bubble-m-panel .l8agent-m-chat {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.l8agent-bubble-m-panel .l8agent-m-header {
+    border-radius: 12px 12px 0 0;
+}
+
+.l8agent-bubble-m-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.l8agent-bubble-m-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--layer8d-text-medium);
+    font-size: 18px;
+    padding: 0 4px;
+    line-height: 1;
+}
+
+.l8agent-bubble-m-close:hover {
+    color: var(--layer8d-text-dark);
+}

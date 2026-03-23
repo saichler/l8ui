@@ -1,0 +1,97 @@
+/*
+(c) 2025 Sharon Aicler (saichler@gmail.com)
+
+Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
+*/
+/* Floating AI Chat Bubble — uses --layer8d-* theme tokens only */
+
+.l8agent-bubble-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--layer8d-primary);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    z-index: 9998;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.l8agent-bubble-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+.l8agent-bubble-btn svg {
+    width: 28px;
+    height: 28px;
+    fill: #fff;
+}
+
+.l8agent-bubble-panel {
+    position: fixed;
+    bottom: 92px;
+    right: 24px;
+    width: 420px;
+    height: 520px;
+    border-radius: 12px;
+    background: var(--layer8d-bg-white);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--layer8d-border);
+}
+
+.l8agent-bubble-panel.l8agent-bubble-open {
+    display: flex;
+}
+
+/* Override chat styles inside bubble panel */
+.l8agent-bubble-panel .l8agent-chat {
+    height: 100%;
+    min-height: 0;
+    border: none;
+    border-radius: 0;
+}
+
+.l8agent-bubble-panel .l8agent-chat-header {
+    border-radius: 12px 12px 0 0;
+}
+
+.l8agent-bubble-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--layer8d-text-medium);
+    font-size: 18px;
+    padding: 0 4px;
+    line-height: 1;
+}
+
+.l8agent-bubble-close:hover {
+    color: var(--layer8d-text-dark);
+}
+
+/* Responsive: smaller screens get wider panel */
+@media (max-width: 480px) {
+    .l8agent-bubble-panel {
+        width: calc(100vw - 16px);
+        height: calc(100vh - 120px);
+        right: 8px;
+        bottom: 84px;
+    }
+
+    .l8agent-bubble-btn {
+        bottom: 16px;
+        right: 16px;
+    }
+}
