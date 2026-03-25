@@ -21,10 +21,21 @@ limitations under the License.
     window.L8Security = window.L8Security || {};
     L8Security.columns = {};
 
+    var enums = L8Security.enums || {};
+    var createStatusRenderer = Layer8DRenderers ? Layer8DRenderers.createStatusRenderer : null;
+    var renderDate = Layer8DRenderers ? Layer8DRenderers.renderDate : null;
+
     // L8User columns
     L8Security.columns.L8User = [
         { key: 'userId', label: 'User ID', sortable: true, filterable: true },
         { key: 'fullName', label: 'Full Name', sortable: true, filterable: true },
+        { key: 'email', label: 'Email', sortable: true, filterable: true },
+        {
+            key: 'accountStatus', label: 'Status', sortable: true,
+            render: enums.ACCOUNT_STATUS && createStatusRenderer
+                ? createStatusRenderer(enums.ACCOUNT_STATUS.enum, enums.ACCOUNT_STATUS.classes)
+                : undefined
+        },
         {
             label: 'Assigned Roles',
             render: function(user) {
@@ -36,7 +47,8 @@ limitations under the License.
                     return '<span class="layer8d-tag">' + Layer8DUtils.escapeHtml(r) + '</span>';
                 }).join(' ');
             }
-        }
+        },
+        { key: 'lastLogin', label: 'Last Login', render: renderDate }
     ];
 
     // L8Role columns

@@ -42,4 +42,18 @@ limitations under the License.
         'GET': '5'
     };
 
+    // L8User AccountStatus enum
+    var factory = window.Layer8EnumFactory;
+    if (factory) {
+        L8Security.enums.ACCOUNT_STATUS = factory.createStatus([
+            'Unspecified', 'Active', 'Inactive', 'Locked', 'Suspended', 'Pending Activation'
+        ], {
+            1: 'success',
+            2: 'inactive',
+            3: 'error',
+            4: 'warning',
+            5: 'info'
+        });
+    }
+
 })();

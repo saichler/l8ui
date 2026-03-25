@@ -57,10 +57,37 @@ limitations under the License.
         }).join('');
     }
 
+    // Generate account status select options
+    function generateStatusOptions(currentStatus) {
+        var statuses = [
+            { value: 'ACCOUNT_STATUS_UNSPECIFIED', label: 'Unspecified' },
+            { value: 'ACCOUNT_STATUS_ACTIVE', label: 'Active' },
+            { value: 'ACCOUNT_STATUS_INACTIVE', label: 'Inactive' },
+            { value: 'ACCOUNT_STATUS_LOCKED', label: 'Locked' },
+            { value: 'ACCOUNT_STATUS_SUSPENDED', label: 'Suspended' },
+            { value: 'ACCOUNT_STATUS_PENDING_ACTIVATION', label: 'Pending Activation' }
+        ];
+        return statuses.map(function(s) {
+            var selected = currentStatus === s.value ? ' selected' : '';
+            return '<option value="' + s.value + '"' + selected + '>' + s.label + '</option>';
+        }).join('');
+    }
+
+    // Format timestamp for display
+    function formatTimestamp(ts) {
+        if (!ts || ts === '0' || ts === 0) return '-';
+        var d = new Date(typeof ts === 'string' ? parseInt(ts, 10) : ts);
+        return d.toLocaleString();
+    }
+
     // Generate user form HTML
     function generateUserFormHtml(user, isEdit) {
         var userId = user ? user.userId || '' : '';
         var fullName = user ? user.fullName || '' : '';
+        var email = user ? user.email || '' : '';
+        var accountStatus = user ? user.accountStatus || 'ACCOUNT_STATUS_UNSPECIFIED' : 'ACCOUNT_STATUS_UNSPECIFIED';
+        var fa = user ? user.fa || false : false;
+        var mustChangePassword = user ? user.mustChangePassword || false : false;
         var userRoles = user ? user.roles || {} : {};
 
         var passwordSection = isEdit ? '' :
@@ -68,6 +95,20 @@ limitations under the License.
             '<label for="l8sys-user-password">Password</label>' +
             '<input type="password" id="l8sys-user-password" name="l8sys-user-password" placeholder="Enter password" required>' +
             '</div>';
+
+        var activitySection = '';
+        if (isEdit && user) {
+            activitySection =
+                '<div class="form-group" style="margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--layer8d-border);">' +
+                '<label style="font-weight: 600;">Account Activity</label>' +
+                '</div>' +
+                '<div class="form-group"><label>Last Login</label><input type="text" value="' + formatTimestamp(user.lastLogin) + '" disabled></div>' +
+                '<div class="form-group"><label>Last Failed Login</label><input type="text" value="' + formatTimestamp(user.lastFailedLogin) + '" disabled></div>' +
+                '<div class="form-group"><label>Failed Login Count</label><input type="text" value="' + (user.failedLoginCount || 0) + '" disabled></div>' +
+                '<div class="form-group"><label>Password Changed At</label><input type="text" value="' + formatTimestamp(user.passwordChangedAt) + '" disabled></div>' +
+                '<div class="form-group"><label>Lockout Until</label><input type="text" value="' + formatTimestamp(user.lockoutUntil) + '" disabled></div>' +
+                '<div class="form-group"><label>Auth Verified</label><input type="text" value="' + (user.faVerified ? 'Yes' : 'No') + '" disabled></div>';
+        }
 
         return '<div class="form-group">' +
             '<label for="l8sys-user-id">User ID</label>' +
@@ -77,13 +118,30 @@ limitations under the License.
             '<label for="l8sys-user-fullname">Full Name</label>' +
             '<input type="text" id="l8sys-user-fullname" name="l8sys-user-fullname" value="' + Layer8DUtils.escapeAttr(fullName) + '" required>' +
             '</div>' +
+            '<div class="form-group">' +
+            '<label for="l8sys-user-email">Email</label>' +
+            '<input type="email" id="l8sys-user-email" name="l8sys-user-email" value="' + Layer8DUtils.escapeAttr(email) + '">' +
+            '</div>' +
+            '<div class="form-group">' +
+            '<label for="l8sys-user-status">Account Status</label>' +
+            '<select id="l8sys-user-status" name="l8sys-user-status">' + generateStatusOptions(accountStatus) + '</select>' +
+            '</div>' +
             passwordSection +
+            '<div class="form-group">' +
+            '<input type="checkbox" id="l8sys-user-fa" name="l8sys-user-fa"' + (fa ? ' checked' : '') + '>' +
+            '<label for="l8sys-user-fa"> First-Factor Auth</label>' +
+            '</div>' +
+            '<div class="form-group">' +
+            '<input type="checkbox" id="l8sys-user-mustchange" name="l8sys-user-mustchange"' + (mustChangePassword ? ' checked' : '') + '>' +
+            '<label for="l8sys-user-mustchange"> Must Change Password</label>' +
+            '</div>' +
             '<div class="form-group">' +
             '<label>Assigned Roles</label>' +
             '<div class="l8sys-checkbox-list">' +
             generateRoleCheckboxes(userRoles) +
             '</div>' +
-            '</div>';
+            '</div>' +
+            activitySection;
     }
 
     // Collect selected roles from popup body
@@ -151,9 +209,13 @@ limitations under the License.
         var body = Layer8DPopup.getBody();
         if (!body) return;
 
-        var userIdEl = body.querySelector('#sys-user-id');
-        var fullNameEl = body.querySelector('#sys-user-fullname');
-        var passwordEl = body.querySelector('#sys-user-password');
+        var userIdEl = body.querySelector('#l8sys-user-id');
+        var fullNameEl = body.querySelector('#l8sys-user-fullname');
+        var emailEl = body.querySelector('#l8sys-user-email');
+        var statusEl = body.querySelector('#l8sys-user-status');
+        var faEl = body.querySelector('#l8sys-user-fa');
+        var mustChangeEl = body.querySelector('#l8sys-user-mustchange');
+        var passwordEl = body.querySelector('#l8sys-user-password');
 
         var userId = userIdEl ? userIdEl.value.trim() : '';
         var fullName = fullNameEl ? fullNameEl.value.trim() : '';
@@ -170,6 +232,10 @@ limitations under the License.
             userData = {
                 userId: existingUserId,
                 fullName: fullName,
+                email: emailEl ? emailEl.value.trim() : '',
+                accountStatus: statusEl ? statusEl.value : 'ACCOUNT_STATUS_UNSPECIFIED',
+                fa: faEl ? faEl.checked : false,
+                mustChangePassword: mustChangeEl ? mustChangeEl.checked : false,
                 roles: selectedRoles
             };
         } else {
@@ -181,6 +247,10 @@ limitations under the License.
             userData = {
                 userId: userId,
                 fullName: fullName,
+                email: emailEl ? emailEl.value.trim() : '',
+                accountStatus: statusEl ? statusEl.value : 'ACCOUNT_STATUS_UNSPECIFIED',
+                fa: faEl ? faEl.checked : false,
+                mustChangePassword: mustChangeEl ? mustChangeEl.checked : false,
                 password: { hash: password },
                 roles: selectedRoles
             };

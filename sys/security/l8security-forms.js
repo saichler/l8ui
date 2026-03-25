@@ -35,7 +35,21 @@ limitations under the License.
                 title: 'User Info',
                 fields: [
                     { key: 'userId', label: 'User ID', type: 'text', required: true },
-                    { key: 'fullName', label: 'Full Name', type: 'text', required: true }
+                    { key: 'fullName', label: 'Full Name', type: 'text', required: true },
+                    { key: 'email', label: 'Email', type: 'text' },
+                    { key: 'accountStatus', label: 'Account Status', type: 'select', options: L8Security.enums && L8Security.enums.ACCOUNT_STATUS ? L8Security.enums.ACCOUNT_STATUS.enum : {} },
+                    { key: 'fa', label: 'First-Factor Auth', type: 'checkbox' },
+                    { key: 'mustChangePassword', label: 'Must Change Password', type: 'checkbox' }
+                ]
+            }, {
+                title: 'Account Activity',
+                fields: [
+                    { key: 'lastLogin', label: 'Last Login', type: 'date', readOnly: true },
+                    { key: 'lastFailedLogin', label: 'Last Failed Login', type: 'date', readOnly: true },
+                    { key: 'failedLoginCount', label: 'Failed Login Count', type: 'number', readOnly: true },
+                    { key: 'passwordChangedAt', label: 'Password Changed At', type: 'date', readOnly: true },
+                    { key: 'lockoutUntil', label: 'Lockout Until', type: 'date', readOnly: true },
+                    { key: 'faVerified', label: 'Auth Verified', type: 'checkbox', readOnly: true }
                 ]
             }]
         },
