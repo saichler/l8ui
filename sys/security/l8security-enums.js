@@ -45,15 +45,16 @@ limitations under the License.
     // L8User AccountStatus enum
     var factory = window.Layer8EnumFactory;
     if (factory) {
-        L8Security.enums.ACCOUNT_STATUS = factory.createStatus([
-            'Unspecified', 'Active', 'Inactive', 'Locked', 'Suspended', 'Pending Activation'
-        ], {
-            1: 'success',
-            2: 'inactive',
-            3: 'error',
-            4: 'warning',
-            5: 'info'
-        });
+        var ACCOUNT_STATUS = factory.create([
+            ['Unspecified', null, ''],
+            ['Active', 'active', 'layer8d-status-active'],
+            ['Inactive', 'inactive', 'layer8d-status-inactive'],
+            ['Locked', 'locked', 'layer8d-status-terminated'],
+            ['Suspended', 'suspended', 'layer8d-status-warning'],
+            ['Pending Activation', 'pending', 'layer8d-status-pending']
+        ]);
+        L8Security.enums.ACCOUNT_STATUS = ACCOUNT_STATUS.enum;
+        L8Security.enums.ACCOUNT_STATUS_CLASSES = ACCOUNT_STATUS.classes;
     }
 
 })();

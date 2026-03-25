@@ -33,7 +33,7 @@ limitations under the License.
         {
             key: 'accountStatus', label: 'Status', sortable: true,
             render: enums.ACCOUNT_STATUS && createStatusRenderer
-                ? createStatusRenderer(enums.ACCOUNT_STATUS.enum, enums.ACCOUNT_STATUS.classes)
+                ? createStatusRenderer(enums.ACCOUNT_STATUS, enums.ACCOUNT_STATUS_CLASSES)
                 : undefined
         },
         {

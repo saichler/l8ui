@@ -37,7 +37,7 @@ limitations under the License.
                     { key: 'userId', label: 'User ID', type: 'text', required: true },
                     { key: 'fullName', label: 'Full Name', type: 'text', required: true },
                     { key: 'email', label: 'Email', type: 'text' },
-                    { key: 'accountStatus', label: 'Account Status', type: 'select', options: L8Security.enums && L8Security.enums.ACCOUNT_STATUS ? L8Security.enums.ACCOUNT_STATUS.enum : {} },
+                    { key: 'accountStatus', label: 'Account Status', type: 'select', options: L8Security.enums && L8Security.enums.ACCOUNT_STATUS ? L8Security.enums.ACCOUNT_STATUS : {} },
                     { key: 'fa', label: 'First-Factor Auth', type: 'checkbox' },
                     { key: 'mustChangePassword', label: 'Must Change Password', type: 'checkbox' }
                 ]
