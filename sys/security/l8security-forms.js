@@ -39,7 +39,7 @@ limitations under the License.
                     { key: 'email', label: 'Email', type: 'text' },
                     { key: 'accountStatus', label: 'Account Status', type: 'select', options: L8Security.enums && L8Security.enums.ACCOUNT_STATUS ? L8Security.enums.ACCOUNT_STATUS : {} },
                     { key: 'fa', label: 'First-Factor Auth', type: 'checkbox' },
-                    { key: 'mustChangePassword', label: 'Must Change Password', type: 'checkbox' }
+                    { key: 'mustChangePassword', label: 'Must Change Password', type: 'select', options: { 0: 'Unspecified', 1: 'No', 2: 'Yes' } }
                 ]
             }, {
                 title: 'Account Activity',
@@ -49,7 +49,7 @@ limitations under the License.
                     { key: 'failedLoginCount', label: 'Failed Login Count', type: 'number', readOnly: true },
                     { key: 'passwordChangedAt', label: 'Password Changed At', type: 'date', readOnly: true },
                     { key: 'lockoutUntil', label: 'Lockout Until', type: 'date', readOnly: true },
-                    { key: 'faVerified', label: 'Auth Verified', type: 'checkbox', readOnly: true }
+                    { key: 'faVerified', label: 'Auth Verified', type: 'select', options: { 0: 'Unspecified', 1: 'Not Verified', 2: 'Verified' }, readOnly: true }
                 ]
             }]
         },

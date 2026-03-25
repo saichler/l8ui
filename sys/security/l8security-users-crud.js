@@ -86,8 +86,9 @@ limitations under the License.
         var fullName = user ? user.fullName || '' : '';
         var email = user ? user.email || '' : '';
         var accountStatus = user ? user.accountStatus || 'ACCOUNT_STATUS_UNSPECIFIED' : 'ACCOUNT_STATUS_UNSPECIFIED';
-        var fa = user ? user.fa || false : false;
-        var mustChangePassword = user ? user.mustChangePassword || false : false;
+        // fa and mustChangePassword are enums: 2 = yes/need, 1 = no/don't need, 0 = unspecified
+        var fa = user ? user.fa === 2 : false;
+        var mustChangePassword = user ? user.mustChangePassword === 2 : false;
         var userRoles = user ? user.roles || {} : {};
 
         var passwordSection = isEdit ? '' :
@@ -107,7 +108,7 @@ limitations under the License.
                 '<div class="form-group"><label>Failed Login Count</label><input type="text" value="' + (user.failedLoginCount || 0) + '" disabled></div>' +
                 '<div class="form-group"><label>Password Changed At</label><input type="text" value="' + formatTimestamp(user.passwordChangedAt) + '" disabled></div>' +
                 '<div class="form-group"><label>Lockout Until</label><input type="text" value="' + formatTimestamp(user.lockoutUntil) + '" disabled></div>' +
-                '<div class="form-group"><label>Auth Verified</label><input type="text" value="' + (user.faVerified ? 'Yes' : 'No') + '" disabled></div>';
+                '<div class="form-group"><label>Auth Verified</label><input type="text" value="' + (user.faVerified === 2 ? 'Yes' : 'No') + '" disabled></div>';
         }
 
         return '<div class="form-group">' +
@@ -234,8 +235,8 @@ limitations under the License.
                 fullName: fullName,
                 email: emailEl ? emailEl.value.trim() : '',
                 accountStatus: statusEl ? statusEl.value : 'ACCOUNT_STATUS_UNSPECIFIED',
-                fa: faEl ? faEl.checked : false,
-                mustChangePassword: mustChangeEl ? mustChangeEl.checked : false,
+                fa: faEl ? (faEl.checked ? 2 : 1) : 1,
+                mustChangePassword: mustChangeEl ? (mustChangeEl.checked ? 2 : 1) : 1,
                 roles: selectedRoles
             };
         } else {
@@ -249,8 +250,8 @@ limitations under the License.
                 fullName: fullName,
                 email: emailEl ? emailEl.value.trim() : '',
                 accountStatus: statusEl ? statusEl.value : 'ACCOUNT_STATUS_UNSPECIFIED',
-                fa: faEl ? faEl.checked : false,
-                mustChangePassword: mustChangeEl ? mustChangeEl.checked : false,
+                fa: faEl ? (faEl.checked ? 2 : 1) : 1,
+                mustChangePassword: mustChangeEl ? (mustChangeEl.checked ? 2 : 1) : 1,
                 password: { hash: password },
                 roles: selectedRoles
             };
