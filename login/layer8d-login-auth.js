@@ -78,12 +78,12 @@ async function authenticate(username, password) {
     const data = await response.json();
 
     // Check for TFA requirements — server returns tokenHash (not token) when TFA is needed
-    // needTfa/setupTfa are enums: 2 = needs action, 1 = does not need action, 0 = unspecified
-    if (data.setupTfa === 2) {
+    // needTfa/setupTfa are enums: 2 = needs action (also accept boolean true for compat)
+    if (data.setupTfa === 2 || data.setupTfa === true) {
         return { success: false, setupTfa: true, tokenHash: data.tokenHash };
     }
 
-    if (data.needTfa === 2) {
+    if (data.needTfa === 2 || data.needTfa === true) {
         return { success: false, needTfa: true, tokenHash: data.tokenHash };
     }
 

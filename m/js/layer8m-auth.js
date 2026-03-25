@@ -216,8 +216,8 @@ limitations under the License.
                 const data = await response.json();
 
                 // TFA required — server returns tokenHash instead of token
-                // needTfa/setupTfa are enums: 2 = needs action, 1 = does not need action
-                if (data.needTfa === 2 || data.setupTfa === 2) {
+                // needTfa/setupTfa are enums: 2 = needs action (also accept boolean true for compat)
+                if (data.needTfa === 2 || data.needTfa === true || data.setupTfa === 2 || data.setupTfa === true) {
                     this._pendingAuth = {
                         username: username,
                         hash: data.tokenHash,
