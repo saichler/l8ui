@@ -97,7 +97,16 @@ Layer8DTable.prototype.fetchData = async function(page, pageSize) {
         });
 
         if (!response.ok) {
-            throw new Error('Failed to fetch data');
+            let errorMsg = 'Failed to fetch data';
+            try {
+                const errorText = await response.text();
+                if (errorText && errorText.toLowerCase().includes('access denied')) {
+                    errorMsg = 'Access denied';
+                } else if (errorText) {
+                    errorMsg = errorText;
+                }
+            } catch (_) { /* ignore parse errors */ }
+            throw new Error(errorMsg);
         }
 
         const data = await response.json();
@@ -129,7 +138,7 @@ Layer8DTable.prototype.fetchData = async function(page, pageSize) {
         }
     } catch (error) {
         console.error('Error fetching data:', error);
-        this.showError('Failed to load data');
+        this.showError(error.message || 'Failed to load data');
     }
 };
 

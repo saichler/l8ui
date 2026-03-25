@@ -33,7 +33,7 @@ limitations under the License.
         {
             key: 'accountStatus', label: 'Status', sortable: true,
             render: enums.ACCOUNT_STATUS && createStatusRenderer
-                ? createStatusRenderer(enums.ACCOUNT_STATUS, enums.ACCOUNT_STATUS_CLASSES)
+                ? (function() { var r = createStatusRenderer(enums.ACCOUNT_STATUS, enums.ACCOUNT_STATUS_CLASSES); return function(item) { return r(item.accountStatus); }; })()
                 : undefined
         },
         {
@@ -48,7 +48,7 @@ limitations under the License.
                 }).join(' ');
             }
         },
-        { key: 'lastLogin', label: 'Last Login', render: renderDate }
+        { key: 'lastLogin', label: 'Last Login', render: function(item) { return renderDate(item.lastLogin); } }
     ];
 
     // L8Role columns

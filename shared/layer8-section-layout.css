@@ -168,6 +168,18 @@ limitations under the License.
 }
 
 /* ============================================ */
+/* SECTION CONTENT WRAPPER */
+/* ============================================ */
+
+.section-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+}
+
+/* ============================================ */
 /* MODULE CONTENT CONTAINER */
 /* ============================================ */
 
@@ -308,7 +320,7 @@ limitations under the License.
 .l8-table-container {
     background: #fcfbf8;
     border-radius: 12px;
-    overflow: hidden;
+    overflow: auto;
     flex: 1;
     min-height: 0;
     display: flex;
