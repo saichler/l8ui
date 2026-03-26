@@ -59,8 +59,8 @@ class Layer8DTable {
         this.filterDebounceMs = options.filterDebounceMs || 1000;
 
         // Sorting and filtering state
-        this.sortColumn = null;
-        this.sortDirection = 'asc';
+        this.sortColumn = options.defaultSort?.column || null;
+        this.sortDirection = options.defaultSort?.direction || 'asc';
         this.filters = {};
         this.filteredData = this.data.length > 0 ? [...this.data] : [];
 

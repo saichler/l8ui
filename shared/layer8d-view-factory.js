@@ -135,7 +135,8 @@ limitations under the License.
             onEdit: options.onEdit,
             onDelete: options.onDelete,
             onRowClick: options.onRowClick,
-            addButtonText: options.addButtonText
+            addButtonText: options.addButtonText,
+            defaultSort: options.defaultSort || null
         });
         return table;
     });

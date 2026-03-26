@@ -100,7 +100,8 @@ limitations under the License.
             onDelete: isReadOnly ? null : (id) => moduleNS._confirmDeleteItem(service, id),
             onRowClick: (item, id) => moduleNS._showDetailsModal(service, item, id),
             addButtonText: `Add ${service.label.replace(/s$/, '')}`,
-            viewConfig: service.viewConfig || {}
+            viewConfig: service.viewConfig || {},
+            defaultSort: service.defaultSort || null
         };
 
         const switcherKey = `${moduleKey}-${service.key}`;
