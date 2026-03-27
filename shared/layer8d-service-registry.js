@@ -88,6 +88,15 @@ limitations under the License.
 
         const isReadOnly = service.readOnly === true;
 
+        // Check per-type action permissions from the security provider
+        // Empty permissions map ({}) means permissive mode — all actions allowed
+        const permMap = window.Layer8DPermissions;
+        const hasPermissions = permMap && Object.keys(permMap).length > 0;
+        const perms = hasPermissions ? (permMap[service.model] || []) : [];
+        const canCreate = !isReadOnly && (!hasPermissions || perms.indexOf(1) !== -1);  // POST
+        const canUpdate = !isReadOnly && (!hasPermissions || perms.indexOf(2) !== -1);  // PUT
+        const canDelete = !isReadOnly && (!hasPermissions || perms.indexOf(4) !== -1);  // DELETE
+
         const viewOptions = {
             containerId: containerId,
             endpoint: Layer8DConfig.resolveEndpoint(service.endpoint),
@@ -95,9 +104,9 @@ limitations under the License.
             columns: columns,
             primaryKey: primaryKey,
             pageSize: 10,
-            onAdd: isReadOnly ? null : () => moduleNS._openAddModal(service),
-            onEdit: isReadOnly ? null : (id) => moduleNS._openEditModal(service, id),
-            onDelete: isReadOnly ? null : (id) => moduleNS._confirmDeleteItem(service, id),
+            onAdd: canCreate ? () => moduleNS._openAddModal(service) : null,
+            onEdit: canUpdate ? (id) => moduleNS._openEditModal(service, id) : null,
+            onDelete: canDelete ? (id) => moduleNS._confirmDeleteItem(service, id) : null,
             onRowClick: (item, id) => moduleNS._showDetailsModal(service, item, id),
             addButtonText: `Add ${service.label.replace(/s$/, '')}`,
             viewConfig: service.viewConfig || {},
