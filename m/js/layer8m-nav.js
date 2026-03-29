@@ -165,8 +165,10 @@ limitations under the License.
             html += '<div class="nav-card-grid">';
 
             const filter = window.Layer8DModuleFilter;
+            const permFilter = window.Layer8DPermissionFilter;
             LAYER8M_NAV_CONFIG.modules.forEach(module => {
                 if (filter && !filter.isEnabled(module.key)) return;
+                if (permFilter && !permFilter.canViewModule(module.key)) return;
                 const isImplemented = !!LAYER8M_NAV_CONFIG[module.key];
                 const cardClass = isImplemented ? 'nav-card' : 'nav-card coming-soon';
 
@@ -213,9 +215,12 @@ limitations under the License.
             }
 
             const filter = window.Layer8DModuleFilter;
-            const visibleSubModules = filter
-                ? moduleConfig.subModules.filter(sm => filter.isEnabled(moduleKey + '.' + sm.key))
-                : moduleConfig.subModules;
+            const permFilter = window.Layer8DPermissionFilter;
+            const visibleSubModules = moduleConfig.subModules.filter(sm => {
+                if (filter && !filter.isEnabled(moduleKey + '.' + sm.key)) return false;
+                if (permFilter && !permFilter.canViewSubModule(moduleKey, sm.key)) return false;
+                return true;
+            });
 
             // Auto-skip: 1 sub-module → check services
             if (visibleSubModules.length === 1) {
@@ -281,10 +286,13 @@ limitations under the License.
             const services = moduleConfig.services[subModuleKey];
 
             const filter = window.Layer8DModuleFilter;
+            const permFilter = window.Layer8DPermissionFilter;
             const basePath = moduleKey + '.' + subModuleKey;
-            const visibleServices = filter
-                ? services.filter(svc => filter.isEnabled(basePath + '.' + svc.key))
-                : services;
+            const visibleServices = services.filter(svc => {
+                if (filter && !filter.isEnabled(basePath + '.' + svc.key)) return false;
+                if (permFilter && !permFilter.canViewService(svc)) return false;
+                return true;
+            });
 
             let html = renderBackHeader(subModuleLabel, 'Select a service');
             html += renderCardGrid(visibleServices,
@@ -363,9 +371,13 @@ limitations under the License.
          */
         _wouldAutoSkip(moduleConfig) {
             const filter = window.Layer8DModuleFilter;
-            const subs = filter
-                ? moduleConfig.subModules.filter(sm => filter.isEnabled(sm.key))
-                : moduleConfig.subModules;
+            const permFilter = window.Layer8DPermissionFilter;
+            const moduleKey = currentState.module || '';
+            const subs = moduleConfig.subModules.filter(sm => {
+                if (filter && !filter.isEnabled(sm.key)) return false;
+                if (permFilter && !permFilter.canViewSubModule(moduleKey, sm.key)) return false;
+                return true;
+            });
             return subs.length === 1;
         },
 
