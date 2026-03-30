@@ -1,0 +1,183 @@
+/*
+© 2025 Sharon Aicler (saichler@gmail.com)
+
+Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
+You may obtain a copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+/* Print-Friendly Stylesheet
+ * Hides navigation and chrome, optimizes tables and detail views for printing.
+ * Include via <link rel="stylesheet" href="l8ui/shared/layer8-print.css" media="print">
+ */
+
+@media print {
+    /* Hide all navigation and chrome */
+    .l8-sidebar,
+    .l8-header,
+    .l8-top-bar,
+    .l8-module-tabs,
+    .l8-sub-nav,
+    .l8-pagination-controls,
+    .l8-action-btns,
+    .l8-filter-row,
+    .l8-btn,
+    .l8-breadcrumb,
+    .layer8d-popup-overlay,
+    .layer8d-popup-close,
+    .layer8d-popup-footer,
+    .mobile-table-export-bar,
+    [data-action="add"],
+    [data-action="export"],
+    [data-action="print"],
+    [data-action="edit"],
+    [data-action="delete"],
+    [data-action="toggle"] {
+        display: none !important;
+    }
+
+    /* Reset layout for full-width printing */
+    body {
+        margin: 0;
+        padding: 0;
+        background: #fff !important;
+        color: #000 !important;
+        font-size: 11pt;
+    }
+
+    .l8-main-content,
+    .l8-content-area,
+    .l8-module-content,
+    .hcm-module-content {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        max-width: none !important;
+    }
+
+    /* Table optimization */
+    .l8-table-container {
+        overflow: visible !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        font-size: 10pt;
+        page-break-inside: auto;
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+    }
+
+    th, td {
+        border: 1px solid #999 !important;
+        padding: 4px 8px !important;
+        background: #fff !important;
+        color: #000 !important;
+    }
+
+    th {
+        background: #eee !important;
+        font-weight: bold;
+    }
+
+    /* Status badges - show text only */
+    .layer8d-status-badge,
+    .l8-status-badge {
+        background: none !important;
+        border: none !important;
+        padding: 0 !important;
+        color: #000 !important;
+    }
+
+    /* Detail/form views */
+    .layer8d-popup-body,
+    .layer8d-form-section {
+        border: none !important;
+        box-shadow: none !important;
+        padding: 8px 0 !important;
+    }
+
+    input, select, textarea {
+        border: 1px solid #ccc !important;
+        background: #fff !important;
+        color: #000 !important;
+    }
+
+    /* Report viewer specific */
+    .fin-report-viewer {
+        width: 100% !important;
+    }
+
+    .fin-report-header {
+        text-align: center;
+        margin-bottom: 16px;
+    }
+
+    .fin-report-section-header {
+        font-weight: bold;
+        background: #eee !important;
+    }
+
+    .fin-report-total-row {
+        font-weight: bold;
+        border-top: 2px solid #000 !important;
+    }
+
+    .fin-report-grand-total {
+        font-weight: bold;
+        border-top: 3px double #000 !important;
+        font-size: 12pt;
+    }
+
+    /* Links should show as plain text */
+    a {
+        color: #000 !important;
+        text-decoration: none !important;
+    }
+
+    /* Page setup */
+    @page {
+        margin: 1cm;
+        size: auto;
+    }
+
+    /* Print title */
+    .l8-print-title {
+        display: block !important;
+        text-align: center;
+        font-size: 16pt;
+        font-weight: bold;
+        margin-bottom: 8px;
+    }
+
+    .l8-print-subtitle {
+        display: block !important;
+        text-align: center;
+        font-size: 11pt;
+        color: #666;
+        margin-bottom: 16px;
+    }
+}
+
+/* Hide print-only elements on screen */
+.l8-print-title,
+.l8-print-subtitle {
+    display: none;
+}

@@ -377,7 +377,8 @@ limitations under the License.
 
         _renderExportBar() {
             if (!this.config.endpoint || !this.config.modelName) return '';
-            return '<div class="mobile-table-export-bar" style="text-align:right;padding:4px 8px;"><button class="mobile-table-export-btn" data-action="export" style="font-size:13px;padding:4px 12px;border:1px solid var(--layer8d-border,#ccc);border-radius:4px;background:var(--layer8d-bg-white,#fff);color:var(--layer8d-text-medium,#555);cursor:pointer;">Export</button></div>';
+            const btnStyle = 'font-size:13px;padding:4px 12px;border:1px solid var(--layer8d-border,#ccc);border-radius:4px;background:var(--layer8d-bg-white,#fff);color:var(--layer8d-text-medium,#555);cursor:pointer;';
+            return `<div class="mobile-table-export-bar" style="text-align:right;padding:4px 8px;display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap;"><button data-action="print" style="${btnStyle}">Print</button><button data-action="export-csv" style="${btnStyle}">CSV</button><button data-action="export-excel" style="${btnStyle}">Excel</button><button data-action="export-pdf" style="${btnStyle}">PDF</button></div>`;
         }
 
         _renderPagination() {
@@ -448,21 +449,14 @@ limitations under the License.
                 });
             }
 
-            const exportBtn = container.querySelector('[data-action="export"]');
-            if (exportBtn) {
-                exportBtn.addEventListener('click', () => {
-                    if (typeof Layer8CsvExport !== 'undefined' && this.config.endpoint && this.config.modelName) {
-                        const parsed = Layer8CsvExport.parseEndpoint(this.config.endpoint);
-                        if (parsed) {
-                            Layer8CsvExport.export({
-                                modelName: this.config.modelName,
-                                serviceName: parsed.serviceName,
-                                serviceArea: parsed.serviceArea,
-                                filename: this.config.modelName
-                            });
-                        }
-                    }
-                });
+            const printBtn = container.querySelector('[data-action="print"]');
+            if (printBtn) {
+                printBtn.addEventListener('click', () => { window.print(); });
+            }
+
+            // Export handlers (CSV, Excel, PDF) via shared helper
+            if (typeof Layer8ExportHelper !== 'undefined') {
+                Layer8ExportHelper.attachHandlers(container, this.config.endpoint, this.config.modelName);
             }
 
             const retryBtn = container.querySelector('.mobile-table-error-retry');

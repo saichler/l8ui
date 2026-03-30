@@ -99,22 +99,36 @@ Layer8DTable.prototype.attachEventListeners = function() {
         });
     });
 
-    // Export CSV button
-    this.container.querySelectorAll('[data-action="export"]').forEach(btn => {
-        btn.addEventListener('click', () => {
-            if (typeof Layer8CsvExport !== 'undefined' && this.endpoint && this.modelName) {
-                const parsed = Layer8CsvExport.parseEndpoint(this.endpoint);
-                if (parsed) {
-                    Layer8CsvExport.export({
-                        modelName: this.modelName,
-                        serviceName: parsed.serviceName,
-                        serviceArea: parsed.serviceArea,
-                        filename: this.modelName
-                    });
-                }
-            }
+    // Print button
+    this.container.querySelectorAll('[data-action="print"]').forEach(btn => {
+        btn.addEventListener('click', () => { window.print(); });
+    });
+
+    // Export dropdown menu toggle
+    this.container.querySelectorAll('[data-action="export-menu"]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const menu = btn.nextElementSibling;
+            menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+            e.stopPropagation();
         });
     });
+
+    // Close export menu on outside click
+    this._exportMenuCloseHandler = () => {
+        this.container.querySelectorAll('.l8-export-menu').forEach(m => m.style.display = 'none');
+    };
+    document.addEventListener('click', this._exportMenuCloseHandler);
+
+    // Hover style for export options
+    this.container.querySelectorAll('.l8-export-option').forEach(opt => {
+        opt.addEventListener('mouseenter', () => { opt.style.background = 'var(--layer8d-bg-light, #f0f0f0)'; });
+        opt.addEventListener('mouseleave', () => { opt.style.background = 'transparent'; });
+    });
+
+    // Export handlers (CSV, Excel, PDF) via shared helper
+    if (typeof Layer8ExportHelper !== 'undefined') {
+        Layer8ExportHelper.attachHandlers(this.container, this.endpoint, this.modelName);
+    }
 
     // Row click handler for details view
     if (this.onRowClick) {

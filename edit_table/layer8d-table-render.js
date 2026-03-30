@@ -73,10 +73,18 @@ Layer8DTable.prototype.renderPagination = function(totalPages, startItem, endIte
     const addButton = this.onAdd ?
         `<button class="l8-btn l8-btn-primary" data-action="add">${Layer8DUtils.escapeHtml(this.addButtonText)}</button>` : '';
     const exportButton = (this.endpoint && this.modelName) ?
-        '<button class="l8-btn l8-btn-secondary l8-btn-small" data-action="export" title="Export CSV">Export</button>' : '';
+        `<div class="l8-export-dropdown" style="display:inline-block;position:relative;">
+            <button class="l8-btn l8-btn-secondary l8-btn-small" data-action="export-menu" title="Export">Export &#9662;</button>
+            <div class="l8-export-menu" style="display:none;position:absolute;right:0;top:100%;background:var(--layer8d-bg-white,#fff);border:1px solid var(--layer8d-border,#ccc);border-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,0.15);z-index:100;min-width:120px;">
+                <div class="l8-export-option" data-action="export-csv" style="padding:6px 12px;cursor:pointer;white-space:nowrap;color:var(--layer8d-text-dark,#333);">CSV</div>
+                <div class="l8-export-option" data-action="export-excel" style="padding:6px 12px;cursor:pointer;white-space:nowrap;color:var(--layer8d-text-dark,#333);">Excel</div>
+                <div class="l8-export-option" data-action="export-pdf" style="padding:6px 12px;cursor:pointer;white-space:nowrap;color:var(--layer8d-text-dark,#333);">PDF</div>
+            </div>
+        </div>` : '';
+    const printButton = '<button class="l8-btn l8-btn-secondary l8-btn-small" data-action="print" title="Print">Print</button>';
 
     if (totalItems === 0) {
-        return `<div class="l8-pagination"><div class="l8-pagination-info"></div><div class="l8-pagination-controls">${exportButton}${addButton}</div></div>`;
+        return `<div class="l8-pagination"><div class="l8-pagination-info"></div><div class="l8-pagination-controls">${printButton}${exportButton}${addButton}</div></div>`;
     }
 
     return `
@@ -110,6 +118,7 @@ Layer8DTable.prototype.renderPagination = function(totalPages, startItem, endIte
                         &raquo;
                     </button>
                 </div>
+                ${printButton}
                 ${exportButton}
                 ${this.onAdd ? `<button class="l8-btn l8-btn-primary" data-action="add">${Layer8DUtils.escapeHtml(this.addButtonText)}</button>` : ''}
             </div>
