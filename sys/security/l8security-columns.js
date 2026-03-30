@@ -48,6 +48,7 @@ limitations under the License.
                 }).join(' ');
             }
         },
+        { key: 'portal', label: 'Portal', sortable: true, filterable: true },
         { key: 'lastLogin', label: 'Last Login', render: function(item) { return renderDate(item.lastLogin); } }
     ];
 
@@ -60,6 +61,22 @@ limitations under the License.
             render: function(role) {
                 var count = role.rules ? Object.keys(role.rules).length : 0;
                 return String(count);
+            }
+        }
+    ];
+
+    // L8Portal columns
+    L8Security.columns.L8Portal = [
+        { key: 'portalId', label: 'Portal ID', sortable: true, filterable: true },
+        {
+            label: 'Portals',
+            render: function(item) {
+                var portals = item.portals || {};
+                var keys = Object.keys(portals);
+                if (keys.length === 0) return '-';
+                return keys.map(function(k) {
+                    return '<span class="layer8d-tag">' + Layer8DUtils.escapeHtml(k) + '</span>';
+                }).join(' ');
             }
         }
     ];

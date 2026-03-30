@@ -87,7 +87,7 @@ async function authenticate(username, password) {
         return { success: false, needTfa: true, tokenHash: data.tokenHash };
     }
 
-    return { success: true, token: data.token };
+    return { success: true, token: data.token, portal: data.portal || '' };
 }
 
 // Detect if device is mobile
@@ -111,22 +111,30 @@ function isMobileDevice() {
     return false;
 }
 
-// Get appropriate redirect URL based on device type
-function getRedirectUrl() {
+// Get appropriate redirect URL based on device type and portal suffix.
+// If a portal suffix is provided (from the auth response), it takes precedence
+// over the login.json redirectUrl. Empty suffix falls back to login.json config.
+function getRedirectUrl(portalSuffix) {
+    var suffix = portalSuffix || '';
+    if (suffix) {
+        // Portal suffix from server — use it directly
+        if (isMobileDevice()) {
+            return '/m/' + suffix;
+        }
+        return '/' + suffix;
+    }
+
+    // Fallback to login.json redirectUrl (backward compatible)
     const baseRedirectUrl = LOGIN_CONFIG.redirectUrl || '/app.html';
 
-    // If already pointing to mobile, use as-is
     if (baseRedirectUrl.includes('/m/')) {
         return baseRedirectUrl;
     }
 
-    // If mobile device, redirect to mobile app
     if (isMobileDevice()) {
-        // Convert ../app.html to ../m/app.html
         if (baseRedirectUrl.endsWith('app.html')) {
             return baseRedirectUrl.replace('app.html', 'm/app.html');
         }
-        // Fallback for other patterns
         return '/m/app.html';
     }
 
@@ -140,6 +148,11 @@ function handleLoginSuccess(result, username, rememberMe) {
 
     // Always store current username in sessionStorage for display
     sessionStorage.setItem('currentUser', username);
+
+    // Store portal suffix for use by the app after redirect
+    if (result.portal) {
+        sessionStorage.setItem('userPortal', result.portal);
+    }
 
     // Handle remember me (persists username across sessions for auto-fill)
     if (rememberMe) {
@@ -155,10 +168,10 @@ function handleLoginSuccess(result, username, rememberMe) {
 
     showToast('Login successful!', 'success');
 
-    // Redirect or callback - detect mobile and redirect appropriately
-    if (LOGIN_CONFIG.redirectUrl) {
+    // Redirect using portal suffix from auth response, or fall back to login.json config
+    if (result.portal || LOGIN_CONFIG.redirectUrl) {
         setTimeout(() => {
-            window.location.href = getRedirectUrl();
+            window.location.href = getRedirectUrl(result.portal);
         }, 500);
     } else if (typeof onLoginSuccess === 'function') {
         onLoginSuccess(result.token, username);

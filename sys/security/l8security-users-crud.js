@@ -85,6 +85,7 @@ limitations under the License.
         var userId = user ? user.userId || '' : '';
         var fullName = user ? user.fullName || '' : '';
         var email = user ? user.email || '' : '';
+        var portal = user ? user.portal || '' : '';
         var accountStatus = user ? user.accountStatus || 'ACCOUNT_STATUS_UNSPECIFIED' : 'ACCOUNT_STATUS_UNSPECIFIED';
         // fa and mustChangePassword are enums: 2 = yes/need, 1 = no/don't need (accept bool true for compat)
         var fa = user ? (user.fa === 2 || user.fa === true) : false;
@@ -126,6 +127,10 @@ limitations under the License.
             '<div class="form-group">' +
             '<label for="l8sys-user-status">Account Status</label>' +
             '<select id="l8sys-user-status" name="l8sys-user-status">' + generateStatusOptions(accountStatus) + '</select>' +
+            '</div>' +
+            '<div class="form-group">' +
+            '<label for="l8sys-user-portal">Portal (path suffix)</label>' +
+            '<input type="text" id="l8sys-user-portal" name="l8sys-user-portal" value="' + Layer8DUtils.escapeAttr(portal) + '" placeholder="e.g. app.html">' +
             '</div>' +
             passwordSection +
             '<div class="form-group">' +
@@ -214,6 +219,7 @@ limitations under the License.
         var fullNameEl = body.querySelector('#l8sys-user-fullname');
         var emailEl = body.querySelector('#l8sys-user-email');
         var statusEl = body.querySelector('#l8sys-user-status');
+        var portalEl = body.querySelector('#l8sys-user-portal');
         var faEl = body.querySelector('#l8sys-user-fa');
         var mustChangeEl = body.querySelector('#l8sys-user-mustchange');
         var passwordEl = body.querySelector('#l8sys-user-password');
@@ -235,6 +241,7 @@ limitations under the License.
                 fullName: fullName,
                 email: emailEl ? emailEl.value.trim() : '',
                 accountStatus: statusEl ? statusEl.value : 'ACCOUNT_STATUS_UNSPECIFIED',
+                portal: portalEl ? portalEl.value.trim() : '',
                 fa: faEl ? (faEl.checked ? 2 : 1) : 1,
                 mustChangePassword: mustChangeEl ? (mustChangeEl.checked ? 2 : 1) : 1,
                 roles: selectedRoles
@@ -250,6 +257,7 @@ limitations under the License.
                 fullName: fullName,
                 email: emailEl ? emailEl.value.trim() : '',
                 accountStatus: statusEl ? statusEl.value : 'ACCOUNT_STATUS_UNSPECIFIED',
+                portal: portalEl ? portalEl.value.trim() : '',
                 fa: faEl ? (faEl.checked ? 2 : 1) : 1,
                 mustChangePassword: mustChangeEl ? (mustChangeEl.checked ? 2 : 1) : 1,
                 password: { hash: password },

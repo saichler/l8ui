@@ -26,7 +26,8 @@ limitations under the License.
         L8User: 'userId',
         L8Role: 'roleId',
         L8Credentials: 'id',
-        EventRecord: 'eventId'
+        EventRecord: 'eventId',
+        L8Portal: 'portalId'
     };
 
     // Minimal form definitions (used by details view / service registry)
@@ -40,6 +41,7 @@ limitations under the License.
                     { key: 'fullName', label: 'Full Name', type: 'text', required: true },
                     { key: 'email', label: 'Email', type: 'text' },
                     { key: 'accountStatus', label: 'Account Status', type: 'select', options: L8Security.enums && L8Security.enums.ACCOUNT_STATUS ? L8Security.enums.ACCOUNT_STATUS : {} },
+                    { key: 'portal', label: 'Portal', type: 'text' },
                     { key: 'fa', label: 'First-Factor Auth', type: 'checkbox' },
                     { key: 'mustChangePassword', label: 'Must Change Password', type: 'select', options: { 0: 'Unspecified', 1: 'No', 2: 'Yes' } }
                 ]
@@ -72,6 +74,15 @@ limitations under the License.
                 fields: [
                     { key: 'id', label: 'ID', type: 'text', required: true },
                     { key: 'name', label: 'Name', type: 'text', required: true }
+                ]
+            }]
+        },
+        L8Portal: {
+            title: 'Portal',
+            sections: [{
+                title: 'Portal Info',
+                fields: [
+                    { key: 'portalId', label: 'Portal ID', type: 'text', required: true }
                 ]
             }]
         },
