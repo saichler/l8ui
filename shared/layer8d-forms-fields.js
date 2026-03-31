@@ -117,12 +117,16 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
                     displayValue = value ? 'Yes' : 'No';
                 } else if (field.type === 'money') {
                     displayValue = formatMoney(value);
-                } else if (field.type === 'date' && typeof value === 'number') {
+                } else if (field.type === 'date') {
                     displayValue = formatDate(value);
+                } else if (field.type === 'datetime') {
+                    displayValue = Layer8DUtils.formatDateTime(value);
+                } else if (field.type === 'time') {
+                    displayValue = String(value);
                 } else {
                     displayValue = String(value);
                 }
-            } else if (value === 0 && field.type === 'date') {
+            } else if (value === 0 && (field.type === 'date' || field.type === 'datetime')) {
                 displayValue = getDateZeroLabel(field.key);
             }
             return `

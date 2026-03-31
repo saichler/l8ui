@@ -23,8 +23,11 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
         if (col.type === 'money' && typeof value === 'object') {
             return Layer8DUtils.formatMoney(value);
         }
-        if (col.type === 'date' && typeof value === 'number') {
+        if (col.type === 'date') {
             return Layer8DUtils.formatDate(value);
+        }
+        if (col.type === 'datetime') {
+            return Layer8DUtils.formatDateTime(value);
         }
         if (col.type === 'select' && col.options) {
             return col.options[value] || String(value);

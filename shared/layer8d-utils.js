@@ -76,6 +76,8 @@ limitations under the License.
      */
     function formatDate(timestamp, options = {}) {
         if (timestamp === null || timestamp === undefined) return '-';
+        if (typeof timestamp === 'string') timestamp = Number(timestamp);
+        if (isNaN(timestamp)) return '-';
 
         // 0 means "current" or "n/a" depending on context
         if (timestamp === 0) {
@@ -110,6 +112,8 @@ limitations under the License.
      */
     function formatDateTime(timestamp, options = {}) {
         if (timestamp === null || timestamp === undefined) return '-';
+        if (typeof timestamp === 'string') timestamp = Number(timestamp);
+        if (isNaN(timestamp)) return '-';
 
         // 0 means "current" or "n/a" depending on context
         if (timestamp === 0) {
