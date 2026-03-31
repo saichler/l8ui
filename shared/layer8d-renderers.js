@@ -213,6 +213,31 @@ limitations under the License.
     }
 
     // ========================================
+    // RATING & DATE RANGE RENDERERS
+    // ========================================
+
+    /**
+     * Render a rating value as "value/max"
+     */
+    function renderRating(value, maxRating, decimals) {
+        if (value === null || value === undefined) return '-';
+        maxRating = maxRating || 5;
+        decimals = decimals || 0;
+        return value.toFixed(decimals) + '/' + maxRating;
+    }
+
+    /**
+     * Render a DateRange object (startDate/endDate) as "start - end"
+     * Note: renderPeriod handles L8Period (year/quarter); this handles DateRange.
+     */
+    function renderDateRange(value) {
+        if (!value) return '-';
+        var start = value.startDate ? formatDate(value.startDate) : '?';
+        var end = value.endDate ? formatDate(value.endDate) : '?';
+        return start + ' - ' + end;
+    }
+
+    // ========================================
     // EXPORT
     // ========================================
 
@@ -232,6 +257,8 @@ limitations under the License.
         renderTags,
         renderEmpty,
         renderPeriod,
+        renderRating,
+        renderDateRange,
 
         // Constants
         DEFAULT_STATUS_CLASSES

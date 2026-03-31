@@ -20,78 +20,66 @@ limitations under the License.
 
     window.L8Security = window.L8Security || {};
     L8Security.columns = {};
+    const col = window.Layer8ColumnFactory;
 
     var enums = L8Security.enums || {};
     var createStatusRenderer = Layer8DRenderers ? Layer8DRenderers.createStatusRenderer : null;
-    var renderDate = Layer8DRenderers ? Layer8DRenderers.renderDate : null;
+
+    var statusRenderer = enums.ACCOUNT_STATUS && createStatusRenderer
+        ? createStatusRenderer(enums.ACCOUNT_STATUS, enums.ACCOUNT_STATUS_CLASSES) : null;
 
     // L8User columns
     L8Security.columns.L8User = [
-        { key: 'userId', label: 'User ID', sortable: true, filterable: true },
-        { key: 'fullName', label: 'Full Name', sortable: true, filterable: true },
-        { key: 'email', label: 'Email', sortable: true, filterable: true },
-        {
-            key: 'accountStatus', label: 'Status', sortable: true,
-            render: enums.ACCOUNT_STATUS && createStatusRenderer
-                ? (function() { var r = createStatusRenderer(enums.ACCOUNT_STATUS, enums.ACCOUNT_STATUS_CLASSES); return function(item) { return r(item.accountStatus); }; })()
-                : undefined
-        },
-        {
-            label: 'Assigned Roles',
-            render: function(user) {
-                const roleIds = Object.keys(user.roles || {}).filter(function(r) {
-                    return user.roles[r];
-                });
-                if (roleIds.length === 0) return '-';
-                return roleIds.map(function(r) {
-                    return '<span class="layer8d-tag">' + Layer8DUtils.escapeHtml(r) + '</span>';
-                }).join(' ');
-            }
-        },
-        { key: 'portal', label: 'Portal', sortable: true, filterable: true },
-        { key: 'lastLogin', label: 'Last Login', render: function(item) { return renderDate(item.lastLogin); } }
+        ...col.col('userId', 'User ID'),
+        ...col.col('fullName', 'Full Name'),
+        ...col.col('email', 'Email'),
+        ...col.custom('accountStatus', 'Status', statusRenderer
+            ? function(item) { return statusRenderer(item.accountStatus); }
+            : undefined),
+        ...col.custom(null, 'Assigned Roles', function(user) {
+            const roleIds = Object.keys(user.roles || {}).filter(function(r) {
+                return user.roles[r];
+            });
+            if (roleIds.length === 0) return '-';
+            return roleIds.map(function(r) {
+                return '<span class="layer8d-tag">' + Layer8DUtils.escapeHtml(r) + '</span>';
+            }).join(' ');
+        }, { sortKey: false }),
+        ...col.col('portal', 'Portal'),
+        ...col.date('lastLogin', 'Last Login'),
     ];
 
     // L8Role columns
     L8Security.columns.L8Role = [
-        { key: 'roleId', label: 'Role ID', sortable: true, filterable: true },
-        { key: 'roleName', label: 'Role Name', sortable: true, filterable: true },
-        {
-            label: 'Rules Count',
-            render: function(role) {
-                var count = role.rules ? Object.keys(role.rules).length : 0;
-                return String(count);
-            }
-        }
+        ...col.col('roleId', 'Role ID'),
+        ...col.col('roleName', 'Role Name'),
+        ...col.custom(null, 'Rules Count', function(role) {
+            var count = role.rules ? Object.keys(role.rules).length : 0;
+            return String(count);
+        }, { sortKey: false }),
     ];
 
     // L8Portal columns
     L8Security.columns.L8Portal = [
-        { key: 'portalId', label: 'Portal ID', sortable: true, filterable: true },
-        {
-            label: 'Portals',
-            render: function(item) {
-                var portals = item.portals || {};
-                var keys = Object.keys(portals);
-                if (keys.length === 0) return '-';
-                return keys.map(function(k) {
-                    return '<span class="layer8d-tag">' + Layer8DUtils.escapeHtml(k) + '</span>';
-                }).join(' ');
-            }
-        }
+        ...col.col('portalId', 'Portal ID'),
+        ...col.custom(null, 'Portals', function(item) {
+            var portals = item.portals || {};
+            var keys = Object.keys(portals);
+            if (keys.length === 0) return '-';
+            return keys.map(function(k) {
+                return '<span class="layer8d-tag">' + Layer8DUtils.escapeHtml(k) + '</span>';
+            }).join(' ');
+        }, { sortKey: false }),
     ];
 
     // L8Credentials columns
     L8Security.columns.L8Credentials = [
-        { key: 'id', label: 'ID', sortable: true, filterable: true },
-        { key: 'name', label: 'Name', sortable: true, filterable: true },
-        {
-            label: 'Items Count',
-            render: function(cred) {
-                var count = cred.creds ? Object.keys(cred.creds).length : 0;
-                return String(count);
-            }
-        }
+        ...col.id('id'),
+        ...col.col('name', 'Name'),
+        ...col.custom(null, 'Items Count', function(cred) {
+            var count = cred.creds ? Object.keys(cred.creds).length : 0;
+            return String(count);
+        }, { sortKey: false }),
     ];
 
 })();

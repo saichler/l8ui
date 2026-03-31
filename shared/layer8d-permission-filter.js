@@ -114,7 +114,7 @@
                 }
             });
 
-            // Filter module tabs — hide if ALL services in that module are denied
+            // Filter module tabs — hide only if services EXIST but ALL are denied
             document.querySelectorAll(
                 '.l8-module-tab[data-module], .hcm-module-tab[data-module]'
             ).forEach(function(tab) {
@@ -123,6 +123,10 @@
                     '.l8-module-content[data-module="' + moduleKey + '"]'
                 );
                 if (!moduleContent) return;
+                var allServices = moduleContent.querySelectorAll(
+                    '.l8-subnav-item, .hcm-subnav-item'
+                );
+                if (allServices.length === 0) return; // No sub-nav by design — leave visible
                 var visibleServices = moduleContent.querySelectorAll(
                     '.l8-subnav-item:not([style*="display: none"]), .hcm-subnav-item:not([style*="display: none"])'
                 );

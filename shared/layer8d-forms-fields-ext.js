@@ -19,23 +19,8 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
     // ========================================
 
     function formatInlineTableCell(col, value) {
-        if (value === null || value === undefined || value === '') return '-';
-        if (col.type === 'money' && typeof value === 'object') {
-            return Layer8DUtils.formatMoney(value);
-        }
-        if (col.type === 'date') {
-            return Layer8DUtils.formatDate(value);
-        }
-        if (col.type === 'datetime') {
-            return Layer8DUtils.formatDateTime(value);
-        }
-        if (col.type === 'select' && col.options) {
-            return col.options[value] || String(value);
-        }
-        if (col.type === 'checkbox') {
-            return value ? 'Yes' : 'No';
-        }
-        return escapeHtml(String(value));
+        // Delegates to the single display formatter — col has same shape as field
+        return escapeHtml(F.formatFieldDisplayValue(col, value));
     }
 
     function generateInlineTableHtml(field, rows, readOnly) {
@@ -309,5 +294,53 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
     F.onFileDragLeave = onFileDragLeave;
     F.onFileDrop = onFileDrop;
     F.onFileDownload = onFileDownload;
+
+    // ========================================
+    // CURRENCY CHANGE HANDLER
+    // ========================================
+
+    function onCurrencyChange(selectEl) {
+        const selectedOption = selectEl.options[selectEl.selectedIndex];
+        const newCurrencyId = selectedOption ? selectedOption.value : '';
+        const symbol = (selectedOption && selectedOption.dataset.symbol) || '$';
+        const group = selectEl.closest('.money-input-group');
+        if (!group) return;
+        const amountInput = group.querySelector('.formatted-input');
+        if (!amountInput) return;
+
+        const oldCurrencyId = selectEl.dataset.previousCurrencyId || '';
+
+        // Get current raw value (in cents) before detaching
+        let rawValue = typeof Layer8DInputFormatter !== 'undefined'
+            ? Layer8DInputFormatter.getValue(amountInput)
+            : amountInput.dataset.rawValue;
+
+        // Convert amount if we have both currencies and a valid amount
+        if (oldCurrencyId && newCurrencyId && oldCurrencyId !== newCurrencyId
+            && rawValue !== null && rawValue !== undefined && rawValue !== '') {
+            const cents = parseInt(rawValue, 10);
+            if (!isNaN(cents) && cents !== 0) {
+                const converted = Layer8DUtils.convertAmount(cents, oldCurrencyId, newCurrencyId);
+                if (converted !== null) {
+                    rawValue = converted;
+                }
+            }
+        }
+
+        selectEl.dataset.previousCurrencyId = newCurrencyId;
+
+        // Detach old formatter and re-attach with new symbol
+        if (typeof Layer8DInputFormatter !== 'undefined') {
+            Layer8DInputFormatter.detach(amountInput);
+            amountInput.dataset.format = 'currency';
+            amountInput.dataset.formatSymbol = symbol;
+            Layer8DInputFormatter.attach(amountInput, 'currency', { symbol });
+            if (rawValue !== null && rawValue !== undefined && rawValue !== '') {
+                Layer8DInputFormatter.setValue(amountInput, rawValue);
+            }
+        }
+    }
+
+    F.onCurrencyChange = onCurrencyChange;
 
 })();

@@ -117,6 +117,8 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
             });
 
             if (!response.ok) {
+                const errorText = await response.text().catch(() => '');
+                console.error(`fetchReferenceDisplayValue: ${response.status} for ${config.modelName} (${idValue}): ${errorText}`);
                 return null;
             }
 

@@ -75,13 +75,21 @@ limitations under the License.
             close();
         });
 
-        // Create body
-        const body = document.createElement('div');
-        body.className = 'probler-popup-body';
+        // Create body — if content is a DOM element, use it directly as the body
+        let body;
+        if (config.content && config.content.nodeType) {
+            body = config.content;
+            if (!body.classList.contains('probler-popup-body')) {
+                body.classList.add('probler-popup-body');
+            }
+        } else {
+            body = document.createElement('div');
+            body.className = 'probler-popup-body';
+            body.innerHTML = config.content || '';
+        }
         if (config.noPadding) {
             body.style.padding = '0';
         }
-        body.innerHTML = config.content || '';
 
         // Create footer if needed
         let footer = null;
@@ -153,8 +161,9 @@ limitations under the License.
             setTimeout(function() { config.onShow(body); }, 50);
         }
 
-        // Setup tab switching via event delegation (for any tabs in popup content)
-        body.addEventListener('click', function(e) {
+        // Setup tab switching via event delegation (skip if body is a pre-built DOM element
+        // that already has its own tab switching wired)
+        if (!(config.content && config.content.nodeType)) body.addEventListener('click', function(e) {
             const tab = e.target.closest('.probler-popup-tab');
             if (!tab) return;
 

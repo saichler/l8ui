@@ -19,11 +19,11 @@ limitations under the License.
 
     window.L8Security = window.L8Security || {};
     L8Security.columns = L8Security.columns || {};
+    const col = window.Layer8ColumnFactory;
 
     var enums = L8Security.enums || {};
     var renderers = window.Layer8DRenderers || {};
     var renderEnum = renderers.renderEnum;
-    var renderDateTime = renderers.renderDateTime;
     var createStatusRenderer = renderers.createStatusRenderer;
 
     var severityRenderer = enums.SEVERITY && createStatusRenderer
@@ -32,31 +32,19 @@ limitations under the License.
         ? createStatusRenderer(enums.EVENT_STATE, enums.EVENT_STATE_CLASSES) : null;
 
     L8Security.columns.EventRecord = [
-        {
-            key: 'occurredAt', label: 'Occurred At', sortable: true,
-            render: function(item) { return renderDateTime(item.occurredAt); }
-        },
-        {
-            key: 'category', label: 'Category', sortable: true,
-            render: enums.EVENT_CATEGORY && renderEnum
-                ? function(item) { return renderEnum(item.category, enums.EVENT_CATEGORY); }
-                : undefined
-        },
-        { key: 'eventType', label: 'Event Type', sortable: true, filterable: true },
-        {
-            key: 'severity', label: 'Severity', sortable: true,
-            render: severityRenderer
-                ? function(item) { return severityRenderer(item.severity); }
-                : undefined
-        },
-        {
-            key: 'state', label: 'State', sortable: true,
-            render: stateRenderer
-                ? function(item) { return stateRenderer(item.state); }
-                : undefined
-        },
-        { key: 'sourceName', label: 'Source', sortable: true, filterable: true },
-        { key: 'message', label: 'Message', sortable: false, filterable: true }
+        ...col.datetime('occurredAt', 'Occurred At'),
+        ...col.custom('category', 'Category', enums.EVENT_CATEGORY && renderEnum
+            ? function(item) { return renderEnum(item.category, enums.EVENT_CATEGORY); }
+            : undefined),
+        ...col.col('eventType', 'Event Type'),
+        ...col.custom('severity', 'Severity', severityRenderer
+            ? function(item) { return severityRenderer(item.severity); }
+            : undefined),
+        ...col.custom('state', 'State', stateRenderer
+            ? function(item) { return stateRenderer(item.state); }
+            : undefined),
+        ...col.col('sourceName', 'Source'),
+        ...col.col('message', 'Message'),
     ];
 
 })();

@@ -23,6 +23,106 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
         return 'Current';
     }
 
+    /**
+     * Format a field value for read-only display.
+     * This is the SINGLE source of truth for value→display conversion.
+     * Every field type handled in the editable switch MUST have a case here.
+     */
+    function formatFieldDisplayValue(field, value) {
+        if (value === null || value === undefined || value === '') return '-';
+
+        // Zero-value handling for temporal types
+        if (value === 0) {
+            if (field.type === 'date' || field.type === 'datetime') {
+                return getDateZeroLabel(field.key);
+            }
+            return '-';
+        }
+
+        switch (field.type) {
+            case 'select':
+                return (field.options && field.options[value] !== undefined)
+                    ? String(field.options[value]) : String(value);
+
+            case 'checkbox':
+            case 'toggle':
+                return value ? 'Yes' : 'No';
+
+            case 'money':
+                return formatMoney(value);
+
+            case 'date':
+                return formatDate(value);
+
+            case 'datetime':
+                return Layer8DUtils.formatDateTime(value);
+
+            case 'time':
+                return String(value);
+
+            case 'percentage':
+                return Layer8DUtils.formatPercentage(value);
+
+            case 'currency':
+                return formatMoney(value);
+
+            case 'ssn':
+                return typeof value === 'string' && value.length >= 4
+                    ? '***-**-' + value.slice(-4) : String(value);
+
+            case 'phone':
+            case 'email':
+            case 'url':
+            case 'routingNumber':
+            case 'ein':
+            case 'colorCode':
+                return String(value);
+
+            case 'number':
+            case 'rating':
+            case 'hours':
+            case 'slider':
+                return String(value);
+
+            case 'tags':
+                return Array.isArray(value) ? value.join(', ') : String(value);
+
+            case 'multiselect': {
+                if (!Array.isArray(value)) return String(value);
+                const opts = field.options || {};
+                return value.map(function(v) { return opts[v] || String(v); }).join(', ');
+            }
+
+            case 'period': {
+                if (typeof value !== 'object' || value === null) return String(value);
+                var PERIOD_LABELS = {0: '', 1: 'Yearly', 2: 'Quarterly', 3: 'Monthly'};
+                var PERIOD_MONTHS = {1:'Jan',2:'Feb',3:'Mar',4:'Apr',5:'May',6:'Jun',
+                                     7:'Jul',8:'Aug',9:'Sep',10:'Oct',11:'Nov',12:'Dec'};
+                var PERIOD_QUARTERS = {13:'Q1',14:'Q2',15:'Q3',16:'Q4'};
+                var pType = value.periodType || 0;
+                var pYear = value.periodYear || '';
+                var pVal = value.periodValue || 0;
+                var pLabel = PERIOD_LABELS[pType] || '';
+                var vLabel = PERIOD_MONTHS[pVal] || PERIOD_QUARTERS[pVal] || '';
+                return [pLabel, vLabel, pYear].filter(Boolean).join(' ');
+            }
+
+            case 'richtext':
+                if (typeof value === 'string') {
+                    var div = document.createElement('div');
+                    div.innerHTML = value;
+                    return div.textContent || div.innerText || '';
+                }
+                return String(value);
+
+            case 'lookup':
+            case 'text':
+            case 'textarea':
+            default:
+                return String(value);
+        }
+    }
+
     function getNestedValue(obj, key) {
         if (!key.includes('.')) return obj[key];
         return key.split('.').reduce((o, k) => o && o[k], obj);
@@ -109,26 +209,7 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
         }
 
         if (isReadOnly) {
-            let displayValue = '-';
-            if (value !== null && value !== undefined && value !== '' && value !== 0) {
-                if (field.type === 'select' && field.options && field.options[value] !== undefined) {
-                    displayValue = field.options[value];
-                } else if (field.type === 'checkbox' || field.type === 'toggle') {
-                    displayValue = value ? 'Yes' : 'No';
-                } else if (field.type === 'money') {
-                    displayValue = formatMoney(value);
-                } else if (field.type === 'date') {
-                    displayValue = formatDate(value);
-                } else if (field.type === 'datetime') {
-                    displayValue = Layer8DUtils.formatDateTime(value);
-                } else if (field.type === 'time') {
-                    displayValue = String(value);
-                } else {
-                    displayValue = String(value);
-                }
-            } else if (value === 0 && (field.type === 'date' || field.type === 'datetime')) {
-                displayValue = getDateZeroLabel(field.key);
-            }
+            const displayValue = formatFieldDisplayValue(field, value);
             return `
                 <div class="form-group">
                     <label for="field-${field.key}">${escapeHtml(field.label)}</label>
@@ -472,55 +553,6 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
             placeholder="Click to select...">`;
     }
 
-    /**
-     * Handle currency dropdown change — re-attach formatter with new symbol
-     */
-    function onCurrencyChange(selectEl) {
-        const selectedOption = selectEl.options[selectEl.selectedIndex];
-        const newCurrencyId = selectedOption ? selectedOption.value : '';
-        const symbol = (selectedOption && selectedOption.dataset.symbol) || '$';
-        const group = selectEl.closest('.money-input-group');
-        if (!group) return;
-        const amountInput = group.querySelector('.formatted-input');
-        if (!amountInput) return;
-
-        const oldCurrencyId = selectEl.dataset.previousCurrencyId || '';
-
-        // Get current raw value (in cents) before detaching
-        let rawValue = typeof Layer8DInputFormatter !== 'undefined'
-            ? Layer8DInputFormatter.getValue(amountInput)
-            : amountInput.dataset.rawValue;
-
-        // Convert amount if we have both currencies and a valid amount
-        if (oldCurrencyId && newCurrencyId && oldCurrencyId !== newCurrencyId
-            && rawValue !== null && rawValue !== undefined && rawValue !== '') {
-            const cents = parseInt(rawValue, 10);
-            if (!isNaN(cents) && cents !== 0) {
-                const converted = Layer8DUtils.convertAmount(cents, oldCurrencyId, newCurrencyId);
-                if (converted !== null) {
-                    rawValue = converted;
-                }
-            }
-        }
-
-        selectEl.dataset.previousCurrencyId = newCurrencyId;
-
-        // Detach old formatter and re-attach with new symbol
-        if (typeof Layer8DInputFormatter !== 'undefined') {
-            Layer8DInputFormatter.detach(amountInput);
-            amountInput.dataset.format = 'currency';
-            amountInput.dataset.formatSymbol = symbol;
-            Layer8DInputFormatter.attach(amountInput, 'currency', { symbol });
-            if (rawValue !== null && rawValue !== undefined && rawValue !== '') {
-                Layer8DInputFormatter.setValue(amountInput, rawValue);
-            }
-        }
-    }
-
-    // ========================================
-    // PERIOD FIELD HELPERS (onPeriodTypeChange in layer8d-forms-fields-ext.js)
-    // ========================================
-
     function generatePeriodValueSelect(fieldKey, periodType, selectedValue) {
         const months = [[1,'January'],[2,'February'],[3,'March'],[4,'April'],[5,'May'],[6,'June'],
                         [7,'July'],[8,'August'],[9,'September'],[10,'October'],[11,'November'],[12,'December']];
@@ -537,7 +569,7 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
         return html;
     }
 
-    // Inline table HTML, tags/multiselect & period handlers are in layer8d-forms-fields-ext.js
+    // Inline table HTML, tags/multiselect, period & currency handlers are in layer8d-forms-fields-ext.js
 
     // Export (extended by layer8d-forms-fields-ext.js)
     window.Layer8DFormsFields = {
@@ -548,7 +580,7 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
         generateReferenceInput,
         generateDateInput,
         getDateZeroLabel,
-        onCurrencyChange,
+        formatFieldDisplayValue,
         FORMATTED_TYPES
     };
 
