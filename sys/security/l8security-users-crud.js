@@ -266,7 +266,21 @@ limitations under the License.
         }
 
         try {
-            await Layer8DForms.saveRecord(Layer8DConfig.resolveEndpoint(service.endpoint), userData, isEdit);
+            var endpoint = Layer8DConfig.resolveEndpoint(service.endpoint);
+            if (isEdit) {
+                // Users require PATCH for updates (PUT re-hashes password)
+                var resp = await fetch(endpoint, {
+                    method: 'PATCH',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify(userData)
+                });
+                if (!resp.ok) {
+                    var errText = await resp.text();
+                    throw new Error(errText || 'Failed to save user');
+                }
+            } else {
+                await Layer8DForms.saveRecord(endpoint, userData, false);
+            }
             Layer8DPopup.close();
             L8Sys.refreshCurrentTable();
         } catch (e) {
