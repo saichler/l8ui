@@ -1,0 +1,159 @@
+/*
+ * Layer8M Portal — shared mobile portal layout CSS.
+ * Used by all portals (ESS, Manager, Customer, Vendor, Partner, Project Client).
+ *
+ * Usage: <link rel="stylesheet" href="../l8ui/portal/layer8m-portal.css">
+ */
+
+/* Mobile nav overrides */
+.l8-portal-nav-section { padding: 8px 0; }
+.l8-portal-nav-section-title {
+    padding: 8px 20px 4px;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.l8-portal-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    transition: all var(--transition-fast);
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+}
+.l8-portal-nav-item:hover, .l8-portal-nav-item:active {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+.l8-portal-nav-item.active {
+    background: var(--layer8d-primary);
+    color: var(--text-light);
+}
+.l8-portal-nav-icon { font-size: 18px; width: 24px; text-align: center; }
+
+/* Section title */
+.l8-portal-section-header {
+    padding: 16px 16px 8px;
+}
+.l8-portal-m-section-title {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+}
+
+/* Service tabs */
+.l8-portal-m-service-tabs {
+    display: flex;
+    gap: 6px;
+    padding: 8px 16px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+.l8-portal-m-service-tab {
+    flex-shrink: 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-full);
+    padding: 8px 14px;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+}
+.l8-portal-m-service-tab:active { transform: scale(0.97); }
+.l8-portal-m-service-tab.active {
+    background: var(--layer8d-primary);
+    color: var(--text-light);
+    border-color: var(--layer8d-primary);
+}
+
+/* Dashboard cards */
+.l8-portal-m-dashboard-welcome {
+    padding: 20px 16px 12px;
+}
+.l8-portal-m-dashboard-welcome h2 {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: 2px;
+}
+.l8-portal-m-dashboard-welcome p {
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+}
+.l8-portal-m-dashboard-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 0 16px 16px;
+}
+.l8-portal-m-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.l8-portal-m-card-icon { font-size: 24px; }
+.l8-portal-m-card-label {
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
+    font-weight: var(--font-weight-medium);
+}
+.l8-portal-m-card-value {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+}
+.l8-portal-m-quick-section {
+    padding: 0 16px 16px;
+}
+.l8-portal-m-quick-section h3 {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: 10px;
+}
+.l8-portal-m-quick-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.l8-portal-m-quick-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    border: none;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+.l8-portal-m-quick-btn:active { transform: scale(0.97); }
+.l8-portal-m-quick-btn-primary {
+    background: var(--layer8d-primary);
+    color: var(--text-light);
+}
+.l8-portal-m-quick-btn-secondary {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+/* Table container */
+.l8-portal-m-table-container {
+    padding: 0 16px 16px;
+}

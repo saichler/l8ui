@@ -1,0 +1,147 @@
+/*
+ * Layer8D Portal — shared desktop portal layout CSS.
+ * Used by all portals (ESS, Manager, Customer, Vendor, Partner, Project Client).
+ * Portal-specific accent colors use --l8-portal-primary (defaults to --layer8d-primary).
+ *
+ * Usage: <link rel="stylesheet" href="l8ui/portal/layer8d-portal.css">
+ *        Then set --l8-portal-primary in a <style> block if a custom accent is desired.
+ */
+
+:root {
+    --l8-portal-primary: var(--layer8d-primary);
+    --l8-portal-sidebar-width: 220px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--layer8d-bg-light);
+    color: var(--layer8d-text-dark);
+    min-height: 100vh;
+}
+
+.l8-portal-container { display: flex; flex-direction: column; min-height: 100vh; }
+
+/* Header */
+.l8-portal-header {
+    background: linear-gradient(135deg, var(--l8-portal-primary), #0284c7);
+    color: white;
+    padding: 0 24px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    z-index: 100;
+}
+.l8-portal-header-left { display: flex; align-items: center; gap: 12px; }
+.l8-portal-header-logo { height: 32px; }
+.l8-portal-header-title h1 { font-size: 18px; font-weight: 600; }
+.l8-portal-header-title p { font-size: 11px; opacity: 0.85; }
+.l8-portal-header-right { display: flex; align-items: center; gap: 16px; }
+.l8-portal-username { font-size: 14px; font-weight: 500; }
+.l8-portal-logout-btn {
+    background: rgba(255,255,255,0.2);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+}
+.l8-portal-logout-btn:hover { background: rgba(255,255,255,0.3); }
+
+/* Body layout */
+.l8-portal-body { display: flex; flex: 1; }
+
+/* Sidebar */
+.l8-portal-sidebar {
+    width: var(--l8-portal-sidebar-width);
+    background: var(--layer8d-bg-white);
+    border-right: 1px solid var(--layer8d-border);
+    padding: 16px 0;
+    overflow-y: auto;
+}
+.l8-portal-nav-menu { list-style: none; }
+.l8-portal-nav-menu li { margin: 2px 8px; }
+.l8-portal-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    color: var(--layer8d-text-medium);
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+.l8-portal-nav-link:hover { background: var(--layer8d-bg-light); color: var(--layer8d-text-dark); }
+.l8-portal-nav-link.active {
+    background: var(--l8-portal-primary);
+    color: white;
+}
+.l8-portal-nav-icon { font-size: 16px; width: 24px; text-align: center; }
+
+/* Content */
+.l8-portal-content {
+    flex: 1;
+    padding: 24px;
+    overflow-y: auto;
+}
+
+/* Dashboard cards */
+.l8-portal-dashboard-welcome { margin-bottom: 24px; }
+.l8-portal-dashboard-welcome h2 { font-size: 24px; font-weight: 600; margin-bottom: 4px; }
+.l8-portal-dashboard-welcome p { color: var(--layer8d-text-medium); }
+.l8-portal-dashboard-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.l8-portal-card {
+    background: var(--layer8d-bg-white);
+    border: 1px solid var(--layer8d-border);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    transition: box-shadow 0.2s;
+}
+.l8-portal-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+.l8-portal-card-icon { font-size: 28px; }
+.l8-portal-card-content h3 { font-size: 13px; color: var(--layer8d-text-medium); margin-bottom: 6px; }
+.l8-portal-card-value { font-size: 15px; font-weight: 600; color: var(--layer8d-text-dark); }
+
+/* Quick actions */
+.l8-portal-dashboard-quick h3 { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
+.l8-portal-quick-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+/* Section layout */
+.l8-portal-section-title { font-size: 20px; font-weight: 600; margin-bottom: 16px; }
+
+/* Service tabs */
+.l8-portal-service-tabs { display: flex; gap: 4px; margin-bottom: 16px; flex-wrap: wrap; }
+.l8-portal-service-tab {
+    background: var(--layer8d-bg-white);
+    border: 1px solid var(--layer8d-border);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--layer8d-text-medium);
+    transition: all 0.2s;
+}
+.l8-portal-service-tab:hover { border-color: var(--l8-portal-primary); color: var(--l8-portal-primary); }
+.l8-portal-service-tab.active {
+    background: var(--l8-portal-primary);
+    color: white;
+    border-color: var(--l8-portal-primary);
+}
+.l8-portal-tab-icon { margin-right: 4px; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .l8-portal-sidebar { display: none; }
+    .l8-portal-content { padding: 16px; }
+    .l8-portal-dashboard-cards { grid-template-columns: 1fr; }
+}
