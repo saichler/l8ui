@@ -9,7 +9,7 @@
 
 :root {
     --l8-portal-primary: var(--layer8d-primary);
-    --l8-portal-sidebar-width: 220px;
+    --l8-portal-sidebar-width: 260px;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -64,25 +64,27 @@ body {
     overflow-y: auto;
 }
 .l8-portal-nav-menu { list-style: none; }
-.l8-portal-nav-menu li { margin: 2px 8px; }
+.l8-portal-nav-menu li { margin: 2px 10px; }
 .l8-portal-nav-link {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 10px 16px;
-    color: var(--layer8d-text-medium);
+    gap: 12px;
+    padding: 11px 18px;
+    color: #475569;
     text-decoration: none;
-    border-radius: 8px;
+    border-radius: 10px;
+    border: 1px solid transparent;
     font-size: 14px;
     font-weight: 500;
     transition: all 0.2s;
 }
-.l8-portal-nav-link:hover { background: var(--layer8d-bg-light); color: var(--layer8d-text-dark); }
+.l8-portal-nav-link:hover { background: #f1eee8; color: #0f172a; border-color: #ddd7ce; }
 .l8-portal-nav-link.active {
-    background: var(--l8-portal-primary);
-    color: white;
+    background: #f0ede6;
+    color: #0f172a;
+    border-color: #c8c0b4;
 }
-.l8-portal-nav-icon { font-size: 16px; width: 24px; text-align: center; }
+.l8-portal-nav-icon { font-size: 16px; width: 20px; text-align: center; }
 
 /* Content */
 .l8-portal-content {

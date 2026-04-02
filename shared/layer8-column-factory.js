@@ -68,6 +68,22 @@ limitations under the License.
         },
 
         /**
+         * Create a numeric column.
+         * @param {string} key - The field key
+         * @param {string} [label] - Optional label
+         * @returns {Array} - Single column in array format
+         */
+        number: function(key, label) {
+            return [{
+                key: key,
+                label: label || this._toTitleCase(key),
+                sortKey: key,
+                filterKey: key,
+                align: 'right'
+            }];
+        },
+
+        /**
          * Create a boolean column.
          * @param {string} key - The field key
          * @param {string} [label] - Optional label

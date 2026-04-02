@@ -101,7 +101,16 @@
             tabsHtml += '</div>';
 
             contentArea.innerHTML = '<div class="l8-portal-section">' +
-                '<h2 class="l8-portal-section-title">' + section.label + '</h2>' +
+                '<div class="l8-header-frame">' +
+                    '<div class="l8-header-content">' +
+                        '<div class="l8-header-title">' +
+                            '<span class="l8-icon">' + (section.icon || '') + '</span>' +
+                            '<div>' +
+                                '<h1 class="l8-title">' + section.label + '</h1>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
                 tabsHtml +
                 '<div id="l8-portal-table-container"></div>' +
             '</div>';

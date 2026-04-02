@@ -175,7 +175,16 @@
                 }
 
                 var services = section.services;
-                var tabsHtml = '<div class="l8-portal-section-header"><h2 class="l8-portal-m-section-title">' + section.label + '</h2></div>';
+                var tabsHtml = '<div class="l8-header-frame">' +
+                    '<div class="l8-header-content">' +
+                        '<div class="l8-header-title">' +
+                            '<span class="l8-icon">' + (section.icon || '') + '</span>' +
+                            '<div>' +
+                                '<h1 class="l8-title">' + section.label + '</h1>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
                 tabsHtml += '<div class="l8-portal-m-service-tabs">';
                 services.forEach(function(svc, i) {
                     var activeClass = i === 0 ? ' active' : '';

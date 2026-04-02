@@ -57,8 +57,33 @@
         return " where " + scopeField + "='" + scopeValue + "'";
     }
 
+    /**
+     * Render a header frame matching the main app's section header style.
+     * Inserts the l8-header-frame HTML at the beginning of the container.
+     * @param {HTMLElement} container - target container
+     * @param {string} icon - emoji icon (e.g., '👥')
+     * @param {string} title - header title
+     * @param {string} [subtitle] - optional subtitle
+     */
+    function renderHeader(container, icon, title, subtitle) {
+        var html =
+            '<div class="l8-header-frame">' +
+                '<div class="l8-header-content">' +
+                    '<div class="l8-header-title">' +
+                        '<span class="l8-icon">' + (icon || '') + '</span>' +
+                        '<div>' +
+                            '<h1 class="l8-title">' + title + '</h1>' +
+                            (subtitle ? '<p class="l8-subtitle">' + subtitle + '</p>' : '') +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+            '</div>';
+        container.insertAdjacentHTML('afterbegin', html);
+    }
+
     window.Layer8DPortalDashboard = {
         fetchCount: fetchCount,
-        scopeWhere: scopeWhere
+        scopeWhere: scopeWhere,
+        renderHeader: renderHeader
     };
 })();

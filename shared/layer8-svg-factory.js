@@ -23,7 +23,7 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
      */
     function generateGrid() {
         return `
-            <g opacity="0.1">
+            <g opacity="0.2">
                 <line x1="0" y1="30" x2="1200" y2="30" stroke="${PRIMARY_COLOR}" stroke-width="0.5"/>
                 <line x1="0" y1="60" x2="1200" y2="60" stroke="${PRIMARY_COLOR}" stroke-width="0.5"/>
                 <line x1="0" y1="90" x2="1200" y2="90" stroke="${PRIMARY_COLOR}" stroke-width="0.5"/>
@@ -40,10 +40,10 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
      */
     function generatePaths() {
         return `
-            <path d="M 215,60 Q 300,40 385,55" fill="none" stroke="${PRIMARY_COLOR}" stroke-width="1" opacity="0.3"/>
-            <path d="M 418,50 Q 500,70 582,60" fill="none" stroke="${PRIMARY_COLOR}" stroke-width="1" opacity="0.3"/>
-            <path d="M 618,60 Q 700,45 770,55" fill="none" stroke="${PRIMARY_COLOR}" stroke-width="1" opacity="0.3"/>
-            <path d="M 830,60 Q 900,75 984,60" fill="none" stroke="${PRIMARY_COLOR}" stroke-width="1" opacity="0.3"/>`;
+            <path d="M 215,60 Q 300,40 385,55" fill="none" stroke="${PRIMARY_COLOR}" stroke-width="1" opacity="0.5"/>
+            <path d="M 418,50 Q 500,70 582,60" fill="none" stroke="${PRIMARY_COLOR}" stroke-width="1" opacity="0.5"/>
+            <path d="M 618,60 Q 700,45 770,55" fill="none" stroke="${PRIMARY_COLOR}" stroke-width="1" opacity="0.5"/>
+            <path d="M 830,60 Q 900,75 984,60" fill="none" stroke="${PRIMARY_COLOR}" stroke-width="1" opacity="0.5"/>`;
     }
 
     /**
@@ -54,8 +54,14 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
             <circle cx="300" cy="50" r="3" fill="${PRIMARY_COLOR}" opacity="0.8">
                 <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/>
             </circle>
-            <circle cx="700" cy="55" r="3" fill="${PRIMARY_COLOR}" opacity="0.8">
+            <circle cx="500" cy="65" r="3" fill="${PRIMARY_COLOR}" opacity="0.8">
                 <animate attributeName="opacity" values="0.3;1;0.3" dur="2.5s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="700" cy="55" r="3" fill="${PRIMARY_COLOR}" opacity="0.8">
+                <animate attributeName="opacity" values="0.3;1;0.3" dur="3s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="900" cy="60" r="3" fill="${PRIMARY_COLOR}" opacity="0.8">
+                <animate attributeName="opacity" values="0.3;1;0.3" dur="2.2s" repeatCount="indefinite"/>
             </circle>`;
     }
 
@@ -99,11 +105,11 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
         }
 
         return `
-        <svg class="l8-illustration" viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg">
+        <svg class="l8-illustration" viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
             <defs>
                 <linearGradient id="${gradientId}" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" style="stop-color:${PRIMARY_COLOR};stop-opacity:0.4" />
-                    <stop offset="100%" style="stop-color:${SECONDARY_COLOR};stop-opacity:0.2" />
+                    <stop offset="0%" style="stop-color:${PRIMARY_COLOR};stop-opacity:0.6" />
+                    <stop offset="100%" style="stop-color:${SECONDARY_COLOR};stop-opacity:0.4" />
                 </linearGradient>
             </defs>
             ${generateGrid()}
