@@ -135,8 +135,9 @@ limitations under the License.
                 `;
             }
 
+            const positionClass = config.position === 'bottom' ? ' mobile-popup-bottom' : '';
             overlay.innerHTML = `
-                <div class="mobile-popup size-${config.size}">
+                <div class="mobile-popup size-${config.size}${positionClass}">
                     <div class="mobile-popup-handle"></div>
                     <div class="mobile-popup-header">
                         ${titleHtml}

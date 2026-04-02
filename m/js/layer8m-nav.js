@@ -173,7 +173,7 @@ limitations under the License.
                 const cardClass = isImplemented ? 'nav-card' : 'nav-card coming-soon';
 
                 html += `
-                    <div class="${cardClass}" ${isImplemented ? `onclick="Layer8MNav.navigateToModule('${module.key}')"` : ''}>
+                    <div class="${cardClass}" data-module="${module.key}" ${isImplemented ? `onclick="Layer8MNav.navigateToModule('${module.key}')"` : ''}>
                         <span class="nav-card-icon">${LAYER8M_NAV_CONFIG.getIcon(module.icon)}</span>
                         <span class="nav-card-label">${Layer8MUtils.escapeHtml(module.label)}</span>
                         ${!isImplemented ? '<span class="nav-card-badge">Coming Soon</span>' : ''}

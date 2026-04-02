@@ -347,3 +347,27 @@ limitations under the License.
         display: none;
     }
 }
+
+/* Bottom sheet variant */
+.mobile-popup.mobile-popup-bottom {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-height: 60vh;
+    border-radius: 16px 16px 0 0;
+    transform: translateY(100%);
+    transition: transform 0.3s ease-out;
+}
+.mobile-popup-overlay.open .mobile-popup.mobile-popup-bottom {
+    transform: translateY(0);
+}
+.mobile-popup.mobile-popup-bottom .mobile-popup-handle {
+    display: block;
+    width: 36px;
+    height: 4px;
+    background: var(--layer8d-border);
+    border-radius: 2px;
+    margin: 8px auto 4px;
+}

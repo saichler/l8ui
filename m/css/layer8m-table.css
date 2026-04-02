@@ -287,3 +287,53 @@ limitations under the License.
     font-weight: 600;
     cursor: pointer;
 }
+
+/* Pull-to-refresh indicator */
+.l8m-pull-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 0;
+    overflow: hidden;
+    transition: opacity 0.2s;
+}
+.l8m-pull-indicator.l8m-pull-refreshing {
+    height: 40px !important;
+    opacity: 1 !important;
+}
+.l8m-pull-spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--layer8d-border);
+    border-top-color: var(--layer8d-primary);
+    border-radius: 50%;
+    animation: l8m-spin 0.6s linear infinite;
+}
+@keyframes l8m-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Swipe actions */
+.l8m-swipe-actions {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 8px;
+    background: var(--layer8d-bg-light);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    z-index: 2;
+    animation: l8m-slide-in 0.2s ease-out;
+}
+@keyframes l8m-slide-in {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+}
+.l8m-swipe-btn-delete {
+    background: var(--layer8d-error);
+    color: #fff;
+    border: none;
+}
