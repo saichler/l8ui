@@ -23,34 +23,47 @@ body {
 
 .l8-portal-container { display: flex; flex-direction: column; min-height: 100vh; }
 
-/* Header */
+/* Header — illustrated style matching desktop section titles */
 .l8-portal-header {
-    background: linear-gradient(135deg, var(--l8-portal-primary), #0284c7);
-    color: white;
-    padding: 0 24px;
-    height: 56px;
+    position: relative;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.l8-portal-header .l8-header-frame {
+    margin-bottom: 0;
+}
+/* Allow portal switcher dropdown to overflow the header */
+.l8-portal-header .l8-portal-header-wrapper,
+.l8-portal-header .l8-header-frame {
+    overflow: visible;
+}
+/* Controls overlay */
+.l8-portal-header-wrapper {
+    position: relative;
+}
+.l8-portal-header-controls {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    z-index: 100;
+    padding-right: 24px;
+    z-index: 110;
 }
-.l8-portal-header-left { display: flex; align-items: center; gap: 12px; }
-.l8-portal-header-logo { height: 32px; }
-.l8-portal-header-title h1 { font-size: 18px; font-weight: 600; }
-.l8-portal-header-title p { font-size: 11px; opacity: 0.85; }
 .l8-portal-header-right { display: flex; align-items: center; gap: 16px; }
-.l8-portal-username { font-size: 14px; font-weight: 500; }
+.l8-portal-username { font-size: 14px; font-weight: 500; color: var(--layer8d-text-dark); }
 .l8-portal-logout-btn {
-    background: rgba(255,255,255,0.2);
-    color: white;
-    border: 1px solid rgba(255,255,255,0.3);
+    background: rgba(0,0,0,0.06);
+    color: var(--layer8d-text-dark);
+    border: 1px solid var(--layer8d-border);
     padding: 6px 14px;
     border-radius: 6px;
     cursor: pointer;
     font-size: 13px;
+    transition: background 0.2s;
 }
-.l8-portal-logout-btn:hover { background: rgba(255,255,255,0.3); }
+.l8-portal-logout-btn:hover { background: rgba(0,0,0,0.1); }
 
 /* Body layout */
 .l8-portal-body { display: flex; flex: 1; }

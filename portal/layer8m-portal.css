@@ -41,6 +41,55 @@
 }
 .l8-portal-nav-icon { font-size: 18px; width: 24px; text-align: center; }
 
+/* Illustrated page header */
+.l8-portal-m-illustrated-header {
+    position: relative;
+    overflow: hidden;
+    height: auto;
+    padding: 0;
+    background: none;
+}
+.l8-portal-m-illustrated-header .l8-header-frame {
+    margin-bottom: 0;
+}
+.l8-portal-m-illustrated-header .l8-portal-header-wrapper {
+    position: relative;
+}
+.l8-portal-m-illustrated-header .l8-portal-header-controls {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+    z-index: 10;
+    pointer-events: none;
+}
+.l8-portal-m-header-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    pointer-events: auto;
+}
+.l8-portal-m-illustrated-header .header-menu-btn,
+.l8-portal-m-illustrated-header .header-action-btn {
+    background: rgba(0,0,0,0.06);
+    border: 1px solid var(--layer8d-border);
+    border-radius: 8px;
+    padding: 8px;
+    color: var(--layer8d-text-dark);
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 /* Section title */
 .l8-portal-section-header {
     padding: 16px 16px 8px;

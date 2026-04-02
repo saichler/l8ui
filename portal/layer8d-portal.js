@@ -35,6 +35,7 @@
         var contentAreaId = config.contentAreaId || 'l8-portal-content-area';
         var navMenuSelector = config.navMenuSelector || '.l8-portal-nav-menu';
         var moduleNs = config.moduleNamespace || config.namespace;
+        var portalSvgKey = config.portalSvgKey || 'default';
 
         // Expose portal methods on the namespace
         ns._scopeField = config.scopeField || '';
@@ -101,16 +102,6 @@
             tabsHtml += '</div>';
 
             contentArea.innerHTML = '<div class="l8-portal-section">' +
-                '<div class="l8-header-frame">' +
-                    '<div class="l8-header-content">' +
-                        '<div class="l8-header-title">' +
-                            '<span class="l8-icon">' + (section.icon || '') + '</span>' +
-                            '<div>' +
-                                '<h1 class="l8-title">' + section.label + '</h1>' +
-                            '</div>' +
-                        '</div>' +
-                    '</div>' +
-                '</div>' +
                 tabsHtml +
                 '<div id="l8-portal-table-container"></div>' +
             '</div>';
@@ -263,6 +254,27 @@
             // Set username
             var username = sessionStorage.getItem('currentUser') || 'User';
             ns._scopeValue = config.scopeValue || username;
+
+            // Generate illustrated page header
+            var headerEl = document.querySelector('.l8-portal-header');
+            if (headerEl && window.Layer8SectionGenerator) {
+                // Extract title from existing HTML before replacing
+                var existingTitle = config.portalTitle || '';
+                if (!existingTitle) {
+                    var titleH1 = headerEl.querySelector('h1');
+                    if (titleH1) existingTitle = titleH1.textContent;
+                }
+                var controlsHtml = '<div class="l8-portal-header-right">' +
+                    '<span class="l8-portal-username">' + username + '</span>' +
+                    '<button class="l8-portal-logout-btn" onclick="logout()">Logout</button>' +
+                '</div>';
+                headerEl.innerHTML = Layer8SectionGenerator.generatePortalHeader({
+                    title: existingTitle,
+                    icon: config.portalIcon || '',
+                    svgKey: portalSvgKey,
+                    controlsHtml: controlsHtml
+                });
+            }
 
             var usernameEl = document.querySelector(config.usernameSelector || '.l8-portal-username');
             if (usernameEl) usernameEl.textContent = username;

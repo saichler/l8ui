@@ -237,6 +237,30 @@ ${this._generateInitScript(config)}
         },
 
         /**
+         * Generate a portal page header with illustrated background and overlaid controls.
+         * @param {object} config - { title, subtitle, icon, controlsHtml }
+         * @returns {string} HTML string
+         */
+        generatePortalHeader: function(config) {
+            var svgContent = '';
+            if (window.Layer8SvgFactory) {
+                svgContent = Layer8SvgFactory.generate(config.svgKey || 'default');
+            }
+            var headerConfig = {
+                title: config.title || '',
+                subtitle: config.subtitle || '',
+                icon: config.icon || '',
+                svgContent: svgContent
+            };
+            var headerHtml = this._generateHeader(headerConfig);
+            var controlsHtml = config.controlsHtml || '';
+            return '<div class="l8-portal-header-wrapper">' +
+                headerHtml +
+                '<div class="l8-portal-header-controls">' + controlsHtml + '</div>' +
+            '</div>';
+        },
+
+        /**
          * Generate initialization script.
          * @private
          */

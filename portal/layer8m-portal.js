@@ -34,6 +34,7 @@
         var sidebarNavId = config.sidebarNavId || 'l8-portal-sidebar-nav';
         var moduleNs = config.moduleNamespace || config.namespace;
         var navMenuTitle = config.navMenuTitle || 'Menu';
+        var portalSvgKey = config.portalSvgKey || 'default';
 
         ns._scopeField = config.scopeField || '';
         ns._scopeValue = '';
@@ -61,6 +62,40 @@
                 var avatarEl = document.getElementById('user-avatar');
                 if (avatarEl) avatarEl.textContent = username.charAt(0).toUpperCase();
 
+                // Generate illustrated page header
+                var headerEl = document.querySelector('.mobile-header');
+                if (headerEl && window.Layer8SectionGenerator) {
+                    // Extract title from existing HTML before replacing
+                    var existingTitle = config.portalTitle || '';
+                    if (!existingTitle) {
+                        var titleSpan = headerEl.querySelector('.header-logo-text');
+                        if (titleSpan) existingTitle = titleSpan.textContent;
+                    }
+                    var controlsHtml = '<div class="l8-portal-m-header-controls">' +
+                        '<button class="header-menu-btn" id="menu-toggle-new">' +
+                            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
+                                '<line x1="3" y1="6" x2="21" y2="6"></line>' +
+                                '<line x1="3" y1="12" x2="21" y2="12"></line>' +
+                                '<line x1="3" y1="18" x2="21" y2="18"></line>' +
+                            '</svg>' +
+                        '</button>' +
+                        '<button class="header-action-btn" id="refresh-btn-new" title="Refresh">' +
+                            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
+                                '<path d="M23 4v6h-6"></path>' +
+                                '<path d="M1 20v-6h6"></path>' +
+                                '<path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>' +
+                            '</svg>' +
+                        '</button>' +
+                    '</div>';
+                    headerEl.innerHTML = Layer8SectionGenerator.generatePortalHeader({
+                        title: existingTitle,
+                        icon: config.portalIcon || '',
+                        svgKey: portalSvgKey,
+                        controlsHtml: controlsHtml
+                    });
+                    headerEl.classList.add('l8-portal-m-illustrated-header');
+                }
+
                 // Call portal-specific onUsername callback
                 if (config.onUsername) {
                     config.onUsername(username);
@@ -83,8 +118,8 @@
                 // Setup sidebar toggle
                 this._initSidebar();
 
-                // Setup refresh button
-                var refreshBtn = document.getElementById('refresh-btn');
+                // Setup refresh button (try new ID from generated header, fallback to original)
+                var refreshBtn = document.getElementById('refresh-btn-new') || document.getElementById('refresh-btn');
                 if (refreshBtn) {
                     var self = this;
                     refreshBtn.addEventListener('click', function() {
@@ -125,7 +160,7 @@
             },
 
             _initSidebar: function() {
-                var menuToggle = document.getElementById('menu-toggle');
+                var menuToggle = document.getElementById('menu-toggle-new') || document.getElementById('menu-toggle');
                 var overlay = document.getElementById('sidebar-overlay');
                 var self = this;
                 if (menuToggle) menuToggle.addEventListener('click', function() { self.openSidebar(); });
@@ -175,16 +210,7 @@
                 }
 
                 var services = section.services;
-                var tabsHtml = '<div class="l8-header-frame">' +
-                    '<div class="l8-header-content">' +
-                        '<div class="l8-header-title">' +
-                            '<span class="l8-icon">' + (section.icon || '') + '</span>' +
-                            '<div>' +
-                                '<h1 class="l8-title">' + section.label + '</h1>' +
-                            '</div>' +
-                        '</div>' +
-                    '</div>' +
-                '</div>';
+                var tabsHtml = '';
                 tabsHtml += '<div class="l8-portal-m-service-tabs">';
                 services.forEach(function(svc, i) {
                     var activeClass = i === 0 ? ' active' : '';
