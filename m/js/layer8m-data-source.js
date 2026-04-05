@@ -140,6 +140,9 @@ limitations under the License.
                 return result;
             } catch (error) {
                 console.error('Layer8MDataSource fetch error:', error);
+                if (error.message && error.message.toLowerCase().includes('access denied') && typeof Layer8MUtils !== 'undefined') {
+                    Layer8MUtils.showError('Access Denied — you do not have permission to view this data.');
+                }
                 if (this._onError) {
                     this._onError(error);
                 }

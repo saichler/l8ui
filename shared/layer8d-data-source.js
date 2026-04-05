@@ -117,6 +117,12 @@ limitations under the License.
                 });
 
                 if (!response.ok) {
+                    const errorText = await response.text().catch(() => '');
+                    if (errorText && errorText.toLowerCase().includes('access denied')) {
+                        const err = new Error('Access Denied — you do not have permission to view this data.');
+                        err.accessDenied = true;
+                        throw err;
+                    }
                     throw new Error('Failed to fetch data');
                 }
 
@@ -150,6 +156,9 @@ limitations under the License.
                 return result;
             } catch (error) {
                 console.error('DataSource fetch error:', error);
+                if (error.accessDenied && typeof Layer8DNotification !== 'undefined') {
+                    Layer8DNotification.error('Access Denied', ['You do not have permission to view this data.']);
+                }
                 if (this._onError) {
                     this._onError(error);
                 }

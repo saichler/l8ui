@@ -305,7 +305,13 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
             headers: typeof getAuthHeaders === 'function' ? getAuthHeaders() : {}
         });
 
-        if (!response.ok) throw new Error('Failed to fetch record');
+        if (!response.ok) {
+            const errorText = await response.text().catch(() => '');
+            if (errorText && errorText.toLowerCase().includes('access denied')) {
+                throw new Error('Access Denied — you do not have permission to view this record.');
+            }
+            throw new Error('Failed to fetch record');
+        }
 
         const result = await response.json();
         return result.list && result.list.length > 0 ? result.list[0] : null;
