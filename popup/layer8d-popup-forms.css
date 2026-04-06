@@ -43,7 +43,7 @@ limitations under the License.
     display: block;
     margin-bottom: var(--layer8d-space-sm, 12px);
     font-weight: 700;
-    color: #334155;
+    color: var(--layer8d-text-dark);
     font-size: 13px;
     font-family: var(--layer8d-font-family, 'Figtree', sans-serif);
     text-transform: none;

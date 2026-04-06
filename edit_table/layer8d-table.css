@@ -47,7 +47,7 @@ limitations under the License.
 
 .l8-pagination-info {
     font-size: 12px;
-    color: #4a5568;
+    color: var(--layer8d-text-medium);
     font-family: 'Figtree', sans-serif;
 }
 
@@ -66,7 +66,7 @@ limitations under the License.
 
 .l8-page-size label {
     font-size: 11px;
-    color: #4a5568;
+    color: var(--layer8d-text-medium);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -80,14 +80,14 @@ limitations under the License.
     font-size: 12px;
     font-family: 'Figtree', sans-serif;
     background: var(--layer8d-bg-white, #fcfbf8);
-    color: #2d3748;
+    color: var(--layer8d-text-dark);
     cursor: pointer;
     min-width: 60px;
 }
 
 .l8-page-size-select:focus {
     outline: none;
-    border-color: #0ea5e9;
+    border-color: var(--layer8d-primary);
     box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.1);
 }
 
@@ -102,7 +102,7 @@ limitations under the License.
     border: 1px solid var(--layer8d-border, #ddd7ce);
     border-radius: 6px;
     background: var(--layer8d-bg-white, #fcfbf8);
-    color: #4a5568;
+    color: var(--layer8d-text-medium);
     font-size: 12px;
     font-weight: 600;
     cursor: pointer;
@@ -111,9 +111,9 @@ limitations under the License.
 }
 
 .l8-page-btn:hover:not(:disabled) {
-    background: #0ea5e9;
+    background: var(--layer8d-primary);
     color: white;
-    border-color: #0ea5e9;
+    border-color: var(--layer8d-primary);
 }
 
 .l8-page-btn:disabled {
@@ -124,7 +124,7 @@ limitations under the License.
 .l8-page-current {
     padding: 6px 12px;
     font-size: 12px;
-    color: #2d3748;
+    color: var(--layer8d-text-dark);
     font-weight: 600;
     font-family: 'Figtree', sans-serif;
 }
@@ -132,7 +132,7 @@ limitations under the License.
 /* Table Container */
 .l8-table-container {
     overflow: auto;
-    border: 1px solid #e2e8f0;
+    border: 1px solid var(--layer8d-border);
     border-radius: 0 0 12px 12px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     flex: 1;
@@ -156,7 +156,7 @@ limitations under the License.
     background: var(--layer8d-bg-light, #f4f1ea);
     font-family: 'Figtree', sans-serif;
     font-weight: 600;
-    color: #0ea5e9;
+    color: var(--layer8d-primary);
     font-size: 10px;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -194,7 +194,7 @@ limitations under the License.
     position: sticky;
     top: 0;
     z-index: 10;
-    background: #f4f1ea;
+    background: var(--layer8d-bg-light);
 }
 
 /* Shadow for header row (tables without filter) */
@@ -216,14 +216,14 @@ limitations under the License.
 
 /* Filter Row - Sticky below header */
 .l8-table-filter-row {
-    background: #f4f1ea;
+    background: var(--layer8d-bg-light);
 }
 
 .l8-table-filter-row th {
     position: sticky;
     top: var(--l8-header-height);
     z-index: 9;
-    background: #f4f1ea;
+    background: var(--layer8d-bg-light);
 }
 
 /* Visual separator shadow for sticky header */
@@ -249,7 +249,7 @@ limitations under the License.
     padding: 6px 10px;
     background: var(--layer8d-bg-white, #fcfbf8);
     border: 1px solid var(--layer8d-border, #ddd7ce);
-    color: #2d3748;
+    color: var(--layer8d-text-dark);
     font-size: 11px;
     font-family: 'Figtree', sans-serif;
     transition: all 0.2s ease;
@@ -259,23 +259,23 @@ limitations under the License.
 
 .l8-filter-input:focus {
     outline: none;
-    border-color: #0ea5e9;
+    border-color: var(--layer8d-primary);
     box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.1);
 }
 
 .l8-filter-input::placeholder {
-    color: #a0aec0;
+    color: var(--layer8d-text-light);
     font-size: 10px;
 }
 
 .l8-filter-input.invalid {
-    border-color: #e53e3e;
-    background-color: #fff5f5;
-    color: #e53e3e;
+    border-color: var(--layer8d-error);
+    background-color: var(--layer8d-error-bg);
+    color: var(--layer8d-error);
 }
 
 .l8-table td {
-    color: #4a5568;
+    color: var(--layer8d-text-medium);
     font-size: 12px;
     font-family: 'Figtree', sans-serif;
 }
@@ -335,13 +335,13 @@ limitations under the License.
 .l8-btn-small {
     padding: 6px 12px;
     font-size: 10px;
-    background: #f4f1ea;
-    color: #4a5568;
-    border: 1px solid #e2e8f0;
+    background: var(--layer8d-bg-light);
+    color: var(--layer8d-text-medium);
+    border: 1px solid var(--layer8d-border);
 }
 
 .l8-btn-small:hover {
-    background: #e6ddd0;
+    background: var(--layer8d-bg-hover);
 }
 
 .l8-btn-danger {
@@ -364,7 +364,7 @@ limitations under the License.
 
 .l8-btn-toggle {
     background: transparent;
-    border: 1px solid #e2e8f0;
+    border: 1px solid var(--layer8d-border);
     font-size: 16px;
     padding: 4px 8px;
     cursor: pointer;
@@ -374,7 +374,7 @@ limitations under the License.
 
 .l8-btn-toggle:hover {
     background: rgba(160, 136, 115, 0.12);
-    border-color: #0ea5e9;
+    border-color: var(--layer8d-primary);
     transform: scale(1.1);
 }
 
@@ -383,7 +383,7 @@ limitations under the License.
     display: inline-block;
     padding: 4px 10px;
     background: rgba(160, 136, 115, 0.12);
-    color: #0ea5e9;
+    color: var(--layer8d-primary);
     border-radius: 4px;
     font-size: 10px;
     font-weight: 600;
@@ -394,29 +394,29 @@ limitations under the License.
 
 .l8-tag-up {
     background: rgba(0, 200, 83, 0.1);
-    color: #00c853;
+    color: var(--layer8d-success);
 }
 
 .l8-tag-down {
     background: rgba(117, 117, 117, 0.1);
-    color: #757575;
+    color: var(--layer8d-text-muted);
 }
 
 .l8-tag-allow {
     background: rgba(0, 200, 83, 0.1);
-    color: #00c853;
+    color: var(--layer8d-success);
 }
 
 .l8-tag-deny {
     background: rgba(239, 68, 68, 0.1);
-    color: #ef4444;
+    color: var(--layer8d-error);
 }
 
 /* Empty State */
 .l8-empty-state {
     text-align: center;
     padding: 40px;
-    color: #718096;
+    color: var(--layer8d-text-muted);
 }
 
 .l8-empty-state p {

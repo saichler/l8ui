@@ -111,7 +111,7 @@ limitations under the License.
         padding: 8px;
         margin: 0 -7px;
         border-right: none;
-        border-bottom: 1px solid #e2e8f0;
+        border-bottom: 1px solid var(--layer8d-border);
     }
 
     .l8-subnav-item,
@@ -125,7 +125,7 @@ limitations under the License.
     .l8-subnav-item.active,
     .hcm-subnav-item.active {
         border-left: none;
-        background: #0ea5e9;
+        background: var(--layer8d-primary);
         color: white;
     }
 

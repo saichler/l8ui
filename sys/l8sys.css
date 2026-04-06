@@ -118,8 +118,8 @@ limitations under the License.
     border-radius: 4px;
     font-size: 11px;
     font-weight: 600;
-    background: #c6f6d5;
-    color: #22543d;
+    background: var(--layer8d-success-bg);
+    color: var(--layer8d-success);
 }
 
 .l8sys-tag-deny {
@@ -128,8 +128,8 @@ limitations under the License.
     border-radius: 4px;
     font-size: 11px;
     font-weight: 600;
-    background: #fed7d7;
-    color: #742a2a;
+    background: var(--layer8d-error-bg);
+    color: var(--layer8d-error);
 }
 
 /* Key-value row for actions / attributes */

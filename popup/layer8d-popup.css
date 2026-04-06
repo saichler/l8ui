@@ -26,17 +26,17 @@ limitations under the License.
     --popup-space-lg: 24px;
     --popup-space-xl: 32px;
 
-    /* Colors */
-    --popup-primary: #0ea5e9;
-    --popup-primary-dark: #0284c7;
-    --popup-text-dark: #2d3748;
-    --popup-text-medium: #4a5568;
-    --popup-text-muted: #718096;
-    --popup-border: #ddd7ce;
-    --popup-bg-light: #f4f1ea;
-    --popup-bg-input: #efeae1;
-    --popup-error: #ef4444;
-    --popup-success: #00c853;
+    /* Colors — redirect to canonical theme tokens */
+    --popup-primary: var(--layer8d-primary);
+    --popup-primary-dark: var(--layer8d-primary-dark);
+    --popup-text-dark: var(--layer8d-text-dark);
+    --popup-text-medium: var(--layer8d-text-medium);
+    --popup-text-muted: var(--layer8d-text-muted);
+    --popup-border: var(--layer8d-border);
+    --popup-bg-light: var(--layer8d-bg-light);
+    --popup-bg-input: var(--layer8d-bg-input);
+    --popup-error: var(--layer8d-error);
+    --popup-success: var(--layer8d-success);
 
     /* Effects */
     --popup-focus-ring: 0 0 0 3px rgba(14, 165, 233, 0.15);
@@ -64,14 +64,14 @@ limitations under the License.
 
 /* Container - the popup box */
 .probler-popup-container {
-    background: #fcfbf8;
+    background: var(--layer8d-bg-white);
     border-radius: 12px;
     width: 90%;
     max-height: 90vh;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    border: 1px solid #e2e8f0;
+    border: 1px solid var(--layer8d-border);
     box-shadow: 0 18px 40px rgba(15, 23, 42, 0.16);
     animation: probler-popup-slide-in 0.3s ease-out;
 }
@@ -101,7 +101,7 @@ limitations under the License.
     justify-content: space-between;
     align-items: center;
     padding: 18px 24px;
-    background: #f8f5ef;
+    background: var(--layer8d-bg-light);
     border-bottom: 1px solid var(--popup-border);
     border-radius: 12px 12px 0 0;
     flex-shrink: 0;
@@ -109,7 +109,7 @@ limitations under the License.
 
 .probler-popup-title {
     font-size: 16px;
-    color: #0f172a;
+    color: var(--layer8d-text-dark);
     font-weight: 600;
     text-transform: none;
     letter-spacing: 0;
@@ -122,7 +122,7 @@ limitations under the License.
     border: none;
     font-size: 28px;
     cursor: pointer;
-    color: #64748b;
+    color: var(--layer8d-text-muted);
     line-height: 1;
     transition: all 0.2s ease;
     padding: 0;
@@ -134,7 +134,7 @@ limitations under the License.
 }
 
 .probler-popup-close:hover {
-    color: #0f172a;
+    color: var(--layer8d-text-dark);
     transform: none;
 }
 
@@ -144,10 +144,10 @@ limitations under the License.
     overflow-y: auto;
     flex: 1;
     min-height: 0;
-    color: #334155;
+    color: var(--layer8d-text-dark);
     display: flex;
     flex-direction: column;
-    background: #fcfbf8;
+    background: var(--layer8d-bg-white);
 }
 
 /* Footer - action buttons */
@@ -157,7 +157,7 @@ limitations under the License.
     gap: 12px;
     padding: 20px 24px;
     border-top: 1px solid var(--popup-border);
-    background: #f8f5ef;
+    background: var(--layer8d-bg-light);
     flex-shrink: 0;
 }
 

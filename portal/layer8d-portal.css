@@ -83,7 +83,7 @@ body {
     align-items: center;
     gap: 12px;
     padding: 11px 18px;
-    color: #475569;
+    color: var(--layer8d-text-medium);
     text-decoration: none;
     border-radius: 10px;
     border: 1px solid transparent;
@@ -91,11 +91,11 @@ body {
     font-weight: 500;
     transition: all 0.2s;
 }
-.l8-portal-nav-link:hover { background: #f1eee8; color: #0f172a; border-color: #ddd7ce; }
+.l8-portal-nav-link:hover { background: var(--layer8d-bg-light); color: var(--layer8d-text-dark); border-color: var(--layer8d-border); }
 .l8-portal-nav-link.active {
-    background: #f0ede6;
-    color: #0f172a;
-    border-color: #c8c0b4;
+    background: var(--layer8d-bg-light);
+    color: var(--layer8d-text-dark);
+    border-color: var(--layer8d-border-dark);
 }
 .l8-portal-nav-icon { font-size: 16px; width: 20px; text-align: center; }
 

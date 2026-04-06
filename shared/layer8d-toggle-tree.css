@@ -3,11 +3,11 @@
 .l8-toggle-tree {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-size: 14px;
-    color: #1e293b;
+    color: var(--layer8d-text-dark);
 }
 
 .l8-toggle-node {
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 1px solid var(--layer8d-border);
 }
 
 .l8-toggle-row {
@@ -35,7 +35,7 @@
 .l8-toggle-collapse {
     background: none;
     border: none;
-    color: #64748b;
+    color: var(--layer8d-text-muted);
     cursor: pointer;
     font-size: 10px;
     width: 20px;
@@ -48,7 +48,7 @@
 }
 
 .l8-toggle-collapse:hover {
-    color: #1e293b;
+    color: var(--layer8d-text-dark);
 }
 
 .l8-toggle-collapse-spacer {
@@ -78,7 +78,7 @@
     padding: 2px 6px;
     border-radius: 4px;
     background: rgba(160, 136, 115, 0.12);
-    color: #0284c7;
+    color: var(--layer8d-primary-dark);
     flex-shrink: 0;
 }
 
@@ -104,7 +104,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #d6cdbf;
+    background-color: var(--layer8d-border);
     transition: 0.3s;
     border-radius: 22px;
 }
@@ -146,7 +146,7 @@
 
 /* Children container */
 .l8-toggle-children {
-    border-left: 1px solid #e2e8f0;
+    border-left: 1px solid var(--layer8d-border);
     margin-left: 10px;
 }
 

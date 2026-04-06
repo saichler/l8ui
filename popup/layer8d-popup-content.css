@@ -64,8 +64,8 @@ limitations under the License.
 
 .probler-popup-tabs {
     display: flex;
-    background: #f8f5ef;
-    border-bottom: 1px solid #ddd7ce;
+    background: var(--layer8d-bg-light);
+    border-bottom: 1px solid var(--layer8d-border);
     padding: 0 16px;
     gap: 4px;
     flex-wrap: wrap;
@@ -77,7 +77,7 @@ limitations under the License.
     font-weight: 600 !important;
     text-transform: none !important;
     letter-spacing: normal !important;
-    color: #4a5568;
+    color: var(--layer8d-text-medium);
     cursor: pointer;
     border-bottom: 3px solid transparent;
     transition: all 0.2s ease;
@@ -86,13 +86,13 @@ limitations under the License.
 
 .probler-popup-tab:hover {
     background: rgba(160, 136, 115, 0.08);
-    color: #0ea5e9;
+    color: var(--layer8d-primary);
 }
 
 .probler-popup-tab.active {
-    background: #fcfbf8;
-    color: #0ea5e9;
-    border-bottom-color: #0ea5e9;
+    background: var(--layer8d-bg-white);
+    color: var(--layer8d-primary);
+    border-bottom-color: var(--layer8d-primary);
     box-shadow: none;
 }
 
@@ -136,23 +136,23 @@ limitations under the License.
 }
 
 .probler-popup-body .detail-section {
-    background: #fdfbf7;
-    border: 1px solid #ddd7ce;
+    background: var(--layer8d-bg-card);
+    border: 1px solid var(--layer8d-border);
     padding: 18px;
-    border-left: 1px solid #ddd7ce;
+    border-left: 1px solid var(--layer8d-border);
     border-radius: 10px;
 }
 
 .probler-popup-body .detail-section-title {
     font-size: 14px !important;
     font-weight: 700 !important;
-    color: #0f172a;
+    color: var(--layer8d-text-dark);
     text-transform: none !important;
     letter-spacing: normal !important;
     margin: -18px -18px 14px -18px;
     padding: 10px 18px;
-    background: #e9e4db;
-    border-bottom: 1px solid #d7d0c3;
+    background: var(--layer8d-bg-light);
+    border-bottom: 1px solid var(--layer8d-border);
     border-radius: 10px 10px 0 0;
     font-family: 'Figtree', sans-serif !important;
 }
@@ -162,7 +162,7 @@ limitations under the License.
     justify-content: space-between;
     align-items: flex-start;
     padding: 12px 0 !important;
-    border-bottom: 1px solid #ddd7ce;
+    border-bottom: 1px solid var(--layer8d-border);
     gap: 20px;
 }
 
@@ -172,7 +172,7 @@ limitations under the License.
 
 .probler-popup-body .detail-label {
     font-size: 12px !important;
-    color: #334155 !important;
+    color: var(--layer8d-text-dark) !important;
     text-transform: none !important;
     letter-spacing: normal !important;
     font-weight: 700 !important;
@@ -183,7 +183,7 @@ limitations under the License.
 
 .probler-popup-body .detail-value {
     font-size: 14px !important;
-    color: #0f172a !important;
+    color: var(--layer8d-text-dark) !important;
     font-family: 'Figtree', sans-serif !important;
     font-weight: 600 !important;
     text-align: right !important;
@@ -205,7 +205,7 @@ limitations under the License.
 }
 
 .probler-popup-body .detail-empty {
-    color: #a0aec0;
+    color: var(--layer8d-text-light);
     font-style: italic;
 }
 
@@ -220,7 +220,7 @@ limitations under the License.
 .probler-popup-body .performance-bar {
     width: 100%;
     height: 8px;
-    background: #e6ddd0;
+    background: var(--layer8d-border);
     border-radius: 4px;
     overflow: hidden;
     margin-top: 5px;
@@ -249,8 +249,8 @@ limitations under the License.
 /* ============================================ */
 
 .probler-popup-body .tree-view-container {
-    background: #f4f1ea;
-    border: 1px solid #ddd7ce;
+    background: var(--layer8d-bg-light);
+    border: 1px solid var(--layer8d-border);
     border-radius: 8px;
     padding: 15px;
     font-family: 'Roboto Mono', monospace;
@@ -264,16 +264,16 @@ limitations under the License.
 }
 
 .probler-popup-body .tree-view-container::-webkit-scrollbar-track {
-    background: #f4f1ea;
+    background: var(--layer8d-bg-light);
 }
 
 .probler-popup-body .tree-view-container::-webkit-scrollbar-thumb {
-    background: #cbd5e0;
+    background: var(--layer8d-text-light);
     border-radius: 4px;
 }
 
 .probler-popup-body .tree-view-container::-webkit-scrollbar-thumb:hover {
-    background: #0ea5e9;
+    background: var(--layer8d-primary);
 }
 
 /* Responsive for detail grid */

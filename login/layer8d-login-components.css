@@ -18,7 +18,7 @@ limitations under the License.
 
 .layer8d-login-footer {
     padding: 20px 30px;
-    background: #f8f5ef;
+    background: var(--layer8d-bg-light);
     border-top: 1px solid var(--border-subtle);
     text-align: center;
 }
@@ -99,24 +99,24 @@ limitations under the License.
     border-radius: 10px;
     box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
     animation: slideIn 0.3s ease-out;
-    background: #fcfbf8;
+    background: var(--layer8d-bg-white);
     border: 1px solid var(--border-subtle);
     border-left: 4px solid var(--noc-cyan);
 }
 
 .toast-success {
     border-left-color: var(--noc-green);
-    background: #fcfbf8;
+    background: var(--layer8d-bg-white);
 }
 
 .toast-error {
-    border-left-color: #dc2626;
-    background: #fcfbf8;
+    border-left-color: var(--layer8d-error);
+    background: var(--layer8d-bg-white);
 }
 
 .toast-warning {
-    border-left-color: #d97706;
-    background: #fcfbf8;
+    border-left-color: var(--layer8d-warning);
+    background: var(--layer8d-bg-white);
 }
 
 .toast-icon {
@@ -138,12 +138,12 @@ limitations under the License.
 
 .toast-error .toast-icon {
     background: rgba(220, 38, 38, 0.1);
-    color: #dc2626;
+    color: var(--layer8d-error);
 }
 
 .toast-warning .toast-icon {
     background: rgba(217, 119, 6, 0.1);
-    color: #d97706;
+    color: var(--layer8d-warning);
 }
 
 .toast-content {
