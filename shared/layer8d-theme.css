@@ -45,138 +45,101 @@ limitations under the License.
     font-display: swap;
 }
 
+@font-face {
+    font-family: 'Figtree';
+    src: url('../font/static/Figtree-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
 /* ============================================ */
-/* CSS VARIABLES (Design Tokens) */
+/* UNIVERSAL RESET */
+/* ============================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ============================================ */
+/* CSS VARIABLES                                */
+/* Token definitions are in layer8d-theme-tokens.css */
+/* This file defines bridge aliases + shared classes */
 /* ============================================ */
 
 :root {
-    /* Primary Colors */
-    --layer8d-primary: #0ea5e9;
-    --layer8d-primary-dark: #0284c7;
-    --layer8d-primary-light: #7dd3fc;
+    /* ============================================ */
+    /* BRIDGE ALIASES                               */
+    /* Old variable names → canonical tokens.       */
+    /* Dark mode works automatically via aliases.   */
+    /* Do NOT remove — consumed by l8ui mobile CSS, */
+    /* login, register, and project-specific files. */
+    /* ============================================ */
 
-    /* Text Colors */
-    --layer8d-text-dark: #2d3748;
-    --layer8d-text-medium: #4a5568;
-    --layer8d-text-muted: #718096;
-    --layer8d-text-light: #a0aec0;
-
-    /* Background Colors */
-    --layer8d-bg-white: #fcfbf8;
-    --layer8d-bg-light: #f4f1ea;
-    --layer8d-bg-input: #efeae1;
-    --layer8d-bg-card: #fdfbf7;
-    --layer8d-bg-hover: #ece6dc;
-
-    /* Border Colors */
-    --layer8d-border: #ddd7ce;
-    --layer8d-border-dark: #c8c0b4;
-
-    /* Status Colors - Core */
-    --layer8d-success: #22c55e;
-    --layer8d-success-bg: rgba(34, 197, 94, 0.1);
-    --layer8d-warning: #f59e0b;
-    --layer8d-warning-bg: rgba(245, 158, 11, 0.1);
-    --layer8d-error: #ef4444;
-    --layer8d-error-bg: rgba(239, 68, 68, 0.1);
-    --layer8d-info: #3b82f6;
-    --layer8d-info-bg: rgba(14, 165, 233, 0.08);
-
-    /* Semantic Status Colors - Tailwind Palette */
-    /* Green (Success/Active/Completed) */
-    --layer8d-green-light-bg: #bbf7d0;
-    --layer8d-green-light-text: #166534;
-    --layer8d-green-bg: #d1fae5;
-    --layer8d-green-text: #065f46;
-
-    /* Red (Error/Critical/Rejected) */
-    --layer8d-red-bg: #fecaca;
-    --layer8d-red-text: #991b1b;
-
-    /* Yellow (Warning/Pending) */
-    --layer8d-yellow-bg: #fef3c7;
-    --layer8d-yellow-text: #92400e;
-
-    /* Orange (High Priority/Urgent) */
-    --layer8d-orange-bg: #fed7aa;
-    --layer8d-orange-text: #9a3412;
-
-    /* Blue (Info/New/Open) */
-    --layer8d-blue-bg: #efe8dd;
-    --layer8d-blue-text: #7c5f3f;
-
-    /* Indigo (Prospecting/Pending) */
-    --layer8d-indigo-bg: #e0e7ff;
-    --layer8d-indigo-text: #3730a3;
-
-    /* Gray (Inactive/Closed/Low) */
-    --layer8d-gray-bg: #e5e7eb;
-    --layer8d-gray-text: #374151;
-    --layer8d-gray-light-bg: #f3f4f6;
-    --layer8d-gray-light-text: #6b7280;
-
-    /* Typography */
-    --layer8d-font-family: 'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    --layer8d-font-mono: 'SF Mono', 'Monaco', 'Consolas', monospace;
-
-    /* Font Weights */
-    --layer8d-font-weight-normal: 400;   /* Regular - for input text, body content */
-    --layer8d-font-weight-medium: 500;   /* Medium - for labels */
-    --layer8d-font-weight-semibold: 600; /* SemiBold - for headers, buttons */
-
-    /* Font Sizes */
-    --layer8d-font-xs: 11px;
-    --layer8d-font-sm: 12px;
-    --layer8d-font-base: 14px;
-    --layer8d-font-lg: 16px;
-    --layer8d-font-xl: 18px;
-
-    /* Spacing (8px baseline) */
-    --layer8d-space-xs: 4px;
-    --layer8d-space-sm: 8px;
-    --layer8d-space-md: 16px;
-    --layer8d-space-lg: 24px;
-    --layer8d-space-xl: 32px;
-
-    /* Border Radius */
-    --layer8d-radius-sm: 4px;
-    --layer8d-radius-md: 8px;
-    --layer8d-radius-lg: 12px;
-
-    /* Shadows */
-    --layer8d-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-    --layer8d-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-    --layer8d-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-
-    /* Focus Ring */
-    --layer8d-focus-ring: 0 0 0 3px rgba(14, 165, 233, 0.15);
-
-    /* Bridge: generic names used by view components → canonical tokens */
+    /* View component aliases */
     --accent-color: var(--layer8d-primary);
     --accent-bg: rgba(160, 136, 115, 0.10);
+    --border-color: var(--layer8d-border);
+
+    /* --noc-* aliases (login, register, scrollbar) */
+    --noc-cyan: var(--layer8d-primary);
+    --noc-cyan-dark: var(--layer8d-primary-dark);
+    --noc-green: var(--layer8d-success);
+    --noc-charcoal: var(--layer8d-bg-input);
+
+    /* --text-* aliases (login, register, mobile, portal) */
+    --text-primary: var(--layer8d-text-dark);
+    --text-secondary: var(--layer8d-text-medium);
+    --text-muted: var(--layer8d-text-muted);
+    --text-light: var(--layer8d-text-light);
+    --text-tertiary: var(--layer8d-text-light);
+    --text-dim: var(--layer8d-text-light);
+
+    /* --bg-* aliases (login, register, mobile) */
     --bg-primary: var(--layer8d-bg-white);
     --bg-secondary: var(--layer8d-bg-light);
     --bg-tertiary: var(--layer8d-bg-input);
-    --text-primary: var(--layer8d-text-dark);
-    --text-secondary: var(--layer8d-text-medium);
-    --text-tertiary: var(--layer8d-text-light);
-    --border-color: var(--layer8d-border);
+    --bg-card: var(--layer8d-bg-card);
+    --bg-elevated: var(--layer8d-bg-card);
+    --bg-input: var(--layer8d-bg-input);
+
+    /* --border-* aliases (login, register, mobile, popup) */
+    --border: var(--layer8d-border);
+    --border-subtle: var(--layer8d-border);
+    --border-default: var(--layer8d-border-dark);
+    --border-emphasis: var(--layer8d-border-dark);
+    --border-light: var(--layer8d-border);
+    --popup-border: var(--layer8d-border-dark);
+
+    /* --shadow-* aliases */
+    --shadow-sm: var(--layer8d-shadow-sm);
+    --shadow-md: var(--layer8d-shadow-md);
+    --shadow-lg: var(--layer8d-shadow-lg);
+
+    /* --primary aliases (mobile datepicker, reference picker) */
+    --primary: var(--layer8d-primary);
+    --primary-dark: var(--layer8d-primary-dark);
+
+    /* --surface-* aliases (mobile datepicker, reference picker) */
+    --surface-elevated: var(--layer8d-bg-card);
+
+    /* --status-* aliases (mobile components) */
+    --status-active: var(--layer8d-success);
+    --status-active-bg: var(--layer8d-success-bg);
+    --status-pending: var(--layer8d-warning);
+    --status-pending-bg: var(--layer8d-warning-bg);
+    --status-terminated: var(--layer8d-error);
+    --status-terminated-bg: var(--layer8d-error-bg);
+    --status-info: var(--layer8d-info);
+    --status-info-bg: var(--layer8d-info-bg);
+    --status-inactive: var(--layer8d-text-muted);
+    --status-inactive-bg: var(--layer8d-gray-light-bg);
 }
 
-/* Dark mode: override canonical tokens + bridge */
+/* Dark mode bridge override (non-token aliases) */
 [data-theme="dark"] {
-    /* Canonical token overrides */
-    --layer8d-bg-white: #0f172a;
-    --layer8d-bg-light: #1e293b;
-    --layer8d-bg-input: #334155;
-    --layer8d-text-dark: #f1f5f9;
-    --layer8d-text-medium: #94a3b8;
-    --layer8d-text-muted: #64748b;
-    --layer8d-text-light: #64748b;
-    --layer8d-border: #334155;
-    --layer8d-border-dark: #475569;
-
-    /* Bridge overrides (resolve via updated tokens) */
     --accent-bg: rgba(160, 136, 115, 0.14);
 }
 

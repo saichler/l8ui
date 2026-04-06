@@ -1,0 +1,228 @@
+/*
+© 2025 Sharon Aicler (saichler@gmail.com)
+
+Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
+You may obtain a copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+/*
+ * Layer8 Theme Token Contract
+ * ============================
+ * Every theme MUST define values for all tokens listed below.
+ * Custom themes are added as [data-theme="xxx"] blocks in this file
+ * or in separate CSS files (e.g., layer8d-theme-ocean.css).
+ *
+ * Color Tokens (theme-dependent — MUST be overridden per theme):
+ *   --layer8d-primary          Accent color (buttons, links, focus)
+ *   --layer8d-primary-dark     Accent hover/active state
+ *   --layer8d-primary-light    Accent subtle backgrounds
+ *   --layer8d-bg-white         Page/card background
+ *   --layer8d-bg-light         Secondary background
+ *   --layer8d-bg-input         Input field background
+ *   --layer8d-bg-card          Elevated card background
+ *   --layer8d-bg-hover         Hover state background
+ *   --layer8d-text-dark        Primary text
+ *   --layer8d-text-medium      Secondary text
+ *   --layer8d-text-muted       Tertiary/disabled text
+ *   --layer8d-text-light       Placeholder text
+ *   --layer8d-border           Default borders
+ *   --layer8d-border-dark      Emphasis borders
+ *   --layer8d-shadow-sm        Subtle shadow
+ *   --layer8d-shadow-md        Medium shadow
+ *   --layer8d-shadow-lg        Elevated shadow
+ *   --layer8d-focus-ring       Focus indicator ring
+ *   --layer8d-success          Success/positive status
+ *   --layer8d-success-bg       Success background tint
+ *   --layer8d-warning          Warning status
+ *   --layer8d-warning-bg       Warning background tint
+ *   --layer8d-error            Error/negative status
+ *   --layer8d-error-bg         Error background tint
+ *   --layer8d-info             Info status
+ *   --layer8d-info-bg          Info background tint
+ *   --layer8d-green-light-bg   Semantic green light bg
+ *   --layer8d-green-light-text Semantic green light text
+ *   --layer8d-green-bg         Semantic green bg
+ *   --layer8d-green-text       Semantic green text
+ *   --layer8d-red-bg           Semantic red bg
+ *   --layer8d-red-text         Semantic red text
+ *   --layer8d-yellow-bg        Semantic yellow bg
+ *   --layer8d-yellow-text      Semantic yellow text
+ *   --layer8d-orange-bg        Semantic orange bg
+ *   --layer8d-orange-text      Semantic orange text
+ *   --layer8d-blue-bg          Semantic blue bg
+ *   --layer8d-blue-text        Semantic blue text
+ *   --layer8d-indigo-bg        Semantic indigo bg
+ *   --layer8d-indigo-text      Semantic indigo text
+ *   --layer8d-gray-bg          Semantic gray bg
+ *   --layer8d-gray-text        Semantic gray text
+ *   --layer8d-gray-light-bg    Semantic gray light bg
+ *   --layer8d-gray-light-text  Semantic gray light text
+ *
+ * Layout Tokens (typically same across themes):
+ *   --layer8d-font-family      Primary font stack
+ *   --layer8d-font-mono        Monospace font stack
+ *   --layer8d-font-weight-*    Font weight scale (normal, medium, semibold)
+ *   --layer8d-font-xs/sm/base/lg/xl  Font size scale
+ *   --layer8d-space-xs/sm/md/lg/xl   Spacing scale (8px baseline)
+ *   --layer8d-radius-sm/md/lg  Border radius scale
+ */
+
+/* ============================================ */
+/* LIGHT THEME (default)                        */
+/* ============================================ */
+
+:root {
+    /* Primary Colors */
+    --layer8d-primary: #0ea5e9;
+    --layer8d-primary-dark: #0284c7;
+    --layer8d-primary-light: #7dd3fc;
+
+    /* Text Colors */
+    --layer8d-text-dark: #2d3748;
+    --layer8d-text-medium: #4a5568;
+    --layer8d-text-muted: #718096;
+    --layer8d-text-light: #a0aec0;
+
+    /* Background Colors */
+    --layer8d-bg-white: #fcfbf8;
+    --layer8d-bg-light: #f4f1ea;
+    --layer8d-bg-input: #efeae1;
+    --layer8d-bg-card: #fdfbf7;
+    --layer8d-bg-hover: #ece6dc;
+
+    /* Border Colors */
+    --layer8d-border: #ddd7ce;
+    --layer8d-border-dark: #c8c0b4;
+
+    /* Status Colors - Core */
+    --layer8d-success: #22c55e;
+    --layer8d-success-bg: rgba(34, 197, 94, 0.1);
+    --layer8d-warning: #f59e0b;
+    --layer8d-warning-bg: rgba(245, 158, 11, 0.1);
+    --layer8d-error: #ef4444;
+    --layer8d-error-bg: rgba(239, 68, 68, 0.1);
+    --layer8d-info: #3b82f6;
+    --layer8d-info-bg: rgba(14, 165, 233, 0.08);
+
+    /* Semantic Status Colors - Tailwind Palette */
+    --layer8d-green-light-bg: #bbf7d0;
+    --layer8d-green-light-text: #166534;
+    --layer8d-green-bg: #d1fae5;
+    --layer8d-green-text: #065f46;
+    --layer8d-red-bg: #fecaca;
+    --layer8d-red-text: #991b1b;
+    --layer8d-yellow-bg: #fef3c7;
+    --layer8d-yellow-text: #92400e;
+    --layer8d-orange-bg: #fed7aa;
+    --layer8d-orange-text: #9a3412;
+    --layer8d-blue-bg: #efe8dd;
+    --layer8d-blue-text: #7c5f3f;
+    --layer8d-indigo-bg: #e0e7ff;
+    --layer8d-indigo-text: #3730a3;
+    --layer8d-gray-bg: #e5e7eb;
+    --layer8d-gray-text: #374151;
+    --layer8d-gray-light-bg: #f3f4f6;
+    --layer8d-gray-light-text: #6b7280;
+
+    /* Typography */
+    --layer8d-font-family: 'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --layer8d-font-mono: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    --layer8d-font-weight-normal: 400;
+    --layer8d-font-weight-medium: 500;
+    --layer8d-font-weight-semibold: 600;
+    --layer8d-font-xs: 11px;
+    --layer8d-font-sm: 12px;
+    --layer8d-font-base: 14px;
+    --layer8d-font-lg: 16px;
+    --layer8d-font-xl: 18px;
+
+    /* Spacing (8px baseline) */
+    --layer8d-space-xs: 4px;
+    --layer8d-space-sm: 8px;
+    --layer8d-space-md: 16px;
+    --layer8d-space-lg: 24px;
+    --layer8d-space-xl: 32px;
+
+    /* Border Radius */
+    --layer8d-radius-sm: 4px;
+    --layer8d-radius-md: 8px;
+    --layer8d-radius-lg: 12px;
+
+    /* Shadows */
+    --layer8d-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --layer8d-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --layer8d-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+
+    /* Focus Ring */
+    --layer8d-focus-ring: 0 0 0 3px rgba(14, 165, 233, 0.15);
+}
+
+/* ============================================ */
+/* DARK THEME                                   */
+/* ============================================ */
+
+[data-theme="dark"] {
+    /* Backgrounds */
+    --layer8d-bg-white: #0f172a;
+    --layer8d-bg-light: #1e293b;
+    --layer8d-bg-input: #334155;
+    --layer8d-bg-card: #1e293b;
+    --layer8d-bg-hover: #334155;
+
+    /* Text */
+    --layer8d-text-dark: #f1f5f9;
+    --layer8d-text-medium: #94a3b8;
+    --layer8d-text-muted: #64748b;
+    --layer8d-text-light: #64748b;
+
+    /* Borders */
+    --layer8d-border: #334155;
+    --layer8d-border-dark: #475569;
+
+    /* Shadows (stronger for dark backgrounds) */
+    --layer8d-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --layer8d-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+    --layer8d-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.4);
+
+    /* Focus Ring (brighter for dark backgrounds) */
+    --layer8d-focus-ring: 0 0 0 3px rgba(14, 165, 233, 0.3);
+
+    /* Status backgrounds (higher opacity for dark backgrounds) */
+    --layer8d-success-bg: rgba(34, 197, 94, 0.15);
+    --layer8d-warning-bg: rgba(245, 158, 11, 0.15);
+    --layer8d-error-bg: rgba(239, 68, 68, 0.15);
+    --layer8d-info-bg: rgba(14, 165, 233, 0.12);
+
+    /* Semantic Status Colors (adjusted for dark background contrast) */
+    --layer8d-green-light-bg: rgba(34, 197, 94, 0.2);
+    --layer8d-green-light-text: #86efac;
+    --layer8d-green-bg: rgba(34, 197, 94, 0.15);
+    --layer8d-green-text: #6ee7b7;
+    --layer8d-red-bg: rgba(239, 68, 68, 0.2);
+    --layer8d-red-text: #fca5a5;
+    --layer8d-yellow-bg: rgba(245, 158, 11, 0.2);
+    --layer8d-yellow-text: #fcd34d;
+    --layer8d-orange-bg: rgba(249, 115, 22, 0.2);
+    --layer8d-orange-text: #fdba74;
+    --layer8d-blue-bg: rgba(59, 130, 246, 0.15);
+    --layer8d-blue-text: #93c5fd;
+    --layer8d-indigo-bg: rgba(99, 102, 241, 0.2);
+    --layer8d-indigo-text: #a5b4fc;
+    --layer8d-gray-bg: rgba(107, 114, 128, 0.2);
+    --layer8d-gray-text: #d1d5db;
+    --layer8d-gray-light-bg: rgba(107, 114, 128, 0.1);
+    --layer8d-gray-light-text: #9ca3af;
+}
+
+/* Future themes go here or in separate files:
+   [data-theme="ocean"] { ... }
+   [data-theme="sunset"] { ... }
+*/

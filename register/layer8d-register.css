@@ -15,78 +15,7 @@ limitations under the License.
 /* ERP by Layer 8 - Register Page Styles */
 /* Aligned with NOC Dark Theme */
 
-/* ============================================ */
-/* FIGTREE FONT FACES */
-/* ============================================ */
-
-@font-face {
-    font-family: 'Figtree';
-    src: url('../font/static/Figtree-Regular.ttf') format('truetype');
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Figtree';
-    src: url('../font/static/Figtree-Medium.ttf') format('truetype');
-    font-weight: 500;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Figtree';
-    src: url('../font/static/Figtree-SemiBold.ttf') format('truetype');
-    font-weight: 600;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Figtree';
-    src: url('../font/static/Figtree-Bold.ttf') format('truetype');
-    font-weight: 700;
-    font-style: normal;
-    font-display: swap;
-}
-
-:root {
-    /* Primary Colors - True NOC Dark Theme */
-    --noc-black: #000000;
-    --noc-dark: #0a0a0a;
-    --noc-charcoal: #121212;
-    --noc-slate: #1a1a1a;
-    --noc-gray: #1e1e1e;
-
-    /* Accent Colors */
-    --noc-cyan: #0ea5e9;
-    --noc-cyan-dark: #0284c7;
-    --noc-green: #00c853;
-
-    /* Text Colors */
-    --text-primary: #ffffff;
-    --text-secondary: #b0bec5;
-    --text-muted: #78909c;
-
-    /* Background Colors */
-    --bg-primary: #000000;
-    --bg-secondary: #0a0a0a;
-    --bg-card: #1a1a1a;
-    --bg-elevated: #1e1e1e;
-    --bg-input: #2d3748;
-
-    /* Border Colors */
-    --border-subtle: #212121;
-    --border-default: #2a2a2a;
-    --border-emphasis: #333333;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+/* Font-face, reset, and variables defined in ../shared/layer8d-theme.css */
 
 body {
     font-family: 'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;

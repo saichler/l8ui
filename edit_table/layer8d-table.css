@@ -14,22 +14,7 @@ limitations under the License.
 */
 /* Layer 8 Ecosystem - Abstract Table Component Styles */
 
-/* Figtree Font */
-@font-face {
-    font-family: 'Figtree';
-    src: url('../font/static/Figtree-Regular.ttf') format('truetype');
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Figtree';
-    src: url('../font/static/Figtree-SemiBold.ttf') format('truetype');
-    font-weight: 600;
-    font-style: normal;
-    font-display: swap;
-}
+/* Font-face defined once in ../shared/layer8d-theme.css */
 
 /* Sticky Header Configuration */
 :root {

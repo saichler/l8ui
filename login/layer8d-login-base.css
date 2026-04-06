@@ -16,71 +16,7 @@ limitations under the License.
 /* Part 1 of 4 - Load this file first */
 /* Variables, reset, body, container, card, header */
 
-/* ============================================ */
-/* FIGTREE FONT FACES */
-/* ============================================ */
-
-@font-face {
-    font-family: 'Figtree';
-    src: url('../font/static/Figtree-Regular.ttf') format('truetype');
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Figtree';
-    src: url('../font/static/Figtree-Medium.ttf') format('truetype');
-    font-weight: 500;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Figtree';
-    src: url('../font/static/Figtree-SemiBold.ttf') format('truetype');
-    font-weight: 600;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Figtree';
-    src: url('../font/static/Figtree-Bold.ttf') format('truetype');
-    font-weight: 700;
-    font-style: normal;
-    font-display: swap;
-}
-
-:root {
-    /* Accent Colors */
-    --noc-cyan: #0ea5e9;
-    --noc-cyan-dark: #0284c7;
-    --noc-green: #16a34a;
-
-    /* Text Colors */
-    --text-primary: #0f172a;
-    --text-secondary: #475569;
-    --text-muted: #64748b;
-
-    /* Background Colors */
-    --bg-primary: #f7f6f2;
-    --bg-secondary: #f1eee8;
-    --bg-card: #fcfbf8;
-    --bg-elevated: #fdfcf9;
-    --bg-input: #f4f1ea;
-
-    /* Border Colors */
-    --border-subtle: #ddd7ce;
-    --border-default: #c8c0b4;
-    --border-emphasis: #c8c0b4;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+/* Font-face, reset, and variables defined in ../shared/layer8d-theme.css */
 
 body {
     font-family: 'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
