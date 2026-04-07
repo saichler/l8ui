@@ -8,19 +8,28 @@ You may obtain a copy of the License at:
 */
 
 /**
- * Layer8DThemeSwitcher — Generic multi-theme switcher.
+ * Layer8DThemeSwitcher — Multi-theme switcher with dropdown picker.
  *
- * Supports any number of themes. Default: ['light', 'dark'].
- * A future theme builder can call registerTheme('ocean') to add more.
- * toggle() cycles through the list.
+ * Supports any number of themes. Each theme has a label and preview colors.
+ * Renders a dropdown menu with color swatches for each theme.
  */
 (function() {
     'use strict';
 
     var STORAGE_KEY = 'layer8d-theme';
 
+    var THEME_META = {
+        light:  { label: 'Light',  colors: ['#fafafa', '#f5f5f3', '#0ea5e9'], metaColor: '#fafafa' },
+        dark:   { label: 'Dark',   colors: ['#0f172a', '#1e293b', '#0ea5e9'], metaColor: '#0f172a' },
+        ocean:  { label: 'Ocean',  colors: ['#0c1929', '#132337', '#06b6d4'], metaColor: '#0c1929' },
+        sunset: { label: 'Sunset', colors: ['#1c1412', '#2a1f1b', '#f59e0b'], metaColor: '#1c1412' },
+        forest: { label: 'Forest', colors: ['#0f1a14', '#162920', '#22c55e'], metaColor: '#0f1a14' },
+        slate:  { label: 'Slate',  colors: ['#ffffff', '#edf2f7', '#4299e1'], metaColor: '#edf2f7' }
+    };
+
     window.Layer8DThemeSwitcher = {
-        themes: ['light', 'dark'],
+        themes: ['light', 'dark', 'ocean', 'sunset', 'forest', 'slate'],
+        _open: false,
 
         init: function() {
             var saved = localStorage.getItem(STORAGE_KEY);
@@ -40,6 +49,12 @@ You may obtain a copy of the License at:
                     }
                 });
             }
+
+            document.addEventListener('click', function(e) {
+                if (self._open && !e.target.closest('.layer8d-theme-picker')) {
+                    self._closeDropdown();
+                }
+            });
         },
 
         setTheme: function(name) {
@@ -59,17 +74,68 @@ You may obtain a copy of the License at:
             return this.themes.slice();
         },
 
-        registerTheme: function(name) {
+        registerTheme: function(name, meta) {
             if (this.themes.indexOf(name) === -1) {
                 this.themes.push(name);
             }
+            if (meta) {
+                THEME_META[name] = meta;
+            }
         },
 
-        toggle: function() {
+        toggleDropdown: function() {
+            if (this._open) {
+                this._closeDropdown();
+            } else {
+                this._openDropdown();
+            }
+        },
+
+        _openDropdown: function() {
+            var pickers = document.querySelectorAll('.layer8d-theme-picker');
             var current = this.getTheme();
-            var idx = this.themes.indexOf(current);
-            var next = this.themes[(idx + 1) % this.themes.length];
-            this.setTheme(next);
+            for (var i = 0; i < pickers.length; i++) {
+                var menu = pickers[i].querySelector('.layer8d-theme-menu');
+                if (menu) {
+                    menu.innerHTML = this._buildMenuHtml(current);
+                    menu.style.display = 'block';
+                }
+            }
+            this._open = true;
+        },
+
+        _closeDropdown: function() {
+            var menus = document.querySelectorAll('.layer8d-theme-menu');
+            for (var i = 0; i < menus.length; i++) {
+                menus[i].style.display = 'none';
+            }
+            this._open = false;
+        },
+
+        _buildMenuHtml: function(current) {
+            var html = '';
+            for (var i = 0; i < this.themes.length; i++) {
+                var name = this.themes[i];
+                var meta = THEME_META[name] || { label: name, colors: ['#888', '#666', '#444'] };
+                var active = name === current ? ' active' : '';
+                html += '<div class="layer8d-theme-option' + active + '" data-theme-name="' + name + '" onclick="Layer8DThemeSwitcher._selectTheme(\'' + name + '\')">';
+                html += '<span class="layer8d-theme-swatches">';
+                for (var j = 0; j < meta.colors.length; j++) {
+                    html += '<span class="layer8d-theme-swatch" style="background:' + meta.colors[j] + '"></span>';
+                }
+                html += '</span>';
+                html += '<span class="layer8d-theme-label">' + meta.label + '</span>';
+                if (active) {
+                    html += '<span class="layer8d-theme-check">✓</span>';
+                }
+                html += '</div>';
+            }
+            return html;
+        },
+
+        _selectTheme: function(name) {
+            this.setTheme(name);
+            this._closeDropdown();
         },
 
         _apply: function(name) {
@@ -83,19 +149,18 @@ You may obtain a copy of the License at:
         },
 
         _updateToggleButtons: function(theme) {
-            var buttons = document.querySelectorAll('.layer8d-theme-toggle');
+            var buttons = document.querySelectorAll('.layer8d-theme-btn');
+            var meta = THEME_META[theme] || {};
             for (var i = 0; i < buttons.length; i++) {
-                buttons[i].setAttribute('aria-label', theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
-                buttons[i].innerHTML = theme === 'dark'
-                    ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>'
-                    : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+                buttons[i].setAttribute('aria-label', 'Theme: ' + (meta.label || theme));
             }
         },
 
         _updateMetaThemeColor: function(theme) {
             var meta = document.querySelector('meta[name="theme-color"]');
-            if (meta) {
-                meta.setAttribute('content', theme === 'dark' ? '#0f172a' : '#fcfbf8');
+            var themeMeta = THEME_META[theme];
+            if (meta && themeMeta) {
+                meta.setAttribute('content', themeMeta.metaColor);
             }
         }
     };
