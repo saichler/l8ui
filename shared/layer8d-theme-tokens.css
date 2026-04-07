@@ -87,20 +87,21 @@ limitations under the License.
 
     /* Text Colors */
     --layer8d-text-dark: #2d3748;
+    --layer8d-text-label: #2d3748;
     --layer8d-text-medium: #4a5568;
     --layer8d-text-muted: #718096;
     --layer8d-text-light: #a0aec0;
 
     /* Background Colors */
-    --layer8d-bg-white: #fcfbf8;
-    --layer8d-bg-light: #f4f1ea;
-    --layer8d-bg-input: #efeae1;
-    --layer8d-bg-card: #fdfbf7;
-    --layer8d-bg-hover: #ece6dc;
+    --layer8d-bg-white: #fafafa;
+    --layer8d-bg-light: #f5f5f3;
+    --layer8d-bg-input: #ededeb;
+    --layer8d-bg-card: #fbfbfb;
+    --layer8d-bg-hover: #e8e8e6;
 
     /* Border Colors */
-    --layer8d-border: #ddd7ce;
-    --layer8d-border-dark: #c8c0b4;
+    --layer8d-border: #dcdcda;
+    --layer8d-border-dark: #c8c8c6;
 
     /* Status Colors - Core */
     --layer8d-success: #22c55e;
@@ -163,6 +164,12 @@ limitations under the License.
 
     /* Focus Ring */
     --layer8d-focus-ring: 0 0 0 3px rgba(14, 165, 233, 0.15);
+
+    /* Section Header */
+    --layer8d-header-grad-start: #f8f8f6;
+    --layer8d-header-grad-mid: #f4f4f2;
+    --layer8d-header-grad-end: #efefed;
+    --layer8d-header-shadow: rgba(0, 0, 0, 0.08);
 }
 
 /* ============================================ */
@@ -179,6 +186,7 @@ limitations under the License.
 
     /* Text */
     --layer8d-text-dark: #f1f5f9;
+    --layer8d-text-label: #ffffff;
     --layer8d-text-medium: #94a3b8;
     --layer8d-text-muted: #64748b;
     --layer8d-text-light: #64748b;
@@ -200,6 +208,12 @@ limitations under the License.
     --layer8d-warning-bg: rgba(245, 158, 11, 0.15);
     --layer8d-error-bg: rgba(239, 68, 68, 0.15);
     --layer8d-info-bg: rgba(14, 165, 233, 0.12);
+
+    /* Section Header */
+    --layer8d-header-grad-start: #1e293b;
+    --layer8d-header-grad-mid: #1a2436;
+    --layer8d-header-grad-end: #162032;
+    --layer8d-header-shadow: rgba(0, 0, 0, 0.3);
 
     /* Semantic Status Colors (adjusted for dark background contrast) */
     --layer8d-green-light-bg: rgba(34, 197, 94, 0.2);

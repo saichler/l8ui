@@ -80,7 +80,7 @@ limitations under the License.
 
     /* View component aliases */
     --accent-color: var(--layer8d-primary);
-    --accent-bg: rgba(160, 136, 115, 0.10);
+    --accent-bg: rgba(0, 0, 0, 0.05);
     --border-color: var(--layer8d-border);
 
     /* --noc-* aliases (login, register, scrollbar) */
@@ -140,7 +140,7 @@ limitations under the License.
 
 /* Dark mode bridge override (non-token aliases) */
 [data-theme="dark"] {
-    --accent-bg: rgba(160, 136, 115, 0.14);
+    --accent-bg: rgba(0, 0, 0, 0.07);
 }
 
 /* ============================================ */
@@ -284,7 +284,7 @@ limitations under the License.
     margin-bottom: var(--layer8d-space-sm);
     font-weight: var(--layer8d-font-weight-medium);
     font-size: 13px;
-    color: var(--layer8d-text-dark);
+    color: var(--layer8d-text-label);
     font-family: var(--layer8d-font-family);
 }
 
