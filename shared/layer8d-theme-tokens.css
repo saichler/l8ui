@@ -515,3 +515,72 @@ limitations under the License.
     --layer8d-gray-light-bg: #edf2f7;
     --layer8d-gray-light-text: #4a5568;
 }
+
+/* ============================================ */
+/* DARK-S THEME (Shakudo-inspired dark)         */
+/* ============================================ */
+
+[data-theme="dark-s"] {
+    /* Primary Colors — Shakudo orange */
+    --layer8d-primary: #FF9E42;
+    --layer8d-primary-dark: #E8872B;
+    --layer8d-primary-light: #FFB870;
+
+    /* Backgrounds — near-black neutrals */
+    --layer8d-bg-white: #141414;
+    --layer8d-bg-light: #1c1c1c;
+    --layer8d-bg-input: #2a2a2a;
+    --layer8d-bg-card: #1c1c1c;
+    --layer8d-bg-hover: #2a2a2a;
+
+    /* Text — warm whites and grays */
+    --layer8d-text-dark: #f0ece8;
+    --layer8d-text-label: #ffffff;
+    --layer8d-text-medium: #a8a099;
+    --layer8d-text-muted: #706860;
+    --layer8d-text-light: #504840;
+
+    /* Borders — warm dark grays */
+    --layer8d-border: #332e2a;
+    --layer8d-border-dark: #4a4340;
+
+    /* Shadows */
+    --layer8d-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --layer8d-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.5);
+    --layer8d-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
+
+    /* Focus Ring — orange glow */
+    --layer8d-focus-ring: 0 0 0 3px rgba(255, 158, 66, 0.3);
+
+    /* Status backgrounds */
+    --layer8d-success-bg: rgba(34, 197, 94, 0.15);
+    --layer8d-warning-bg: rgba(255, 158, 66, 0.15);
+    --layer8d-error-bg: rgba(239, 68, 68, 0.15);
+    --layer8d-info-bg: rgba(255, 158, 66, 0.12);
+
+    /* Section Header — subtle warm gradient */
+    --layer8d-header-grad-start: #1c1c1c;
+    --layer8d-header-grad-mid: #191917;
+    --layer8d-header-grad-end: #141414;
+    --layer8d-header-shadow: rgba(0, 0, 0, 0.4);
+
+    /* Semantic Status Colors */
+    --layer8d-green-light-bg: rgba(34, 197, 94, 0.2);
+    --layer8d-green-light-text: #86efac;
+    --layer8d-green-bg: rgba(34, 197, 94, 0.15);
+    --layer8d-green-text: #6ee7b7;
+    --layer8d-red-bg: rgba(239, 68, 68, 0.2);
+    --layer8d-red-text: #fca5a5;
+    --layer8d-yellow-bg: rgba(245, 158, 11, 0.2);
+    --layer8d-yellow-text: #fcd34d;
+    --layer8d-orange-bg: rgba(255, 158, 66, 0.2);
+    --layer8d-orange-text: #FFB870;
+    --layer8d-blue-bg: rgba(59, 130, 246, 0.15);
+    --layer8d-blue-text: #93c5fd;
+    --layer8d-indigo-bg: rgba(99, 102, 241, 0.2);
+    --layer8d-indigo-text: #a5b4fc;
+    --layer8d-gray-bg: rgba(107, 114, 128, 0.2);
+    --layer8d-gray-text: #d1d5db;
+    --layer8d-gray-light-bg: rgba(107, 114, 128, 0.1);
+    --layer8d-gray-light-text: #9ca3af;
+}

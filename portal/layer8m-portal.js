@@ -71,6 +71,17 @@
                         var titleSpan = headerEl.querySelector('.header-logo-text');
                         if (titleSpan) existingTitle = titleSpan.textContent;
                     }
+                    var themePickerHtml = '';
+                    if (typeof Layer8DThemeSwitcher !== 'undefined') {
+                        themePickerHtml = '<div class="layer8d-theme-picker">' +
+                            '<button class="header-action-btn layer8d-theme-btn" onclick="Layer8DThemeSwitcher.toggleDropdown()" aria-label="Choose theme" title="Choose theme">' +
+                                '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
+                                    '<circle cx="12" cy="12" r="10"/><path d="M12 2a7 7 0 0 0 0 20V2z"/>' +
+                                '</svg>' +
+                            '</button>' +
+                            '<div class="layer8d-theme-menu"></div>' +
+                        '</div>';
+                    }
                     var controlsHtml = '<div class="l8-portal-m-header-controls">' +
                         '<button class="header-menu-btn" id="menu-toggle-new">' +
                             '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
@@ -79,13 +90,16 @@
                                 '<line x1="3" y1="18" x2="21" y2="18"></line>' +
                             '</svg>' +
                         '</button>' +
-                        '<button class="header-action-btn" id="refresh-btn-new" title="Refresh">' +
-                            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
-                                '<path d="M23 4v6h-6"></path>' +
-                                '<path d="M1 20v-6h6"></path>' +
-                                '<path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>' +
-                            '</svg>' +
-                        '</button>' +
+                        '<div style="display:flex;align-items:center;gap:8px;">' +
+                            themePickerHtml +
+                            '<button class="header-action-btn" id="refresh-btn-new" title="Refresh">' +
+                                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
+                                    '<path d="M23 4v6h-6"></path>' +
+                                    '<path d="M1 20v-6h6"></path>' +
+                                    '<path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>' +
+                                '</svg>' +
+                            '</button>' +
+                        '</div>' +
                     '</div>';
                     headerEl.innerHTML = Layer8SectionGenerator.generatePortalHeader({
                         title: existingTitle,

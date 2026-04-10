@@ -264,7 +264,19 @@
                     var titleH1 = headerEl.querySelector('h1');
                     if (titleH1) existingTitle = titleH1.textContent;
                 }
+                var themePickerHtml = '';
+                if (typeof Layer8DThemeSwitcher !== 'undefined') {
+                    themePickerHtml = '<div class="layer8d-theme-picker">' +
+                        '<button class="layer8d-theme-btn" onclick="Layer8DThemeSwitcher.toggleDropdown()" aria-label="Choose theme">' +
+                            '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
+                                '<circle cx="12" cy="12" r="10"/><path d="M12 2a7 7 0 0 0 0 20V2z"/>' +
+                            '</svg>' +
+                        '</button>' +
+                        '<div class="layer8d-theme-menu"></div>' +
+                    '</div>';
+                }
                 var controlsHtml = '<div class="l8-portal-header-right">' +
+                    themePickerHtml +
                     '<span class="l8-portal-username">' + username + '</span>' +
                     '<button class="l8-portal-logout-btn" onclick="logout()">Logout</button>' +
                 '</div>';

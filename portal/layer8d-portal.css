@@ -27,7 +27,7 @@ body {
 .l8-portal-header {
     position: relative;
     z-index: 100;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    box-shadow: var(--layer8d-shadow-sm);
 }
 .l8-portal-header .l8-header-frame {
     margin-bottom: 0;
@@ -54,7 +54,7 @@ body {
 .l8-portal-header-right { display: flex; align-items: center; gap: 16px; }
 .l8-portal-username { font-size: 14px; font-weight: 500; color: var(--layer8d-text-dark); }
 .l8-portal-logout-btn {
-    background: rgba(0,0,0,0.06);
+    background: var(--layer8d-bg-input);
     color: var(--layer8d-text-dark);
     border: 1px solid var(--layer8d-border);
     padding: 6px 14px;
@@ -63,7 +63,7 @@ body {
     font-size: 13px;
     transition: background 0.2s;
 }
-.l8-portal-logout-btn:hover { background: rgba(0,0,0,0.1); }
+.l8-portal-logout-btn:hover { background: var(--layer8d-bg-light); }
 
 /* Body layout */
 .l8-portal-body { display: flex; flex: 1; }
@@ -121,7 +121,7 @@ body {
     gap: 14px;
     transition: box-shadow 0.2s;
 }
-.l8-portal-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+.l8-portal-card:hover { box-shadow: var(--layer8d-shadow-md); }
 .l8-portal-card-icon { font-size: 28px; }
 .l8-portal-card-content h3 { font-size: 13px; color: var(--layer8d-text-medium); margin-bottom: 6px; }
 .l8-portal-card-value { font-size: 15px; font-weight: 600; color: var(--layer8d-text-dark); }
@@ -149,7 +149,7 @@ body {
 .l8-portal-service-tab:hover { border-color: var(--l8-portal-primary); color: var(--l8-portal-primary); }
 .l8-portal-service-tab.active {
     background: var(--l8-portal-primary);
-    color: white;
+    color: var(--layer8d-bg-white);
     border-color: var(--l8-portal-primary);
 }
 .l8-portal-tab-icon { margin-right: 4px; }

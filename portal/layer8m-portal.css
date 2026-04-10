@@ -77,7 +77,7 @@
 }
 .l8-portal-m-illustrated-header .header-menu-btn,
 .l8-portal-m-illustrated-header .header-action-btn {
-    background: rgba(0,0,0,0.06);
+    background: var(--layer8d-bg-input);
     border: 1px solid var(--layer8d-border);
     border-radius: 8px;
     padding: 8px;

@@ -24,11 +24,12 @@ You may obtain a copy of the License at:
         ocean:  { label: 'Ocean',  colors: ['#0c1929', '#132337', '#06b6d4'], metaColor: '#0c1929' },
         sunset: { label: 'Sunset', colors: ['#1c1412', '#2a1f1b', '#f59e0b'], metaColor: '#1c1412' },
         forest: { label: 'Forest', colors: ['#0f1a14', '#162920', '#22c55e'], metaColor: '#0f1a14' },
-        slate:  { label: 'Slate',  colors: ['#ffffff', '#edf2f7', '#4299e1'], metaColor: '#edf2f7' }
+        slate:  { label: 'Slate',  colors: ['#ffffff', '#edf2f7', '#4299e1'], metaColor: '#edf2f7' },
+        'dark-s': { label: 'Dark-S', colors: ['#141414', '#1c1c1c', '#FF9E42'], metaColor: '#141414' }
     };
 
     window.Layer8DThemeSwitcher = {
-        themes: ['light', 'dark', 'ocean', 'sunset', 'forest', 'slate'],
+        themes: ['light', 'dark', 'ocean', 'sunset', 'forest', 'slate', 'dark-s'],
         _open: false,
 
         init: function() {
