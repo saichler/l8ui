@@ -99,6 +99,10 @@ limitations under the License.
     --layer8d-bg-card: #fbfbfb;
     --layer8d-bg-hover: #e8e8e6;
 
+    /* Section Header */
+    --layer8d-header-gradient: linear-gradient(135deg, #f5f1ea 0%, #efe8dd 55%, #e4dbcf 100%);
+    --layer8d-header-shadow: 0 8px 24px rgba(123, 95, 63, 0.10);
+
     /* Border Colors */
     --layer8d-border: #dcdcda;
     --layer8d-border-dark: #c8c8c6;
@@ -190,6 +194,10 @@ limitations under the License.
     --layer8d-text-medium: #94a3b8;
     --layer8d-text-muted: #64748b;
     --layer8d-text-light: #64748b;
+
+    /* Section Header */
+    --layer8d-header-gradient: linear-gradient(135deg, #1e293b 0%, #1a2332 55%, #162030 100%);
+    --layer8d-header-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
 
     /* Borders */
     --layer8d-border: #334155;

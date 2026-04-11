@@ -161,6 +161,7 @@ CSS files first, then JS in strict dependency order:
 <script src="l8ui/shared/layer8d-module-navigation.js"></script>
 <script src="l8ui/shared/layer8d-toggle-tree.js"></script>
 <script src="l8ui/shared/layer8d-module-filter.js"></script>
+<script src="l8ui/shared/layer8-module-factory-core.js"></script>
 <script src="l8ui/shared/layer8d-module-factory.js"></script>
 
 <!-- JS: Module Data (per module, per sub-module) -->

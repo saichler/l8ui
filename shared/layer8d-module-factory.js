@@ -21,12 +21,8 @@ limitations under the License.
     // Bootstrap a complete module
     function create(options) {
         const ns = options.namespace;
-        const moduleNS = window[ns];
-
-        if (!moduleNS) {
-            console.error(`${ns} namespace not found. Ensure ${ns.toLowerCase()}-config.js is loaded.`);
-            return;
-        }
+        const moduleNS = Layer8ModuleFactoryCore.resolveNamespace(ns);
+        if (!moduleNS) return;
 
         // 1. Register sub-modules in the service registry
         if (moduleNS.submodules) {
@@ -72,25 +68,8 @@ limitations under the License.
             return Layer8DServiceRegistry.getPrimaryKey(ns, modelName);
         };
 
-        // 6. Validate sub-module namespaces and clean up internals
-        var requiredProps = ['columns', 'forms', 'primaryKeys', 'enums'];
-        if (options.requiredNamespaces) {
-            for (const nsName of options.requiredNamespaces) {
-                var subNS = window[nsName];
-                if (!subNS) {
-                    console.warn(ns + ' submodule ' + nsName + ' not loaded. Some features may not work.');
-                    continue;
-                }
-                for (var i = 0; i < requiredProps.length; i++) {
-                    if (!subNS[requiredProps[i]]) {
-                        console.warn(ns + ' submodule ' + nsName + '.' + requiredProps[i] + ' not found.');
-                    }
-                }
-                if (subNS._internal) {
-                    delete subNS._internal;
-                }
-            }
-        }
+        // 6. Validate sub-module namespaces and clean up internals (shared core)
+        Layer8ModuleFactoryCore.validateNamespaces(ns, options.requiredNamespaces);
 
         console.log(`${ns} module initialized`);
     }
