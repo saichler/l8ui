@@ -343,6 +343,13 @@ limitations under the License.
         max-height: 80vh;
     }
 
+    .mobile-popup.size-full {
+        top: 50%;
+        max-width: 95vw;
+        max-height: 95vh;
+        border-radius: var(--radius-lg);
+    }
+
     .mobile-popup-handle {
         display: none;
     }
