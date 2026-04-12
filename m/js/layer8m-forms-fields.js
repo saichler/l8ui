@@ -355,8 +355,8 @@ limitations under the License.
                 '</div>';
             }
 
-            // All other types: delegate to desktop formatFieldDisplayValue
-            var displayValue = Layer8DFormsFields.formatFieldDisplayValue(config, value);
+            // All other types: delegate to shared Layer8FormatDisplay
+            var displayValue = Layer8FormatDisplay.format(config, value);
 
             return '<div class="mobile-form-field">' +
                 '<label class="mobile-form-label">' + esc(config.label) + '</label>' +

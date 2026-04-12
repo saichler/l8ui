@@ -56,6 +56,17 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
                     popup.body.querySelectorAll('input, select, textarea').forEach(el => {
                         el.disabled = true;
                     });
+                    // Tab switching for multi-section read-only forms
+                    popup.body.addEventListener('click', function(e) {
+                        var tab = e.target.closest('.mobile-form-tab');
+                        if (!tab) return;
+                        var tabId = tab.dataset.tab;
+                        popup.body.querySelectorAll('.mobile-form-tab').forEach(function(t) { t.classList.remove('active'); });
+                        popup.body.querySelectorAll('.mobile-form-tab-pane').forEach(function(p) { p.classList.remove('active'); });
+                        tab.classList.add('active');
+                        var pane = popup.body.querySelector('.mobile-form-tab-pane[data-pane="' + tabId + '"]');
+                        if (pane) pane.classList.add('active');
+                    });
                 },
                 onSave: (popup) => {
                     Layer8MPopup.close();

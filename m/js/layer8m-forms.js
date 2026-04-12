@@ -117,13 +117,58 @@ limitations under the License.
          * Render a complete form from definition
          */
         renderForm(formDef, data = {}, readonly = false) {
-            let html = '<form class="mobile-form">';
+            const esc = Layer8MUtils.escapeHtml;
+            const sections = formDef.sections;
+            const usesTabs = readonly && sections && sections.length > 1;
 
-            if (formDef.sections) {
-                formDef.sections.forEach(section => {
-                    html += `<div class="mobile-form-section">`;
+            let html = '<form class="mobile-form' + (usesTabs ? ' mobile-form-tabbed' : '') + '">';
+
+            if (usesTabs) {
+                // Tabbed layout matching desktop for multi-section read-only forms
+                html += '<div class="mobile-form-tabs">';
+                sections.forEach((section, idx) => {
+                    const active = idx === 0 ? ' active' : '';
+                    html += '<div class="mobile-form-tab' + active + '" data-tab="tab-' + idx + '">' + esc(section.title || '') + '</div>';
+                });
+                html += '</div>';
+
+                html += '<div class="mobile-form-tab-content">';
+                sections.forEach((section, idx) => {
+                    const active = idx === 0 ? ' active' : '';
+                    html += '<div class="mobile-form-tab-pane' + active + '" data-pane="tab-' + idx + '">';
+
+                    const fields = section.fields;
+                    for (let i = 0; i < fields.length; i++) {
+                        const field1 = fields[i];
+
+                        // Inline tables span full width
+                        if (field1.type === 'inlineTable') {
+                            html += this.renderField(field1, getNestedValue(data, field1.key), true);
+                            continue;
+                        }
+
+                        // Pair fields into 2-column rows matching desktop
+                        const field2 = fields[i + 1];
+                        if (field2 && field2.type !== 'inlineTable') {
+                            html += '<div class="mobile-form-field-row">';
+                            html += this.renderField(field1, getNestedValue(data, field1.key), true);
+                            html += this.renderField(field2, getNestedValue(data, field2.key), true);
+                            html += '</div>';
+                            i++;
+                        } else {
+                            html += this.renderField(field1, getNestedValue(data, field1.key), true);
+                        }
+                    }
+
+                    html += '</div>';
+                });
+                html += '</div>';
+            } else if (sections) {
+                // Stacked layout for single-section or editable forms
+                sections.forEach(section => {
+                    html += '<div class="mobile-form-section">';
                     if (section.title) {
-                        html += `<h3 class="mobile-form-section-title">${Layer8MUtils.escapeHtml(section.title)}</h3>`;
+                        html += '<h3 class="mobile-form-section-title">' + esc(section.title) + '</h3>';
                     }
                     section.fields.forEach(field => {
                         const value = getNestedValue(data, field.key);
