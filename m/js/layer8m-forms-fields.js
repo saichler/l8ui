@@ -316,6 +316,53 @@ limitations under the License.
         // hours, EIN, routingNumber, colorCode are in layer8m-forms-fields-ext.js
         // Reference and money renderers are in layer8m-forms-fields-reference.js
         // Inline table, _formatMobileCell, _onInlineRowClick are in layer8m-forms-fields-ext.js
+
+        /**
+         * Unified read-only field renderer.
+         * Uses desktop formatFieldDisplayValue for identical output on both platforms.
+         * Special types (reference, file, inlineTable, money) keep their own read-only rendering.
+         */
+        renderReadOnlyField(config, value) {
+            var type = config.type || 'text';
+            var esc = Layer8MUtils.escapeHtml;
+
+            // Reference fields: need disabled input with data-ref-config for picker resolution
+            if (type === 'reference') {
+                return this.renderReferenceField(config, value, true);
+            }
+
+            // File fields: need download button
+            if (type === 'file') {
+                return this.renderFileField(config, value, true);
+            }
+
+            // Inline tables: need card-based display
+            if (type === 'inlineTable') {
+                return this.renderInlineTableField(config, value, true);
+            }
+
+            // Money fields: use desktop formatMoney for formatted display
+            if (type === 'money') {
+                var displayValue = '-';
+                if (value && typeof value === 'object' && value.amount) {
+                    displayValue = Layer8DUtils.formatMoney(value);
+                } else if (typeof value === 'number' && value !== 0) {
+                    displayValue = Layer8DUtils.formatMoney(value);
+                }
+                return '<div class="mobile-form-field">' +
+                    '<label class="mobile-form-label">' + esc(config.label) + '</label>' +
+                    '<span class="mobile-form-display-value">' + esc(displayValue) + '</span>' +
+                '</div>';
+            }
+
+            // All other types: delegate to desktop formatFieldDisplayValue
+            var displayValue = Layer8DFormsFields.formatFieldDisplayValue(config, value);
+
+            return '<div class="mobile-form-field">' +
+                '<label class="mobile-form-label">' + esc(config.label) + '</label>' +
+                '<span class="mobile-form-display-value">' + esc(displayValue) + '</span>' +
+            '</div>';
+        }
     };
 
 })();

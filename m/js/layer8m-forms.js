@@ -26,14 +26,30 @@ limitations under the License.
 (function() {
     'use strict';
 
+    /**
+     * Deep property access for dot-notation keys (e.g., 'auditInfo.createdBy')
+     * Matches desktop getNestedValue in layer8d-forms-fields.js
+     */
+    function getNestedValue(obj, key) {
+        if (!obj || !key) return undefined;
+        if (!key.includes('.')) return obj[key];
+        return key.split('.').reduce(function(o, k) { return o && o[k]; }, obj);
+    }
+
     window.Layer8MForms = {
         /**
          * Render a form field based on type
          * Delegates to Layer8MFormFields for actual rendering
+         * In read-only mode, uses desktop formatFieldDisplayValue for parity
          */
         renderField(fieldConfig, value, readonly = false) {
             const type = fieldConfig.type || 'text';
             const F = Layer8MFormFields;
+
+            // Read-only mode: use unified display formatting (matches desktop exactly)
+            if (readonly) {
+                return F.renderReadOnlyField(fieldConfig, value);
+            }
 
             switch (type) {
                 case 'text':
@@ -110,14 +126,14 @@ limitations under the License.
                         html += `<h3 class="mobile-form-section-title">${Layer8MUtils.escapeHtml(section.title)}</h3>`;
                     }
                     section.fields.forEach(field => {
-                        const value = data[field.key];
+                        const value = getNestedValue(data, field.key);
                         html += this.renderField(field, value, readonly || field.readonly);
                     });
                     html += '</div>';
                 });
             } else if (formDef.fields) {
                 formDef.fields.forEach(field => {
-                    const value = data[field.key];
+                    const value = getNestedValue(data, field.key);
                     html += this.renderField(field, value, readonly || field.readonly);
                 });
             }

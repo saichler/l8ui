@@ -59,6 +59,21 @@ limitations under the License.
     margin-bottom: var(--spacing-xs);
 }
 
+.mobile-form-display-value {
+    display: block;
+    padding: 10px 12px;
+    font-family: var(--font-family);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-normal);
+    color: var(--text-primary);
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    min-height: var(--touch-target);
+    line-height: calc(var(--touch-target) - 20px);
+    word-break: break-word;
+}
+
 .mobile-form-input,
 .mobile-form-select,
 .mobile-form-textarea {
