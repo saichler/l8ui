@@ -286,20 +286,38 @@ limitations under the License.
         }
 
         static getEndpointForModel(modelName) {
-            if (typeof LAYER8M_NAV_CONFIG === 'undefined') {
-                console.error('Layer8MReferencePicker: LAYER8M_NAV_CONFIG is not defined. Cannot resolve endpoint for model "' + modelName + '".');
-                return null;
-            }
-            for (const moduleKey in LAYER8M_NAV_CONFIG) {
-                const mod = LAYER8M_NAV_CONFIG[moduleKey];
-                if (!mod || !mod.services) continue;
-                for (const subModuleKey in mod.services) {
-                    for (const service of mod.services[subModuleKey]) {
-                        if (service.model === modelName) return Layer8MConfig.resolveEndpoint(service.endpoint);
+            // Try LAYER8M_NAV_CONFIG first (main mobile app)
+            if (typeof LAYER8M_NAV_CONFIG !== 'undefined') {
+                for (const moduleKey in LAYER8M_NAV_CONFIG) {
+                    const mod = LAYER8M_NAV_CONFIG[moduleKey];
+                    if (!mod || !mod.services) continue;
+                    for (const subModuleKey in mod.services) {
+                        for (const service of mod.services[subModuleKey]) {
+                            if (service.model === modelName) return Layer8MConfig.resolveEndpoint(service.endpoint);
+                        }
                     }
                 }
             }
-            console.error(`Layer8MReferencePicker: No service found for model "${modelName}" in LAYER8M_NAV_CONFIG. Check model name and nav config registration.`);
+            // Fallback: check desktop module configs via Layer8DServiceRegistry (portals)
+            if (typeof Layer8DServiceRegistry !== 'undefined') {
+                const namespaces = Layer8DServiceRegistry.getRegisteredModules();
+                for (const ns of namespaces) {
+                    const mod = window[ns];
+                    if (!mod || !mod.modules) continue;
+                    for (const moduleKey in mod.modules) {
+                        const module = mod.modules[moduleKey];
+                        if (module.services) {
+                            for (const service of module.services) {
+                                if (service.model === modelName) {
+                                    var resolve = (typeof Layer8DConfig !== 'undefined') ? Layer8DConfig.resolveEndpoint : Layer8MConfig.resolveEndpoint;
+                                    return resolve(service.endpoint);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            console.error(`Layer8MReferencePicker: No service found for model "${modelName}". Check nav config or module config registration.`);
             return null;
         }
 

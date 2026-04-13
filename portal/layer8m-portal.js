@@ -319,6 +319,7 @@
                       container.querySelectorAll('input, select, textarea').forEach(function(el) {
                           el.disabled = true;
                       });
+                      Layer8MForms.wireTabSwitching(container);
                   }).catch(function() {
                       container.innerHTML = '<div class="empty-state"><p class="empty-state-message">Failed to load data.</p></div>';
                   });
@@ -352,6 +353,7 @@
                             popup.body.querySelectorAll('input, select, textarea').forEach(function(el) {
                                 el.disabled = true;
                             });
+                            Layer8MForms.wireTabSwitching(popup.body);
                         }
                     });
                 }

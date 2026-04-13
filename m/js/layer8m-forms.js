@@ -455,6 +455,20 @@ limitations under the License.
                     }
                 }
             });
+        },
+
+        wireTabSwitching: function(container) {
+            if (!container) return;
+            container.addEventListener('click', function(e) {
+                var tab = e.target.closest('.mobile-form-tab');
+                if (!tab) return;
+                var tabId = tab.dataset.tab;
+                container.querySelectorAll('.mobile-form-tab').forEach(function(t) { t.classList.remove('active'); });
+                container.querySelectorAll('.mobile-form-tab-pane').forEach(function(p) { p.classList.remove('active'); });
+                tab.classList.add('active');
+                var pane = container.querySelector('.mobile-form-tab-pane[data-pane="' + tabId + '"]');
+                if (pane) pane.classList.add('active');
+            });
         }
     };
 
