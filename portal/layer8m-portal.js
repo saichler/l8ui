@@ -141,6 +141,16 @@
                     });
                 }
 
+                // Initialize portal switcher in header (inserted before refresh button)
+                if (typeof Layer8MPortalSwitcher !== 'undefined' && refreshBtn) {
+                    Layer8MPortalSwitcher.init({
+                        container: refreshBtn.parentNode,
+                        insertBefore: refreshBtn,
+                        apiPrefix: (typeof Layer8MConfig !== 'undefined') ? Layer8MConfig.getApiPrefix() : '',
+                        currentPath: window.location.pathname
+                    });
+                }
+
                 // Load dashboard
                 this.loadSection('dashboard');
             },

@@ -1,0 +1,89 @@
+/*
+© 2025 Sharon Aicler (saichler@gmail.com)
+Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
+*/
+
+.layer8m-portal-sheet-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.layer8m-portal-sheet-overlay.is-open {
+    opacity: 1;
+}
+
+.layer8m-portal-sheet {
+    width: 100%;
+    max-width: 560px;
+    background: var(--layer8d-bg-white, #fff);
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.2);
+    transform: translateY(100%);
+    transition: transform 0.2s ease;
+    padding-bottom: env(safe-area-inset-bottom, 12px);
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.layer8m-portal-sheet-overlay.is-open .layer8m-portal-sheet {
+    transform: translateY(0);
+}
+
+.layer8m-portal-sheet-header {
+    padding: 16px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--layer8d-text-dark, #1a202c);
+    border-bottom: 1px solid var(--layer8d-border, #e2e8f0);
+    text-align: center;
+}
+
+.layer8m-portal-sheet-list {
+    padding: 8px 0;
+}
+
+.layer8m-portal-sheet-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    cursor: pointer;
+    font-size: 15px;
+    color: var(--layer8d-text-dark, #1a202c);
+    transition: background 0.12s;
+    min-height: 44px;
+}
+
+.layer8m-portal-sheet-item:active {
+    background: var(--layer8d-bg-light, #f7fafc);
+}
+
+.layer8m-portal-sheet-item.is-current {
+    background: var(--layer8d-bg-light, #f7fafc);
+    font-weight: 600;
+    cursor: default;
+}
+
+.layer8m-portal-sheet-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: var(--layer8d-border, #e2e8f0);
+}
+
+.layer8m-portal-sheet-item.is-current .layer8m-portal-sheet-dot {
+    background: var(--layer8d-primary, #0ea5e9);
+}
+
+.layer8m-portal-sheet-label {
+    flex: 1;
+}
