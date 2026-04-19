@@ -80,6 +80,7 @@ limitations under the License.
     ${this._generateModuleTabs(config)}
     <div class="section-content">
         ${this._generateModuleContents(config)}
+        ${config.customContent || ''}
     </div>
 </div>
 ${this._generateInitScript(config)}
