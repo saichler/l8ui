@@ -66,7 +66,13 @@
         }
         this.namespace = config.namespace || 'default';
         this.groups = config.groups || [];
+        this.favorites = Array.isArray(config.favorites) ? config.favorites.slice() : [];
+        this.recents = Array.isArray(config.recents) ? config.recents.slice() : [];
         this.onSelect = typeof config.onSelect === 'function' ? config.onSelect : function() {};
+        this.onToggleFavorite = typeof config.onToggleFavorite === 'function'
+            ? config.onToggleFavorite
+            : null;
+        this.favoritesEnabled = !!this.onToggleFavorite;
         this.selected = config.selected || { group: null, item: null };
         this.counts = {};
         this.status = {};
@@ -85,6 +91,16 @@
         nav.setAttribute('role', 'tree');
         nav.setAttribute('aria-label', 'Resource navigator');
 
+        // Virtual groups (Favorites, Recents) come first so the operator's
+        // pinned and most-recent items are always at the top of the rail.
+        // They render the same way as regular groups except items click
+        // through to their _resolvesTo target instead of using their own
+        // (group, item) keys.
+        var virtuals = this._buildVirtualGroups();
+        for (var v = 0; v < virtuals.length; v++) {
+            nav.appendChild(this._renderGroup(virtuals[v]));
+        }
+
         for (var i = 0; i < this.groups.length; i++) {
             nav.appendChild(this._renderGroup(this.groups[i]));
         }
@@ -94,6 +110,58 @@
         this.container.addEventListener('keydown', this._keyHandler);
         this._applyDecorations();
         this._applySelection();
+    };
+
+    Layer8DExplorer.prototype._buildVirtualGroups = function() {
+        var out = [];
+        if (this.favorites.length > 0) {
+            out.push({
+                key: '__favorites',
+                label: 'Favorites',
+                icon: '★',
+                _virtual: 'favorites',
+                items: this.favorites.map(function(f) {
+                    // Each favorite resolves to a real (group, item) pair
+                    // so click behaviors mirror navigating to it directly.
+                    return {
+                        key: f.key,
+                        label: f.label || f.key,
+                        icon: f.icon || '',
+                        _resolvesTo: { group: f.group || '', item: f.key },
+                        _favoritePayload: f
+                    };
+                })
+            });
+        }
+        if (this.recents.length > 0) {
+            out.push({
+                key: '__recents',
+                label: 'Recent',
+                icon: '⏲',
+                _virtual: 'recents',
+                items: this.recents.map(function(r) {
+                    return {
+                        key: r.key,
+                        label: r.label || r.key,
+                        icon: r.icon || '',
+                        _resolvesTo: r.kind === 'object'
+                            ? { object: true, payload: r }
+                            : { group: r.group || '', item: r.key }
+                    };
+                })
+            });
+        }
+        return out;
+    };
+
+    Layer8DExplorer.prototype.setFavorites = function(list) {
+        this.favorites = Array.isArray(list) ? list.slice() : [];
+        this.render();
+    };
+
+    Layer8DExplorer.prototype.setRecents = function(list) {
+        this.recents = Array.isArray(list) ? list.slice() : [];
+        this.render();
     };
 
     Layer8DExplorer.prototype.destroy = function() {
@@ -141,10 +209,13 @@
     Layer8DExplorer.prototype._renderGroup = function(group) {
         var hasItems = group.items && group.items.length > 0;
         var isCollapsed = hasItems && this.collapsed[group.key] === true;
+        var isVirtual = !!group._virtual;
 
         var wrap = document.createElement('div');
         wrap.className = 'layer8d-explorer-group';
+        if (isVirtual) wrap.classList.add('layer8d-explorer-group-virtual');
         wrap.setAttribute('data-group', group.key);
+        if (isVirtual) wrap.setAttribute('data-virtual', group._virtual);
         if (isCollapsed) wrap.classList.add('collapsed');
 
         var header = document.createElement('button');
@@ -202,10 +273,17 @@
     };
 
     Layer8DExplorer.prototype._renderItem = function(group, item) {
+        var isVirtualFavs = group._virtual === 'favorites';
+        var isVirtualRecents = group._virtual === 'recents';
+        var isVirtual = isVirtualFavs || isVirtualRecents;
+
         var li = document.createElement('li');
         li.className = 'layer8d-explorer-item';
         li.setAttribute('data-group', group.key);
         li.setAttribute('data-item', item.key);
+        if (item._resolvesTo) {
+            li.setAttribute('data-resolves-to', JSON.stringify(item._resolvesTo));
+        }
         li.setAttribute('role', 'treeitem');
         li.setAttribute('tabindex', '0');
 
@@ -222,22 +300,68 @@
         label.textContent = item.label;
         li.appendChild(label);
 
-        var countBadge = document.createElement('span');
-        countBadge.className = 'layer8d-explorer-count';
-        countBadge.setAttribute('data-count-for', item.key);
-        countBadge.style.display = 'none';
-        li.appendChild(countBadge);
+        if (!isVirtual) {
+            // Count badge + status dot only on real (non-virtual) items.
+            // Showing them on Favorites/Recents would double-decorate.
+            var countBadge = document.createElement('span');
+            countBadge.className = 'layer8d-explorer-count';
+            countBadge.setAttribute('data-count-for', item.key);
+            countBadge.style.display = 'none';
+            li.appendChild(countBadge);
 
-        var statusDot = document.createElement('span');
-        statusDot.className = 'layer8d-explorer-status';
-        statusDot.setAttribute('data-status-for', item.key);
-        statusDot.style.display = 'none';
-        li.appendChild(statusDot);
+            var statusDot = document.createElement('span');
+            statusDot.className = 'layer8d-explorer-status';
+            statusDot.setAttribute('data-status-for', item.key);
+            statusDot.style.display = 'none';
+            li.appendChild(statusDot);
+        }
+
+        // Favorite toggle (★ pin / ✕ unpin). Only shows when an
+        // onToggleFavorite handler is registered.
+        if (this.favoritesEnabled) {
+            var btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'layer8d-explorer-fav';
+            btn.setAttribute('data-fav-toggle', '1');
+            btn.setAttribute('tabindex', '-1');
+            if (isVirtualFavs) {
+                btn.textContent = '✕';
+                btn.title = 'Remove from Favorites';
+                btn.classList.add('layer8d-explorer-fav-pinned');
+            } else if (isVirtualRecents) {
+                // No pin button in Recents — recents auto-decay; don't
+                // confuse users with extra buttons.
+                btn = null;
+            } else {
+                var pinned = this._isFavorite(group.key, item.key);
+                btn.textContent = pinned ? '★' : '☆';
+                btn.title = pinned ? 'Pinned to Favorites' : 'Pin to Favorites';
+                if (pinned) btn.classList.add('layer8d-explorer-fav-pinned');
+            }
+            if (btn) li.appendChild(btn);
+        }
 
         return li;
     };
 
+    Layer8DExplorer.prototype._isFavorite = function(groupKey, itemKey) {
+        for (var i = 0; i < this.favorites.length; i++) {
+            var f = this.favorites[i];
+            if (!f) continue;
+            if (f.key === itemKey && (!f.group || f.group === groupKey)) return true;
+        }
+        return false;
+    };
+
     Layer8DExplorer.prototype._onClick = function(e) {
+        // Star toggle takes precedence over selection — clicking the
+        // pin button must NOT also select the row.
+        var favBtn = e.target.closest('[data-fav-toggle]');
+        if (favBtn) {
+            e.stopPropagation();
+            this._handleFavoriteToggle(favBtn);
+            return;
+        }
         var headerEl = e.target.closest('.layer8d-explorer-group-header');
         if (headerEl) {
             var groupKey = headerEl.getAttribute('data-group');
@@ -254,10 +378,56 @@
         }
         var itemEl = e.target.closest('.layer8d-explorer-item');
         if (itemEl) {
+            // Virtual items resolve to their backing (group, item).
+            var resolves = itemEl.getAttribute('data-resolves-to');
+            if (resolves) {
+                var t;
+                try { t = JSON.parse(resolves); } catch (_) { return; }
+                if (t.object && t.payload) {
+                    // Object recents — let the consumer decide. We surface
+                    // the payload via onSelect's third "extras" parameter.
+                    if (typeof this.onSelectObject === 'function') {
+                        this.onSelectObject(t.payload);
+                    }
+                    return;
+                }
+                this._select(t.group, t.item || null);
+                return;
+            }
             var gk = itemEl.getAttribute('data-group');
             var ik = itemEl.getAttribute('data-item');
             this._select(gk, ik);
         }
+    };
+
+    Layer8DExplorer.prototype._handleFavoriteToggle = function(btn) {
+        if (!this.onToggleFavorite) return;
+        var itemEl = btn.closest('.layer8d-explorer-item');
+        if (!itemEl) return;
+        // For virtual favorites, resolve back to the real (group, item)
+        // before firing the toggle so the consumer's removal logic gets
+        // the correct keys.
+        var resolves = itemEl.getAttribute('data-resolves-to');
+        var groupKey, itemKey, label, icon;
+        if (resolves) {
+            var t;
+            try { t = JSON.parse(resolves); } catch (_) { return; }
+            groupKey = t.group;
+            itemKey = t.item;
+        } else {
+            groupKey = itemEl.getAttribute('data-group');
+            itemKey  = itemEl.getAttribute('data-item');
+        }
+        var labelEl = itemEl.querySelector('.layer8d-explorer-item-label');
+        var iconEl = itemEl.querySelector('.layer8d-explorer-icon');
+        label = labelEl ? labelEl.textContent : itemKey;
+        icon  = iconEl ? iconEl.textContent : '';
+        this.onToggleFavorite({
+            groupKey: groupKey,
+            itemKey:  itemKey,
+            label:    label,
+            icon:     icon
+        });
     };
 
     Layer8DExplorer.prototype._onKeyDown = function(e) {
