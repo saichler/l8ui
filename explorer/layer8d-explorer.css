@@ -1,0 +1,189 @@
+/*
+ * Layer8DExplorer — rail navigator styles.
+ * Theme tokens only — no hard-coded colors. See layer8d-theme.css.
+ */
+
+.layer8d-explorer {
+    font-family: 'Figtree', system-ui, -apple-system, sans-serif;
+    font-size: 13px;
+    color: var(--layer8d-text-dark);
+    padding: 8px 0;
+    user-select: none;
+}
+
+.layer8d-explorer-nav {
+    display: flex;
+    flex-direction: column;
+}
+
+/* ── Group header ─────────────────────────────────────────────── */
+
+.layer8d-explorer-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.layer8d-explorer-group-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    background: transparent;
+    border: none;
+    color: var(--layer8d-text-dark);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+    transition: background 0.12s;
+}
+
+.layer8d-explorer-group-header:hover {
+    background: var(--layer8d-bg-light);
+}
+
+.layer8d-explorer-group-header:focus {
+    outline: none;
+    background: var(--layer8d-bg-light);
+    box-shadow: inset 2px 0 0 var(--layer8d-primary);
+}
+
+/* Leaf groups (no children) get the same selectable affordance as items. */
+.layer8d-explorer-group-header[data-leaf="true"] {
+    text-transform: none;
+    font-weight: 500;
+    font-size: 13px;
+    letter-spacing: 0;
+    color: var(--layer8d-text-dark);
+    padding-left: 28px; /* align with items (chevron-width offset) */
+}
+
+.layer8d-explorer-group-header[data-leaf="true"].layer8d-explorer-active {
+    background: rgba(14, 165, 233, 0.1);
+    color: var(--layer8d-primary);
+    box-shadow: inset 3px 0 0 var(--layer8d-primary);
+}
+
+.layer8d-explorer-chevron {
+    width: 12px;
+    font-size: 10px;
+    line-height: 1;
+    color: var(--layer8d-text-medium);
+    flex-shrink: 0;
+    transition: transform 0.12s;
+}
+
+.layer8d-explorer-group.collapsed .layer8d-explorer-chevron {
+    transform: rotate(-90deg);
+}
+
+.layer8d-explorer-icon {
+    font-size: 14px;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.layer8d-explorer-label {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ── Items list ───────────────────────────────────────────────── */
+
+.layer8d-explorer-items {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    transition: max-height 0.18s ease;
+}
+
+.layer8d-explorer-group.collapsed .layer8d-explorer-items {
+    display: none;
+}
+
+.layer8d-explorer-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px 6px 36px;
+    cursor: pointer;
+    color: var(--layer8d-text-dark);
+    font-size: 13px;
+    line-height: 1.4;
+    transition: background 0.12s, color 0.12s;
+}
+
+.layer8d-explorer-item:hover {
+    background: var(--layer8d-bg-light);
+}
+
+.layer8d-explorer-item:focus {
+    outline: none;
+    background: var(--layer8d-bg-light);
+    box-shadow: inset 2px 0 0 var(--layer8d-primary);
+}
+
+.layer8d-explorer-item.layer8d-explorer-active {
+    background: rgba(14, 165, 233, 0.1);
+    color: var(--layer8d-primary);
+    font-weight: 600;
+    box-shadow: inset 3px 0 0 var(--layer8d-primary);
+}
+
+.layer8d-explorer-item-label {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ── Count badge ──────────────────────────────────────────────── */
+
+.layer8d-explorer-count {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 1px 7px;
+    border-radius: 10px;
+    background: var(--layer8d-bg-input);
+    color: var(--layer8d-text-medium);
+    border: 1px solid var(--layer8d-border);
+    line-height: 1.4;
+    flex-shrink: 0;
+    min-width: 18px;
+    text-align: center;
+}
+
+.layer8d-explorer-active .layer8d-explorer-count {
+    background: var(--layer8d-primary);
+    color: var(--layer8d-bg-white);
+    border-color: var(--layer8d-primary);
+}
+
+/* ── Status dot ───────────────────────────────────────────────── */
+
+.layer8d-explorer-status {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: var(--layer8d-text-muted);
+}
+
+.layer8d-explorer-status.status-ok {
+    background: var(--layer8d-success, #16a34a);
+}
+
+.layer8d-explorer-status.status-warning {
+    background: var(--layer8d-warning, #f59e0b);
+}
+
+.layer8d-explorer-status.status-critical {
+    background: var(--layer8d-error, #dc2626);
+}

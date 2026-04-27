@@ -49,15 +49,38 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
             if (Object.keys(portals).length < 2) {
                 portals = getConfigPortals();
             }
-            if (Object.keys(portals).length < 2) return;
+            if (Object.keys(portals).length < 2) {
+                warnNoSwitcher(portals);
+                return;
+            }
             render(config.container, config.insertBefore, portals, currentPath);
         })
         .catch(function() {
             // L8Portal endpoint unavailable — fall back to login.json config
             var portals = getConfigPortals();
-            if (Object.keys(portals).length < 2) return;
+            if (Object.keys(portals).length < 2) {
+                warnNoSwitcher(portals);
+                return;
+            }
             render(config.container, config.insertBefore, portals, currentPath);
         });
+    }
+
+    // warnNoSwitcher surfaces the most common failure mode for the portal
+    // dropdown: Layer8DPortalSwitcher needs at least 2 portals registered
+    // (either via the L8Portal service or the login.json `app.portals` map)
+    // before it renders. Silently bailing here is a debugging trap; this
+    // log keeps it visible without forcing the dropdown to render in
+    // single-portal apps that intentionally don't want it.
+    function warnNoSwitcher(portals) {
+        if (typeof console === 'undefined' || !console.warn) return;
+        var count = portals ? Object.keys(portals).length : 0;
+        console.warn(
+            'Layer8DPortalSwitcher: not rendering — found ' + count +
+            ' portal(s); need >= 2. Register portals under `app.portals`' +
+            ' in login.json (e.g. {"app.html":"Probler"}) or via the' +
+            ' L8Portal service. See l8ui/shared/layer8d-portal-switcher.js.'
+        );
     }
 
     /**
