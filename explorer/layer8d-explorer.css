@@ -187,3 +187,51 @@
 .layer8d-explorer-status.status-critical {
     background: var(--layer8d-error, #dc2626);
 }
+
+/* ── Favorite/unpin button ────────────────────────────────────── */
+
+.layer8d-explorer-fav {
+    background: transparent;
+    border: none;
+    color: var(--layer8d-text-muted);
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 1;
+    padding: 2px 4px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    opacity: 0;
+    transition: opacity 0.12s, color 0.12s, background 0.12s;
+}
+
+/* Show the star on hover or focus of the row, or when pinned. */
+.layer8d-explorer-item:hover .layer8d-explorer-fav,
+.layer8d-explorer-item:focus .layer8d-explorer-fav,
+.layer8d-explorer-fav.layer8d-explorer-fav-pinned,
+.layer8d-explorer-group-virtual[data-virtual="favorites"] .layer8d-explorer-fav {
+    opacity: 1;
+}
+
+.layer8d-explorer-fav:hover {
+    background: var(--layer8d-bg-input);
+    color: var(--layer8d-text-dark);
+}
+
+.layer8d-explorer-fav-pinned {
+    color: var(--layer8d-warning, #f59e0b);
+}
+
+/* ── Virtual groups (Favorites, Recents) ──────────────────────── */
+
+.layer8d-explorer-group-virtual {
+    background: var(--layer8d-bg-light);
+    border-bottom: 1px solid var(--layer8d-border);
+}
+
+.layer8d-explorer-group-virtual .layer8d-explorer-group-header {
+    color: var(--layer8d-text-medium);
+}
+
+.layer8d-explorer-group-virtual[data-virtual="favorites"] .layer8d-explorer-icon {
+    color: var(--layer8d-warning, #f59e0b);
+}

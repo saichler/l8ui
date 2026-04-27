@@ -69,6 +69,9 @@
         this.favorites = Array.isArray(config.favorites) ? config.favorites.slice() : [];
         this.recents = Array.isArray(config.recents) ? config.recents.slice() : [];
         this.onSelect = typeof config.onSelect === 'function' ? config.onSelect : function() {};
+        this.onSelectObject = typeof config.onSelectObject === 'function'
+            ? config.onSelectObject
+            : null;
         this.onToggleFavorite = typeof config.onToggleFavorite === 'function'
             ? config.onToggleFavorite
             : null;
@@ -113,45 +116,7 @@
     };
 
     Layer8DExplorer.prototype._buildVirtualGroups = function() {
-        var out = [];
-        if (this.favorites.length > 0) {
-            out.push({
-                key: '__favorites',
-                label: 'Favorites',
-                icon: '★',
-                _virtual: 'favorites',
-                items: this.favorites.map(function(f) {
-                    // Each favorite resolves to a real (group, item) pair
-                    // so click behaviors mirror navigating to it directly.
-                    return {
-                        key: f.key,
-                        label: f.label || f.key,
-                        icon: f.icon || '',
-                        _resolvesTo: { group: f.group || '', item: f.key },
-                        _favoritePayload: f
-                    };
-                })
-            });
-        }
-        if (this.recents.length > 0) {
-            out.push({
-                key: '__recents',
-                label: 'Recent',
-                icon: '⏲',
-                _virtual: 'recents',
-                items: this.recents.map(function(r) {
-                    return {
-                        key: r.key,
-                        label: r.label || r.key,
-                        icon: r.icon || '',
-                        _resolvesTo: r.kind === 'object'
-                            ? { object: true, payload: r }
-                            : { group: r.group || '', item: r.key }
-                    };
-                })
-            });
-        }
-        return out;
+        return Layer8DExplorerRender.buildVirtualGroups(this);
     };
 
     Layer8DExplorer.prototype.setFavorites = function(list) {
@@ -206,151 +171,17 @@
         this._applyDecorations();
     };
 
+    // _renderGroup, _renderItem, and _isFavorite live in
+    // layer8d-explorer-render.js to keep this file under the 500-line
+    // maintainability guideline.
     Layer8DExplorer.prototype._renderGroup = function(group) {
-        var hasItems = group.items && group.items.length > 0;
-        var isCollapsed = hasItems && this.collapsed[group.key] === true;
-        var isVirtual = !!group._virtual;
-
-        var wrap = document.createElement('div');
-        wrap.className = 'layer8d-explorer-group';
-        if (isVirtual) wrap.classList.add('layer8d-explorer-group-virtual');
-        wrap.setAttribute('data-group', group.key);
-        if (isVirtual) wrap.setAttribute('data-virtual', group._virtual);
-        if (isCollapsed) wrap.classList.add('collapsed');
-
-        var header = document.createElement('button');
-        header.type = 'button';
-        header.className = 'layer8d-explorer-group-header';
-        header.setAttribute('data-group', group.key);
-        header.setAttribute('data-leaf', hasItems ? 'false' : 'true');
-        header.setAttribute('tabindex', '0');
-        header.setAttribute('role', hasItems ? 'treeitem' : 'treeitem');
-        if (hasItems) header.setAttribute('aria-expanded', String(!isCollapsed));
-
-        var chevron = document.createElement('span');
-        chevron.className = 'layer8d-explorer-chevron';
-        chevron.setAttribute('aria-hidden', 'true');
-        chevron.textContent = hasItems ? '▾' : '';
-        header.appendChild(chevron);
-
-        if (group.icon) {
-            var icon = document.createElement('span');
-            icon.className = 'layer8d-explorer-icon';
-            icon.setAttribute('aria-hidden', 'true');
-            icon.textContent = group.icon;
-            header.appendChild(icon);
-        }
-
-        var label = document.createElement('span');
-        label.className = 'layer8d-explorer-label';
-        label.textContent = group.label;
-        header.appendChild(label);
-
-        var countBadge = document.createElement('span');
-        countBadge.className = 'layer8d-explorer-count';
-        countBadge.setAttribute('data-count-for', group.key);
-        countBadge.style.display = 'none';
-        header.appendChild(countBadge);
-
-        var statusDot = document.createElement('span');
-        statusDot.className = 'layer8d-explorer-status';
-        statusDot.setAttribute('data-status-for', group.key);
-        statusDot.style.display = 'none';
-        header.appendChild(statusDot);
-
-        wrap.appendChild(header);
-
-        if (hasItems) {
-            var list = document.createElement('ul');
-            list.className = 'layer8d-explorer-items';
-            list.setAttribute('role', 'group');
-            for (var i = 0; i < group.items.length; i++) {
-                list.appendChild(this._renderItem(group, group.items[i]));
-            }
-            wrap.appendChild(list);
-        }
-        return wrap;
+        return Layer8DExplorerRender.renderGroup(this, group);
     };
-
     Layer8DExplorer.prototype._renderItem = function(group, item) {
-        var isVirtualFavs = group._virtual === 'favorites';
-        var isVirtualRecents = group._virtual === 'recents';
-        var isVirtual = isVirtualFavs || isVirtualRecents;
-
-        var li = document.createElement('li');
-        li.className = 'layer8d-explorer-item';
-        li.setAttribute('data-group', group.key);
-        li.setAttribute('data-item', item.key);
-        if (item._resolvesTo) {
-            li.setAttribute('data-resolves-to', JSON.stringify(item._resolvesTo));
-        }
-        li.setAttribute('role', 'treeitem');
-        li.setAttribute('tabindex', '0');
-
-        if (item.icon) {
-            var icon = document.createElement('span');
-            icon.className = 'layer8d-explorer-icon';
-            icon.setAttribute('aria-hidden', 'true');
-            icon.textContent = item.icon;
-            li.appendChild(icon);
-        }
-
-        var label = document.createElement('span');
-        label.className = 'layer8d-explorer-item-label';
-        label.textContent = item.label;
-        li.appendChild(label);
-
-        if (!isVirtual) {
-            // Count badge + status dot only on real (non-virtual) items.
-            // Showing them on Favorites/Recents would double-decorate.
-            var countBadge = document.createElement('span');
-            countBadge.className = 'layer8d-explorer-count';
-            countBadge.setAttribute('data-count-for', item.key);
-            countBadge.style.display = 'none';
-            li.appendChild(countBadge);
-
-            var statusDot = document.createElement('span');
-            statusDot.className = 'layer8d-explorer-status';
-            statusDot.setAttribute('data-status-for', item.key);
-            statusDot.style.display = 'none';
-            li.appendChild(statusDot);
-        }
-
-        // Favorite toggle (★ pin / ✕ unpin). Only shows when an
-        // onToggleFavorite handler is registered.
-        if (this.favoritesEnabled) {
-            var btn = document.createElement('button');
-            btn.type = 'button';
-            btn.className = 'layer8d-explorer-fav';
-            btn.setAttribute('data-fav-toggle', '1');
-            btn.setAttribute('tabindex', '-1');
-            if (isVirtualFavs) {
-                btn.textContent = '✕';
-                btn.title = 'Remove from Favorites';
-                btn.classList.add('layer8d-explorer-fav-pinned');
-            } else if (isVirtualRecents) {
-                // No pin button in Recents — recents auto-decay; don't
-                // confuse users with extra buttons.
-                btn = null;
-            } else {
-                var pinned = this._isFavorite(group.key, item.key);
-                btn.textContent = pinned ? '★' : '☆';
-                btn.title = pinned ? 'Pinned to Favorites' : 'Pin to Favorites';
-                if (pinned) btn.classList.add('layer8d-explorer-fav-pinned');
-            }
-            if (btn) li.appendChild(btn);
-        }
-
-        return li;
+        return Layer8DExplorerRender.renderItem(this, group, item);
     };
-
     Layer8DExplorer.prototype._isFavorite = function(groupKey, itemKey) {
-        for (var i = 0; i < this.favorites.length; i++) {
-            var f = this.favorites[i];
-            if (!f) continue;
-            if (f.key === itemKey && (!f.group || f.group === groupKey)) return true;
-        }
-        return false;
+        return Layer8DExplorerRender.isFavorite(this, groupKey, itemKey);
     };
 
     Layer8DExplorer.prototype._onClick = function(e) {
