@@ -114,7 +114,26 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
     /**
      * Render the portal switcher button and dropdown.
      */
+    /**
+     * Split a current page pathname into a directory prefix and a basename.
+     * Examples:
+     *   'app.html'                  → { dir: '',           basename: 'app.html' }
+     *   'probler/app.html'          → { dir: 'probler/',   basename: 'app.html' }
+     *   'foo/bar/k8s-explorer.html' → { dir: 'foo/bar/',   basename: 'k8s-explorer.html' }
+     *
+     * Used so the switcher works for apps served under a path prefix
+     * (e.g. /probler/app.html) — portal hops navigate to a sibling file
+     * in the SAME directory, not the origin root, and "current portal"
+     * highlighting compares basenames not full paths.
+     */
+    function splitPath(p) {
+        var idx = p.lastIndexOf('/');
+        if (idx === -1) return { dir: '', basename: p };
+        return { dir: p.substring(0, idx + 1), basename: p.substring(idx + 1) };
+    }
+
     function render(container, insertBefore, portals, currentPath) {
+        var split = splitPath(currentPath);
         var wrapper = document.createElement('div');
         wrapper.className = 'l8-portal-switcher';
         wrapper.style.cssText = 'position:relative;display:inline-flex;align-items:center;';
@@ -149,7 +168,9 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
         for (var i = 0; i < portalKeys.length; i++) {
             var path = portalKeys[i];
             var label = portals[path];
-            var isCurrent = (path === currentPath);
+            // Compare basenames so an app served at /probler/app.html still
+            // matches a portal entry registered as 'app.html'.
+            var isCurrent = (path === currentPath) || (path === split.basename);
 
             var item = document.createElement('div');
             item.style.cssText = 'padding:10px 14px;cursor:pointer;display:flex;align-items:center;gap:8px;'
@@ -171,6 +192,7 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
 
             if (!isCurrent) {
                 item.dataset.path = path;
+                item.dataset.dir = split.dir;
                 item.addEventListener('mouseenter', function() {
                     this.style.background = 'var(--layer8d-bg-light, #f7fafc)';
                 });
@@ -179,7 +201,13 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
                 });
                 item.addEventListener('click', function() {
                     var targetPath = this.dataset.path;
-                    window.location.href = '/' + targetPath;
+                    var dir = this.dataset.dir || '';
+                    // Hop to the sibling portal in the same directory as the
+                    // current page. Without this, apps served under a path
+                    // prefix (e.g. /probler/app.html) would navigate to the
+                    // wrong absolute URL ('/k8s-explorer.html') and the
+                    // server would return 401/404.
+                    window.location.href = '/' + dir + targetPath;
                 });
             }
 
