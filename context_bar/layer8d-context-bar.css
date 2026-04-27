@@ -1,0 +1,85 @@
+/*
+ * Layer8DContextBar — top-toolbar dropdowns + search.
+ * Theme tokens only.
+ */
+
+.layer8d-context-bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    min-width: 0;
+}
+
+.layer8d-context-bar-control {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.layer8d-context-bar-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--layer8d-text-medium);
+    margin: 0;
+    white-space: nowrap;
+}
+
+.layer8d-context-bar-select {
+    font-family: inherit;
+    font-size: 12px;
+    padding: 5px 24px 5px 10px;
+    background: var(--layer8d-bg-input);
+    color: var(--layer8d-text-dark);
+    border: 1px solid var(--layer8d-border);
+    border-radius: 6px;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M1 1l4 4 4-4' stroke='%2364748b' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    min-width: 140px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.layer8d-context-bar-select:focus {
+    outline: none;
+    border-color: var(--layer8d-primary);
+    box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.18);
+}
+
+.layer8d-context-bar-select:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.layer8d-context-bar-search-wrap {
+    flex: 1;
+    min-width: 180px;
+    display: flex;
+    align-items: center;
+}
+
+.layer8d-context-bar-search {
+    width: 100%;
+    font-family: inherit;
+    font-size: 12px;
+    padding: 6px 10px;
+    background: var(--layer8d-bg-input);
+    color: var(--layer8d-text-dark);
+    border: 1px solid var(--layer8d-border);
+    border-radius: 6px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.layer8d-context-bar-search::placeholder {
+    color: var(--layer8d-text-muted);
+}
+
+.layer8d-context-bar-search:focus {
+    outline: none;
+    border-color: var(--layer8d-primary);
+    box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.18);
+}
