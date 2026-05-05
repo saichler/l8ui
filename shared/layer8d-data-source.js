@@ -72,6 +72,11 @@ limitations under the License.
                         continue;
                     }
                     queryValue = enumValue;
+                } else if (column.enumOptions) {
+                    // enumOptions uses numeric keys — pass the value directly
+                    queryValue = filterValue;
+                } else if (column.type === 'boolean') {
+                    queryValue = filterValue;
                 } else {
                     queryValue = `${filterValue}*`;
                 }

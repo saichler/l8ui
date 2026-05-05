@@ -31,16 +31,18 @@ Layer8DTable.prototype.attachEventListeners = function() {
 
     // Filtering (input in filter row)
     if (this.filterable) {
+        const self = this;
         this.container.querySelectorAll('.l8-filter-input').forEach(input => {
-            input.addEventListener('input', (e) => {
+            const eventType = input.tagName === 'SELECT' ? 'change' : 'input';
+            input.addEventListener(eventType, (e) => {
                 const column = input.dataset.column;
                 const value = input.value;
-                this.filters[column] = value;
+                self.filters[column] = value;
 
-                if (this.serverSide) {
-                    this.debouncedFilterHandler();
+                if (self.serverSide) {
+                    self.debouncedFilterHandler();
                 } else {
-                    this.filter(column, value);
+                    self.filter(column, value);
                 }
             });
         });

@@ -61,7 +61,7 @@ Layer8DTable.prototype.render = function() {
         const input = this.container.querySelector(`.l8-filter-input[data-column="${focusedColumn}"]`);
         if (input) {
             input.focus();
-            if (cursorPosition !== null) {
+            if (cursorPosition !== null && typeof input.setSelectionRange === 'function') {
                 input.setSelectionRange(cursorPosition, cursorPosition);
             }
         }
@@ -158,6 +158,40 @@ Layer8DTable.prototype.renderFilterRow = function() {
 
     let filterCells = this.columns.map(col => {
         const filterValue = this.filters[col.key] || '';
+        // enumValues: { 'active': 1, 'draft': 2 } — filter sends the string key
+        if (col.enumValues && typeof col.enumValues === 'object') {
+            let options = `<option value="">All</option>`;
+            Object.keys(col.enumValues).forEach(label => {
+                const displayLabel = label.charAt(0).toUpperCase() + label.slice(1);
+                const selected = filterValue === label ? ' selected' : '';
+                options += `<option value="${Layer8DUtils.escapeAttr(label)}"${selected}>${Layer8DUtils.escapeHtml(displayLabel)}</option>`;
+            });
+            return `<th class="l8-table-filter">
+                <select class="l8-filter-input l8-filter-select" data-column="${col.key}">${options}</select>
+            </th>`;
+        }
+        // enumOptions: { 0: 'Unspecified', 1: 'Active', 2: 'Inactive' } — filter sends the numeric key
+        if (col.enumOptions && typeof col.enumOptions === 'object') {
+            let options = `<option value="">All</option>`;
+            Object.keys(col.enumOptions).forEach(numKey => {
+                if (numKey === '0') return; // skip Unspecified
+                const label = col.enumOptions[numKey];
+                const selected = filterValue === numKey ? ' selected' : '';
+                options += `<option value="${Layer8DUtils.escapeAttr(numKey)}"${selected}>${Layer8DUtils.escapeHtml(label)}</option>`;
+            });
+            return `<th class="l8-table-filter">
+                <select class="l8-filter-input l8-filter-select" data-column="${col.key}">${options}</select>
+            </th>`;
+        }
+        // boolean columns
+        if (col.type === 'boolean') {
+            let options = `<option value="">All</option>`;
+            options += `<option value="true"${filterValue === 'true' ? ' selected' : ''}>Yes</option>`;
+            options += `<option value="false"${filterValue === 'false' ? ' selected' : ''}>No</option>`;
+            return `<th class="l8-table-filter">
+                <select class="l8-filter-input l8-filter-select" data-column="${col.key}">${options}</select>
+            </th>`;
+        }
         return `<th class="l8-table-filter">
             <input type="text" class="l8-filter-input" data-column="${col.key}"
                    value="${Layer8DUtils.escapeAttr(filterValue)}" placeholder="Filter...">

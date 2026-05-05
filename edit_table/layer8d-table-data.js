@@ -49,11 +49,15 @@ Layer8DTable.prototype.buildQuery = function(page, pageSize) {
             // Enum column: validate and convert to enum value
             const enumValue = Layer8DUtils.matchEnumValue(filterValue, column.enumValues);
             if (enumValue === null) {
-                // No match - mark as invalid, skip this filter
                 invalidFilters.push(columnKey);
                 continue;
             }
             queryValue = enumValue;
+        } else if (column.enumOptions) {
+            // enumOptions uses numeric keys — pass directly
+            queryValue = filterValue;
+        } else if (column.type === 'boolean') {
+            queryValue = filterValue;
         } else {
             // Non-enum column: use text with wildcard
             queryValue = `${filterValue}*`;

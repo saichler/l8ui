@@ -26,7 +26,7 @@ limitations under the License.
 (function() {
     'use strict';
 
-    const ENDPOINT = Layer8DConfig.resolveEndpoint('/0/FileStore');
+    function getEndpoint() { return Layer8DConfig.resolveEndpoint('/0/FileStore'); }
     const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
     function getHeaders() {
@@ -77,7 +77,7 @@ limitations under the License.
                     if (documentId) body.documentId = documentId;
                     if (version) body.version = version;
 
-                    fetch(ENDPOINT, {
+                    fetch(getEndpoint(), {
                         method: 'POST',
                         headers: getHeaders(),
                         body: JSON.stringify(body)
@@ -114,7 +114,7 @@ limitations under the License.
 
             var body = { storagePath: storagePath };
 
-            fetch(ENDPOINT, {
+            fetch(getEndpoint(), {
                 method: 'PUT',
                 headers: getHeaders(),
                 body: JSON.stringify(body)

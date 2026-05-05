@@ -110,11 +110,11 @@ limitations under the License.
          * @param {Function} renderer - The status renderer function
          * @returns {Array} - Single column in array format
          */
-        status: function(key, label, enumValues, renderer) {
+        status: function(key, label, enumValues, renderer, enumOptions) {
             if (typeof renderer !== 'function') {
                 console.error(`Layer8ColumnFactory.status('${key}', '${label}'): renderer is not a function (got ${typeof renderer}). Check that the render object is populated before columns are defined.`);
             }
-            return [{
+            var col = {
                 key: key,
                 label: label,
                 sortKey: key,
@@ -124,7 +124,9 @@ limitations under the License.
                 render: typeof renderer === 'function'
                     ? (item) => renderer(item[key])
                     : (item) => String(item[key] ?? '')
-            }];
+            };
+            if (enumOptions) col.enumOptions = enumOptions;
+            return [col];
         },
 
         /**
@@ -135,7 +137,7 @@ limitations under the License.
          * @param {Function} renderer - The enum renderer function
          * @returns {Array} - Single column in array format
          */
-        enum: function(key, label, enumValues, renderer) {
+        enum: function(key, label, enumValues, renderer, enumOptions) {
             if (typeof renderer !== 'function') {
                 console.error(`Layer8ColumnFactory.enum('${key}', '${label}'): renderer is not a function (got ${typeof renderer}). Check that the render object is populated before columns are defined.`);
             }
@@ -149,9 +151,8 @@ limitations under the License.
                     ? (item) => renderer(item[key])
                     : (item) => String(item[key] ?? '')
             };
-            if (enumValues) {
-                col.enumValues = enumValues;
-            }
+            if (enumValues) col.enumValues = enumValues;
+            if (enumOptions) col.enumOptions = enumOptions;
             return [col];
         },
 
