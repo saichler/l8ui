@@ -592,3 +592,69 @@ limitations under the License.
     --layer8d-gray-light-bg: rgba(107, 114, 128, 0.1);
     --layer8d-gray-light-text: #9ca3af;
 }
+
+/*
+ * Theme Token Aliases
+ *
+ * Maps short CSS variable names (used by mobile components) to the
+ * canonical --layer8d-* tokens defined in layer8d-theme.css.
+ *
+ * This file should be upstreamed to ../l8ui once stabilized.
+ */
+:root {
+    /* Backgrounds */
+    --bg-primary: var(--layer8d-bg-white);
+    --bg-secondary: var(--layer8d-bg-light);
+    --bg-tertiary: var(--layer8d-bg-input);
+    --bg-card: var(--layer8d-bg-card, var(--layer8d-bg-white));
+
+    /* Text */
+    --text-primary: var(--layer8d-text-dark);
+    --text-secondary: var(--layer8d-text-medium);
+    --text-muted: var(--layer8d-text-muted);
+
+    /* Borders */
+    --border-light: var(--layer8d-border);
+    --border-color: var(--layer8d-border);
+
+    /* Spacing */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 12px;
+    --spacing-lg: 16px;
+    --spacing-xl: 24px;
+
+    /* Font sizes */
+    --font-size-sm: 12px;
+    --font-size-base: 14px;
+    --font-size-lg: 16px;
+
+    /* Border radius */
+    --radius-sm: 6px;
+    --radius-md: var(--layer8d-radius-md, 8px);
+
+    /* Shadows */
+    --shadow-sm: var(--layer8d-shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.05));
+
+    /* Touch */
+    --touch-target: 44px;
+
+    /* Transitions */
+    --transition-fast: 0.15s ease;
+
+    /* Status aliases */
+    --status-terminated: var(--layer8d-error);
+    --status-terminated-bg: var(--layer8d-error-bg);
+}
+
+/* Dark mode aliases */
+[data-theme="dark"] {
+    --bg-primary: var(--layer8d-bg-white);
+    --bg-secondary: var(--layer8d-bg-light);
+    --bg-tertiary: var(--layer8d-bg-input);
+    --bg-card: var(--layer8d-bg-card, var(--layer8d-bg-white));
+    --text-primary: var(--layer8d-text-dark);
+    --text-secondary: var(--layer8d-text-medium);
+    --text-muted: var(--layer8d-text-muted);
+    --border-light: var(--layer8d-border);
+}
