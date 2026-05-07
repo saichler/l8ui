@@ -59,6 +59,7 @@ limitations under the License.
             sortable: true,
             filterable: true,
             serverSide: true,
+            realtime: true,
             transformData: transformHealthData,
             onDataLoaded: function(data, items, totalCount) {
                 healthDataMap.clear();
