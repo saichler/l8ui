@@ -337,3 +337,12 @@ limitations under the License.
     color: #fff;
     border: none;
 }
+
+/* Real-time card change highlight */
+.layer8m-card-changed {
+    animation: layer8m-card-flash 2s ease-out;
+}
+@keyframes layer8m-card-flash {
+    0% { background-color: var(--layer8d-warning); opacity: 0.3; }
+    100% { background-color: transparent; opacity: 1; }
+}

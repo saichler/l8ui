@@ -27,18 +27,25 @@ limitations under the License.
             this.pageSize = options.pageSize || 10;
             this.columns = options.columns || [];
             this.transformData = options.transformData || null;
+            this.primaryKey = options.primaryKey || 'id';
+            this.realtime = options.realtime || false;
 
             // State
             this.currentPage = 1;
             this.totalItems = 0;
+            this.data = [];
             this.filters = {};
             this.sortColumn = null;
             this.sortDirection = 'asc';
+            this._wsUnsubscribe = null;
+            this._notificationsPaused = false;
 
             // Callbacks
             this._onDataLoaded = options.onDataLoaded || null;
             this._onError = options.onError || null;
             this._onMetadata = options.onMetadata || null;
+            this.onItemChanged = null;
+            this.onPageStructureChanged = null;
         }
 
         /**
@@ -97,6 +104,10 @@ limitations under the License.
                 query += ` sort-by ${sortKey}${desc}`;
             }
 
+            if (this.realtime) {
+                query += ' register=true';
+            }
+
             return { query, invalidFilters };
         }
 
@@ -147,6 +158,12 @@ limitations under the License.
                 }
 
                 this.currentPage = page;
+                this.data = items;
+                this._notificationsPaused = false;
+
+                if (this.realtime && typeof Layer8DWebSocket !== 'undefined' && !this._wsUnsubscribe) {
+                    this._wsUnsubscribe = Layer8DWebSocket.subscribe(this.modelName, this._handleChangeNotification.bind(this));
+                }
 
                 const result = { items, totalCount, metadata: data.metadata, invalidFilters };
 
@@ -208,6 +225,54 @@ limitations under the License.
          */
         getTotalPages() {
             return Math.ceil(this.totalItems / this.pageSize);
+        }
+
+        /**
+         * Handle incoming WebSocket change notification
+         */
+        _handleChangeNotification(msg) {
+            if (this._notificationsPaused) return;
+
+            var pk = this.primaryKey;
+
+            if (msg.action === 'update') {
+                var record = msg.record;
+                if (this.transformData) {
+                    record = this.transformData(record);
+                }
+                var index = -1;
+                for (var i = 0; i < this.data.length; i++) {
+                    if (String(this.data[i][pk]) === String(msg.primaryKey)) {
+                        index = i;
+                        break;
+                    }
+                }
+                if (index >= 0) {
+                    this.data[index] = record;
+                    if (this.onItemChanged) this.onItemChanged(record, index, 'update');
+                }
+            } else if (msg.action === 'delete' || msg.action === 'add') {
+                this._notificationsPaused = true;
+                if (this.onPageStructureChanged) {
+                    var self = this;
+                    this.onPageStructureChanged(msg.action, function() {
+                        self._notificationsPaused = false;
+                        self.fetchData(self.currentPage);
+                    }, function() {
+                        // ignore — stay paused until next manual refresh
+                    });
+                }
+            }
+        }
+
+        /**
+         * Unsubscribe from WebSocket and clean up
+         */
+        destroy() {
+            if (this._wsUnsubscribe) {
+                this._wsUnsubscribe();
+                this._wsUnsubscribe = null;
+            }
         }
     }
 

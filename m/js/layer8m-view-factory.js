@@ -60,7 +60,8 @@ limitations under the License.
             onDelete: options.onDelete,
             onRowClick: options.onRowClick,
             transformData: options.transformData,
-            onDataLoaded: options.onDataLoaded
+            onDataLoaded: options.onDataLoaded,
+            realtime: options.realtime || false
         });
     });
 

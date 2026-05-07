@@ -58,6 +58,11 @@ class Layer8DTable {
         this.filterable = options.filterable !== false;
         this.filterDebounceMs = options.filterDebounceMs || 1000;
 
+        // Real-time change notifications
+        this.realtime = options.realtime || false;
+        this._wsUnsubscribe = null;
+        this._notificationsPaused = false;
+
         // Sorting and filtering state
         this.sortColumn = options.defaultSort?.column || null;
         this.sortDirection = options.defaultSort?.direction || 'asc';

@@ -59,6 +59,8 @@ limitations under the License.
             this.isLoading = false;
             this.hasError = false;
             this.errorMessage = '';
+            this._wsUnsubscribe = null;
+            this._notificationsPaused = false;
 
             this.init();
         }
@@ -141,6 +143,10 @@ limitations under the License.
                 query += ` sort-by ${sortKey}${desc}`;
             }
 
+            if (this.config.realtime) {
+                query += ' register=true';
+            }
+
             return { query, isInvalid };
         }
 
@@ -170,6 +176,11 @@ limitations under the License.
 
                 this._updateServerData(items, totalCount);
                 this.currentPage = page;
+                this._notificationsPaused = false;
+
+                if (this.config.realtime && typeof Layer8DWebSocket !== 'undefined' && !this._wsUnsubscribe) {
+                    this._wsUnsubscribe = Layer8DWebSocket.subscribe(this.config.modelName, this._handleChangeNotification.bind(this));
+                }
 
                 if (this.config.onDataLoaded) {
                     this.config.onDataLoaded(response, items, totalCount);
@@ -523,6 +534,7 @@ limitations under the License.
             }
             return range;
         }
+
     }
 
     window.Layer8MTable = Layer8MTable;

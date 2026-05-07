@@ -457,3 +457,12 @@ limitations under the License.
         display: none;
     }
 }
+
+/* Real-time row change highlight */
+.layer8d-row-changed {
+    animation: layer8d-row-flash 2s ease-out;
+}
+@keyframes layer8d-row-flash {
+    0% { background-color: var(--layer8d-warning); opacity: 0.3; }
+    100% { background-color: transparent; opacity: 1; }
+}

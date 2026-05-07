@@ -136,7 +136,8 @@ limitations under the License.
             onDelete: options.onDelete,
             onRowClick: options.onRowClick,
             addButtonText: options.addButtonText,
-            defaultSort: options.defaultSort || null
+            defaultSort: options.defaultSort || null,
+            realtime: options.realtime || false
         });
         return table;
     });

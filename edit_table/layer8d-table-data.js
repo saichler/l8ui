@@ -81,6 +81,10 @@ Layer8DTable.prototype.buildQuery = function(page, pageSize) {
         query += ` sort-by ${sortKey}${desc}`;
     }
 
+    if (this.realtime) {
+        query += ' register=true';
+    }
+
     return { query, invalidFilters };
 };
 
@@ -135,6 +139,12 @@ Layer8DTable.prototype.fetchData = async function(page, pageSize) {
         // Update table
         this.setServerData(items, totalCount);
         this.setInvalidFilters(invalidFilters);
+        this._notificationsPaused = false;
+
+        // Subscribe to real-time change notifications
+        if (this.realtime && typeof Layer8DWebSocket !== 'undefined' && !this._wsUnsubscribe) {
+            this._wsUnsubscribe = Layer8DWebSocket.subscribe(this.modelName, this._handleChangeNotification.bind(this));
+        }
 
         // Call optional callback for additional processing
         if (this.onDataLoaded) {
@@ -275,4 +285,51 @@ Layer8DTable.prototype.getNestedValue = function(obj, key) {
         value = value[k];
     }
     return value !== null && value !== undefined ? value : '';
+};
+
+// Handle incoming WebSocket change notification
+Layer8DTable.prototype._handleChangeNotification = function(msg) {
+    if (this._notificationsPaused) return;
+
+    if (msg.action === 'update') {
+        var record = msg.record;
+        if (!record) {
+            this._notificationsPaused = true;
+            var self = this;
+            setTimeout(function() {
+                self._notificationsPaused = false;
+                self.fetchData(self.currentPage, self.pageSize);
+            }, 500);
+            return;
+        }
+        if (this.transformData) {
+            record = this.transformData(record);
+        }
+        var pk = this.primaryKey || 'id';
+        for (var i = 0; i < this.data.length; i++) {
+            if (String(this.getItemId(this.data[i])) === String(msg.primaryKey)) {
+                this.data[i] = record;
+                this.updateRow(i, record);
+                return;
+            }
+        }
+    } else if (msg.action === 'delete' || msg.action === 'add') {
+        this._notificationsPaused = true;
+        var self = this;
+        if (typeof Layer8DNotification !== 'undefined') {
+            Layer8DNotification.info('Data changed — rows were ' + msg.action + 'd. Refreshing...');
+        }
+        setTimeout(function() {
+            self._notificationsPaused = false;
+            self.fetchData(self.currentPage, self.pageSize);
+        }, 500);
+    }
+};
+
+// Unsubscribe from WebSocket notifications and clean up
+Layer8DTable.prototype.destroy = function() {
+    if (this._wsUnsubscribe) {
+        this._wsUnsubscribe();
+        this._wsUnsubscribe = null;
+    }
 };

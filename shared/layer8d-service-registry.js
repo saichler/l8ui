@@ -110,7 +110,8 @@ limitations under the License.
             onRowClick: (item, id) => moduleNS._showDetailsModal(service, item, id),
             addButtonText: `Add ${service.label.replace(/s$/, '')}`,
             viewConfig: service.viewConfig || {},
-            defaultSort: service.defaultSort || null
+            defaultSort: service.defaultSort || null,
+            realtime: service.realtime || false
         };
 
         const switcherKey = `${moduleKey}-${service.key}`;

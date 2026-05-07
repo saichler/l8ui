@@ -40,7 +40,8 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
                 primaryKey: primaryKey,
                 baseWhereClause: serviceConfig.baseWhereClause || null,
                 viewConfig: serviceConfig.viewConfig || {},
-                getItemId: (item) => item[primaryKey]
+                getItemId: (item) => item[primaryKey],
+                realtime: serviceConfig.realtime || false
             };
 
             if (transformData) {

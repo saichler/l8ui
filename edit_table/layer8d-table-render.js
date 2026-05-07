@@ -260,3 +260,36 @@ Layer8DTable.prototype.renderRow = function(item, index) {
     const rowClass = this.onRowClick ? 'l8-clickable-row' : '';
     return `<tr class="${rowClass}" data-row-index="${index}">${cells}</tr>`;
 };
+
+// Surgically update a single row without re-rendering the entire table
+Layer8DTable.prototype.updateRow = function(index, item) {
+    var tbody = this.container ? this.container.querySelector('tbody') : null;
+    if (!tbody) return;
+    var existingRow = tbody.rows[index];
+    if (!existingRow) return;
+
+    var tempDiv = document.createElement('div');
+    tempDiv.innerHTML = '<table><tbody>' + this.renderRow(item, index) + '</tbody></table>';
+    var newRow = tempDiv.querySelector('tr');
+    if (!newRow) return;
+
+    existingRow.replaceWith(newRow);
+
+    // Re-attach row click handler
+    if (this.onRowClick) {
+        var self = this;
+        newRow.addEventListener('click', function(e) {
+            if (e.target.closest('button')) return;
+            var rowIndex = parseInt(newRow.dataset.rowIndex, 10);
+            var data = self.getPaginatedData();
+            if (data[rowIndex]) {
+                self.onRowClick(data[rowIndex], self.getItemId(data[rowIndex]));
+            }
+        });
+    }
+
+    newRow.classList.add('layer8d-row-changed');
+    setTimeout(function() {
+        newRow.classList.remove('layer8d-row-changed');
+    }, 2000);
+};
