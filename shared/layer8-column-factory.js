@@ -157,6 +157,38 @@ limitations under the License.
         },
 
         /**
+         * Create a multi-enum column for a repeated enum field.
+         * Renders each array element via the per-value renderer and joins them.
+         * @param {string} key - The field key (holds an array of enum values)
+         * @param {string} label - The label
+         * @param {Object} [enumValues] - Optional enum values for filtering
+         * @param {Function} renderer - The per-value renderer function
+         * @returns {Array} - Single column in array format
+         */
+        multiEnum: function(key, label, enumValues, renderer, enumOptions) {
+            if (typeof renderer !== 'function') {
+                console.error(`Layer8ColumnFactory.multiEnum('${key}', '${label}'): renderer is not a function (got ${typeof renderer}). Check that the render object is populated before columns are defined.`);
+            }
+            const renderArray = (arr) => {
+                if (!Array.isArray(arr) || arr.length === 0) return '';
+                return arr.map(v => renderer(v)).join(' ');
+            };
+            const col = {
+                key: key,
+                label: label,
+                sortKey: key,
+                filterKey: key,
+                type: 'multiEnum',
+                render: typeof renderer === 'function'
+                    ? (item) => renderArray(item[key])
+                    : (item) => Array.isArray(item[key]) ? item[key].join(', ') : ''
+            };
+            if (enumValues) col.enumValues = enumValues;
+            if (enumOptions) col.enumOptions = enumOptions;
+            return [col];
+        },
+
+        /**
          * Create a date column.
          * @param {string} key - The field key
          * @param {string} [label] - Optional label
