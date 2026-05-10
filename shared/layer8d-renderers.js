@@ -66,6 +66,16 @@ limitations under the License.
     }
 
     /**
+     * Render a repeated enum value (array) as a comma-separated string.
+     * Falls back to renderEnum for scalar values.
+     */
+    function renderEnumList(value, enumMap, defaultLabel = '-') {
+        if (!Array.isArray(value)) return renderEnum(value, enumMap, defaultLabel);
+        if (value.length === 0) return defaultLabel;
+        return value.map(function(v) { return renderEnum(v, enumMap, defaultLabel); }).join(', ');
+    }
+
+    /**
      * Render a status badge
      */
     function renderStatus(value, enumMap, classMap = {}) {
@@ -244,6 +254,7 @@ limitations under the License.
     window.Layer8DRenderers = {
         // Generic
         renderEnum,
+        renderEnumList,
         renderStatus,
         createStatusRenderer,
         renderBoolean,
