@@ -170,7 +170,9 @@ limitations under the License.
                 console.error(`Layer8ColumnFactory.multiEnum('${key}', '${label}'): renderer is not a function (got ${typeof renderer}). Check that the render object is populated before columns are defined.`);
             }
             const renderArray = (arr) => {
-                if (!Array.isArray(arr) || arr.length === 0) return '';
+                if (arr == null || arr === 0 || arr === '') return '';
+                if (!Array.isArray(arr)) return renderer(arr);
+                if (arr.length === 0) return '';
                 return arr.map(v => renderer(v)).join(' ');
             };
             const col = {
