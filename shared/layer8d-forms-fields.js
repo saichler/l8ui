@@ -250,7 +250,7 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
             }
 
             case 'multiselect': {
-                const msValues = Array.isArray(value) ? value : [];
+                const msValues = Array.isArray(value) ? value : (value != null && value !== 0 && value !== '' ? [value] : []);
                 const msOptions = field.options || {};
                 let msChipsHtml = msValues.map(v => {
                     const label = msOptions[v] || v;
