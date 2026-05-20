@@ -117,8 +117,8 @@ limitations under the License.
                 return Array.isArray(value) ? value.join(', ') : String(value);
 
             case 'multiselect': {
-                if (!Array.isArray(value)) return String(value);
                 var opts = field.options || {};
+                if (!Array.isArray(value)) return opts[value] !== undefined ? String(opts[value]) : String(value);
                 return value.map(function(v) { return opts[v] || String(v); }).join(', ');
             }
 
