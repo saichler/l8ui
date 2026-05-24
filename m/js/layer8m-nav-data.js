@@ -135,7 +135,10 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
                     window.MobilePrj, window.MobileEcom, window.MobileSYS,
                     window.MobileMonitoring, window.MobileALM,
                     window.MobileSystem, window.MobileTargets,
-                    window.MobileAia, window.MobileLending
+                    window.MobileAia, window.MobileLending,
+                    window.MobileFmcCore, window.MobileFmcCoaching,
+                    window.MobileFmcNutrition, window.MobileFmcProgress,
+                    window.MobileFmcBilling
                 ];
                 for (const reg of registries) {
                     if (reg && reg.getColumns) {
@@ -166,7 +169,10 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
                     window.MobilePrj, window.MobileEcom, window.MobileSYS,
                     window.MobileMonitoring, window.MobileALM,
                     window.MobileSystem, window.MobileTargets,
-                    window.MobileAia, window.MobileLending
+                    window.MobileAia, window.MobileLending,
+                    window.MobileFmcCore, window.MobileFmcCoaching,
+                    window.MobileFmcNutrition, window.MobileFmcProgress,
+                    window.MobileFmcBilling
                 ];
                 for (const reg of registries) {
                     if (reg && reg.getTransformData) {
@@ -191,7 +197,10 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
                     window.MobilePrj, window.MobileEcom, window.MobileSYS,
                     window.MobileMonitoring, window.MobileALM,
                     window.MobileSystem, window.MobileTargets,
-                    window.MobileAia, window.MobileLending
+                    window.MobileAia, window.MobileLending,
+                    window.MobileFmcCore, window.MobileFmcCoaching,
+                    window.MobileFmcNutrition, window.MobileFmcProgress,
+                    window.MobileFmcBilling
                 ];
                 for (const reg of registries) {
                     if (reg && reg.getFormDef) {
