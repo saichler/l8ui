@@ -46,6 +46,13 @@ limitations under the License.
             }).join(' ');
         }, { sortKey: false }),
         ...col.col('portal', 'Portal'),
+        ...col.custom(null, 'Associate IDs', function(user) {
+            var ids = user.associateIds || user.associate_ids || [];
+            if (!Array.isArray(ids) || ids.length === 0) return '-';
+            return ids.map(function(id) {
+                return '<span class="layer8d-tag">' + Layer8DUtils.escapeHtml(id) + '</span>';
+            }).join(' ');
+        }, { sortKey: false }),
         ...col.date('lastLogin', 'Last Login'),
     ];
 

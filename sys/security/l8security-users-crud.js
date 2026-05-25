@@ -91,6 +91,8 @@ limitations under the License.
         var fa = user ? (user.fa === 2 || user.fa === true) : false;
         var mustChangePassword = user ? (user.mustChangePassword === 2 || user.mustChangePassword === true) : false;
         var userRoles = user ? user.roles || {} : {};
+        var associateIds = user ? (user.associateIds || user.associate_ids || []) : [];
+        var associateIdsStr = Array.isArray(associateIds) ? associateIds.join(', ') : '';
 
         var passwordSection = isEdit ? '' :
             '<div class="form-group">' +
@@ -131,6 +133,10 @@ limitations under the License.
             '<div class="form-group">' +
             '<label for="l8sys-user-portal">Portal (path suffix)</label>' +
             '<input type="text" id="l8sys-user-portal" name="l8sys-user-portal" value="' + Layer8DUtils.escapeAttr(portal) + '" placeholder="e.g. app.html">' +
+            '</div>' +
+            '<div class="form-group">' +
+            '<label for="l8sys-user-associateids">Associate IDs (comma-separated)</label>' +
+            '<textarea id="l8sys-user-associateids" name="l8sys-user-associateids" rows="3" placeholder="e.g. STU-001, STU-002">' + Layer8DUtils.escapeHtml(associateIdsStr) + '</textarea>' +
             '</div>' +
             passwordSection +
             '<div class="form-group">' +
@@ -223,6 +229,7 @@ limitations under the License.
         var faEl = body.querySelector('#l8sys-user-fa');
         var mustChangeEl = body.querySelector('#l8sys-user-mustchange');
         var passwordEl = body.querySelector('#l8sys-user-password');
+        var associateIdsEl = body.querySelector('#l8sys-user-associateids');
 
         var userId = userIdEl ? userIdEl.value.trim() : '';
         var fullName = fullNameEl ? fullNameEl.value.trim() : '';
@@ -233,6 +240,8 @@ limitations under the License.
         }
 
         var selectedRoles = collectSelectedRoles(body);
+        var associateIdsRaw = associateIdsEl ? associateIdsEl.value : '';
+        var associateIdsList = associateIdsRaw.split(',').map(function(s) { return s.trim(); }).filter(function(s) { return s !== ''; });
 
         var userData;
         if (isEdit) {
@@ -244,7 +253,8 @@ limitations under the License.
                 portal: portalEl ? portalEl.value.trim() : '',
                 fa: faEl ? (faEl.checked ? 2 : 1) : 1,
                 mustChangePassword: mustChangeEl ? (mustChangeEl.checked ? 2 : 1) : 1,
-                roles: selectedRoles
+                roles: selectedRoles,
+                associateIds: associateIdsList
             };
         } else {
             var password = passwordEl ? passwordEl.value : '';
@@ -261,7 +271,8 @@ limitations under the License.
                 fa: faEl ? (faEl.checked ? 2 : 1) : 1,
                 mustChangePassword: mustChangeEl ? (mustChangeEl.checked ? 2 : 1) : 1,
                 password: { hash: password },
-                roles: selectedRoles
+                roles: selectedRoles,
+                associateIds: associateIdsList
             };
         }
 

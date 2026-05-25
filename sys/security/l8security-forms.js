@@ -42,6 +42,7 @@ limitations under the License.
                     { key: 'email', label: 'Email', type: 'text' },
                     { key: 'accountStatus', label: 'Account Status', type: 'select', options: L8Security.enums && L8Security.enums.ACCOUNT_STATUS ? L8Security.enums.ACCOUNT_STATUS : {} },
                     { key: 'portal', label: 'Portal', type: 'text' },
+                    { key: 'associateIds', label: 'Associate IDs', type: 'textarea' },
                     { key: 'fa', label: 'First-Factor Auth', type: 'checkbox' },
                     { key: 'mustChangePassword', label: 'Must Change Password', type: 'select', options: { 0: 'Unspecified', 1: 'No', 2: 'Yes' } }
                 ]
