@@ -86,7 +86,7 @@ limitations under the License.
     }
 
     /**
-     * Render reference field - MATCHES DESKTOP erp-forms.js EXACTLY
+     * Render reference field - MATCHES DESKTOP layer8d-forms-fields.js EXACTLY
      */
     F.renderReferenceField = function(config, value, readonly) {
         const refId = value?.id || value || '';

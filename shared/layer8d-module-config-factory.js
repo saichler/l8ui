@@ -16,7 +16,7 @@ limitations under the License.
 /**
  * Layer8 Module Config Factory
  *
- * Factory for creating ERP module configurations with minimal boilerplate.
+ * Factory for creating Layer 8 module configurations with minimal boilerplate.
  * Each module config defines: modules (with services), submodules, and renderStatus.
  *
  * Usage:

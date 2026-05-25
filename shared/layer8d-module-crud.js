@@ -12,7 +12,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-// ERP Module CRUD
+// Layer 8 Module CRUD
 // Generic CRUD operations attached to any module namespace
 
 (function() {

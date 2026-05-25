@@ -16,8 +16,8 @@
 // Layer8DContextBar — top-toolbar holder for a fixed set of "context"
 // dropdowns plus an optional search box. The K8s explorer uses it for
 // cluster + namespace + search; any module that needs persistent contextual
-// filtering across views (Probler hosts cluster filter, L8erp HCM dept
-// scope, etc.) is a target consumer.
+// filtering across views (cluster filter, department scope, etc.)
+// is a target consumer.
 //
 // Design notes:
 //

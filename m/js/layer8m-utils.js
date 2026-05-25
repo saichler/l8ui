@@ -13,8 +13,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 /**
- * Layer8MUtils - Utility functions for ERP mobile app
- * Desktop Equivalent: erp-utils.js patterns
+ * Layer8MUtils - Utility functions for mobile app
+ * Desktop Equivalent: layer8d-utils.js
  */
 (function() {
     'use strict';

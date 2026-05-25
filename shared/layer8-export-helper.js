@@ -26,7 +26,7 @@ limitations under the License.
         /**
          * Attach export event handlers for CSV, Excel, and PDF buttons.
          * @param {Element} container - DOM container with export buttons
-         * @param {string} endpoint - Service endpoint (e.g., "/erp/30/Employee")
+         * @param {string} endpoint - Service endpoint (e.g., "/{prefix}/{serviceArea}/{model}")
          * @param {string} modelName - Protobuf type name
          */
         attachHandlers: function(container, endpoint, modelName) {

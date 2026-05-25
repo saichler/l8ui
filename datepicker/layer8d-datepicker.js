@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 /**
- * ERP Date Picker Component - Entry Point
+ * Layer 8 Date Picker Component - Entry Point
  * A reusable calendar date picker with configurable date format support
  *
  * This file serves as the entry point. The Layer8DDatePicker module is split across:

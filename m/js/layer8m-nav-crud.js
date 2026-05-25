@@ -65,7 +65,7 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
             });
         },
 
-        /** Fetch a single record by ID - Desktop Equivalent: erp-forms.js fetchRecord() */
+        /** Fetch a single record by ID - Desktop Equivalent: layer8d-forms.js fetchRecord() */
         async fetchRecord(serviceConfig, id) {
             const query = `select * from ${serviceConfig.model} where ${serviceConfig.idField}=${id}`;
             try {
@@ -79,7 +79,7 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
 
         /**
          * Open form for add/edit
-         * Desktop Equivalent: erp-forms.js openAddForm() and openEditForm()
+         * Desktop Equivalent: layer8d-forms.js openAddForm() and openEditForm()
          */
         async openServiceForm(serviceConfig, formDef, item) {
             const isEdit = !!item;
@@ -152,7 +152,7 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
 
         /**
          * Delete service record
-         * Desktop Equivalent: erp-forms.js deleteRecord()
+         * Desktop Equivalent: layer8d-forms.js deleteRecord()
          */
         async deleteServiceRecord(serviceConfig, id, item) {
             const name = this.getRecordDisplayName(item);

@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 /**
- * Layer8MConfirm - Confirmation dialog for ERP mobile
+ * Layer8MConfirm - Confirmation dialog for Layer 8 mobile
  */
 (function() {
     'use strict';

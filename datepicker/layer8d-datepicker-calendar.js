@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 /**
- * ERP Date Picker - Calendar Rendering
+ * Layer 8 Date Picker - Calendar Rendering
  */
 (function() {
     'use strict';

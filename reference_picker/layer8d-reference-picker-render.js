@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 /**
- * ERP Reference Picker - Rendering
+ * Layer 8 Reference Picker - Rendering
  * DOM creation and list rendering
  */
 (function() {

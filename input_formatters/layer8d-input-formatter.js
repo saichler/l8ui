@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 /**
- * ERP Input Formatter - Entry Point
+ * Layer 8 Input Formatter - Entry Point
  * Module verification and public API export
  */
 (function() {

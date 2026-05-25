@@ -4,7 +4,7 @@
 Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
 */
 /**
- * ERP Form Component
+ * Layer 8 Form Component
  * One rendering pipeline for popup and inline form contexts.
  * openViewForm, openEditForm, openAddForm accept an optional container parameter:
  *   - With container: renders form into the container

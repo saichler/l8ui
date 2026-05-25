@@ -12,7 +12,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-// L8ERP - Login Page JavaScript
+// Layer 8 - Login Page JavaScript
 //
 // This file has been split into multiple files for maintainability.
 // The module is split across multiple files:

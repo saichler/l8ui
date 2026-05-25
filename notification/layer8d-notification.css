@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 /**
- * ERP Notification Component Styles
+ * Layer 8 Notification Component Styles
  * Standardized error/success/warning/info notification popups
  */
 
@@ -44,11 +44,11 @@ limitations under the License.
     pointer-events: auto;
     opacity: 0;
     transform: translateY(-20px);
-    animation: erp-notification-slide-in 0.3s ease forwards;
+    animation: l8-notification-slide-in 0.3s ease forwards;
 }
 
 .layer8d-notification.layer8d-notification-closing {
-    animation: erp-notification-slide-out 0.2s ease forwards;
+    animation: l8-notification-slide-out 0.2s ease forwards;
 }
 
 /* ============================================ */
@@ -213,7 +213,7 @@ limitations under the License.
 /* ANIMATIONS */
 /* ============================================ */
 
-@keyframes erp-notification-slide-in {
+@keyframes l8-notification-slide-in {
     from {
         opacity: 0;
         transform: translateY(-20px);
@@ -224,7 +224,7 @@ limitations under the License.
     }
 }
 
-@keyframes erp-notification-slide-out {
+@keyframes l8-notification-slide-out {
     from {
         opacity: 1;
         transform: translateY(0);

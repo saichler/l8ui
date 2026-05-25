@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 /**
- * ERP Reference Picker - Event Handling
+ * Layer 8 Reference Picker - Event Handling
  * All event listeners and keyboard navigation
  */
 (function() {

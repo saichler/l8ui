@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 /**
- * ERP Reference Picker Component - Entry Point
+ * Layer 8 Reference Picker Component - Entry Point
  * A reusable dropdown picker for selecting referenced entities (foreign keys)
  *
  * This file serves as the entry point. The Layer8DReferencePicker module is split across:

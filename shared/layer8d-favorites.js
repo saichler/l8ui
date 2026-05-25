@@ -19,7 +19,7 @@
 // Items are arbitrary objects whose `key` field is the dedup key. The
 // utility stores the entire object so consumers can keep navigation
 // hints (group, item, label, icon, etc.) in one place. Storage is
-// per-namespace so independent consumers (k8s, l8erp, l8logs, …)
+// per-namespace so independent consumers (k8s, myproject, l8logs, …)
 // don't collide.
 //
 // API:

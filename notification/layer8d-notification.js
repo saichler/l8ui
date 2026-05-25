@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 /**
- * ERP Notification Component
+ * Layer 8 Notification Component
  * Standardized error/success/warning/info notification popups
  */
 (function() {

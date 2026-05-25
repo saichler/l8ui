@@ -12,7 +12,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-// L8ERP - Login Page TFA Functions
+// Layer 8 - Login Page TFA Functions
 // Part 3 of 4 - Load after login-auth.js
 
 // Handle TFA verification (for users with TFA already enabled)

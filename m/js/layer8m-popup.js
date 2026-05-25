@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 /**
- * Layer8MPopup - Full-screen modal component for ERP mobile
+ * Layer8MPopup - Full-screen modal component for Layer 8 mobile
  * Desktop Equivalent: popup/popup.js
  */
 (function() {

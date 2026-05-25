@@ -4,7 +4,7 @@
 Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
 */
 /**
- * ERP Form Pickers Integration
+ * Layer 8 Form Pickers Integration
  * Handles date pickers and reference pickers
  */
 (function() {

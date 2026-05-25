@@ -4,7 +4,7 @@
 Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
 */
 /**
- * ERP Form Field Generation
+ * Layer 8 Form Field Generation
  * Handles HTML generation for form fields
  */
 (function() {

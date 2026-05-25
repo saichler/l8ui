@@ -4,7 +4,7 @@
 Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
 */
 /**
- * ERP Input Formatter - Validation-Heavy Type Definitions
+ * Layer 8 Input Formatter - Validation-Heavy Type Definitions
  * ID formats (SSN, EIN, Routing), Contact formats (Phone, Email, URL), Color
  */
 (function() {

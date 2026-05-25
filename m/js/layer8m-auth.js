@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 /**
- * Layer8MAuth - Authentication utilities for ERP mobile app
+ * Layer8MAuth - Authentication utilities for Layer 8 mobile app
  * Desktop Equivalent: login-auth.js patterns
  */
 (function() {

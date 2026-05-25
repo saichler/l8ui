@@ -14,7 +14,7 @@ limitations under the License.
 */
 /**
  * Layer8MForms Field Renderers
- * Desktop Equivalent: shared/erp-forms.js (field generation part)
+ * Desktop Equivalent: shared/layer8d-forms-fields.js
  *
  * Contains all field rendering functions.
  * Core form handling is in mobile-forms.js
@@ -24,7 +24,7 @@ limitations under the License.
 
     /**
      * Determine the appropriate zero-value label for a date field
-     * Desktop Equivalent: erp-forms.js getDateZeroLabel()
+     * Desktop Equivalent: layer8d-forms-fields.js getDateZeroLabel()
      * @param {string} fieldKey - The field key (e.g., 'endDate', 'effectiveDate')
      * @returns {string} - 'N/A' for end/expiration dates, 'Current' for others
      */

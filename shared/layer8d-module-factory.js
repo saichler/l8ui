@@ -12,7 +12,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-// ERP Module Factory
+// Layer 8 Module Factory
 // Bootstraps a complete module with all shared functionality
 
 (function() {

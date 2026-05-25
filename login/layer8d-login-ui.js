@@ -12,7 +12,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-// L8ERP - Login Page UI Helper Functions
+// Layer 8 - Login Page UI Helper Functions
 // Part 4 of 4 - Load this file last
 
 // UI Helper Functions

@@ -217,62 +217,16 @@ Layer8DTable.prototype.getTotalPages = function() {
     return Math.ceil(total / this.pageSize);
 };
 
-// Get item ID from primary key or common ID field patterns
+// Get item ID from primary key
 Layer8DTable.prototype.getItemId = function(item) {
-    // Use configured primary key if available
     if (this.primaryKey && item[this.primaryKey] !== undefined) {
         return item[this.primaryKey];
     }
-    // Fall back to common patterns (Core HR + Payroll + Benefits)
-    return item.id || item.userId || item.roleId || item.targetId ||
-           item.credId || item.employeeId || item.organizationId ||
-           item.departmentId || item.positionId || item.jobId ||
-           item.jobFamilyId || item.documentId || item.recordId ||
-           // Payroll primary keys
-           item.payStructureId || item.componentId || item.payrollRunId ||
-           item.payslipId || item.withholdingId || item.directDepositId ||
-           item.garnishmentId ||
-           // Benefits primary keys
-           item.planId || item.enrollmentId || item.carrierId ||
-           item.dependentId || item.lifeEventId || item.cobraEventId ||
-           // Time & Attendance primary keys
-           item.timesheetId || item.requestId || item.balanceId ||
-           item.policyId || item.shiftId || item.scheduleId ||
-           item.holidayId || item.absenceId ||
-           // Talent primary keys
-           item.reviewId || item.goalId || item.feedbackId ||
-           item.careerPathId || item.requisitionId || item.applicantId ||
-           item.applicationId || item.taskId ||
-           // Learning primary keys
-           item.courseId || item.sessionId || item.certificationId ||
-           item.employeeCertificationId || item.skillId || item.employeeSkillId ||
-           item.recordId ||
-           // Compensation primary keys
-           item.gradeId || item.structureId || item.compensationId ||
-           item.increaseId || item.cycleId || item.grantId ||
-           item.statementId || item.benchmarkId ||
-           // FIN - General Ledger primary keys
-           item.accountId || item.journalEntryId || item.lineId ||
-           item.fiscalYearId || item.fiscalPeriodId || item.currencyId ||
-           item.exchangeRateId ||
-           // FIN - Accounts Payable primary keys
-           item.vendorId || item.contactId || item.invoiceId ||
-           item.paymentId || item.allocationId ||
-           // FIN - Accounts Receivable primary keys
-           item.customerId || item.creditMemoId || item.letterId ||
-           item.applicationId ||
-           // FIN - Cash Management primary keys
-           item.bankAccountId || item.transactionId || item.reconciliationId ||
-           item.forecastId || item.transferId || item.pettyCashId ||
-           // FIN - Fixed Assets primary keys
-           item.assetId || item.categoryId || item.disposalId ||
-           item.maintenanceId || item.revaluationId ||
-           // FIN - Budgeting primary keys
-           item.budgetId || item.scenarioId || item.capexId ||
-           // FIN - Tax primary keys
-           item.taxCodeId || item.jurisdictionId || item.ruleId ||
-           item.returnId || item.exemptionId || item.configId ||
-           item.key || JSON.stringify(item);
+    if (item.id !== undefined) return item.id;
+    console.error('Layer8DTable: No primaryKey configured for model "' +
+        (this.modelName || 'unknown') + '" and item has no "id" field. ' +
+        'Set primaryKey in table config.');
+    return undefined;
 };
 
 // Get nested value from object (e.g., 'user.name')

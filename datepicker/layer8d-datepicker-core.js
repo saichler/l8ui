@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 /**
- * ERP Date Picker - Core API Functions
+ * Layer 8 Date Picker - Core API Functions
  */
 (function() {
     'use strict';

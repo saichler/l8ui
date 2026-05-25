@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 /**
- * ERP Shared Animations
+ * Layer 8 Shared Animations
  * Consolidated keyframe animations for consistent behavior
  */
 
@@ -21,7 +21,7 @@ limitations under the License.
 /* SPIN ANIMATION (loading spinners) */
 /* ============================================ */
 
-@keyframes erp-spin {
+@keyframes l8-spin {
     to {
         transform: rotate(360deg);
     }
@@ -38,7 +38,7 @@ limitations under the License.
 /* FADE IN ANIMATIONS */
 /* ============================================ */
 
-@keyframes erp-fade-in {
+@keyframes l8-fade-in {
     from {
         opacity: 0;
     }
@@ -47,7 +47,7 @@ limitations under the License.
     }
 }
 
-@keyframes erp-fade-in-up {
+@keyframes l8-fade-in-up {
     from {
         opacity: 0;
         transform: translateY(10px);
@@ -58,7 +58,7 @@ limitations under the License.
     }
 }
 
-@keyframes erp-fade-in-down {
+@keyframes l8-fade-in-down {
     from {
         opacity: 0;
         transform: translateY(-10px);
@@ -85,7 +85,7 @@ limitations under the License.
 /* SLIDE ANIMATIONS */
 /* ============================================ */
 
-@keyframes erp-slide-in-right {
+@keyframes l8-slide-in-right {
     from {
         transform: translateX(100%);
         opacity: 0;
@@ -96,7 +96,7 @@ limitations under the License.
     }
 }
 
-@keyframes erp-slide-out-right {
+@keyframes l8-slide-out-right {
     from {
         transform: translateX(0);
         opacity: 1;
@@ -107,7 +107,7 @@ limitations under the License.
     }
 }
 
-@keyframes erp-slide-in-left {
+@keyframes l8-slide-in-left {
     from {
         transform: translateX(-100%);
         opacity: 0;
@@ -145,7 +145,7 @@ limitations under the License.
 /* MODAL/POPUP ANIMATIONS */
 /* ============================================ */
 
-@keyframes erp-modal-fade-in {
+@keyframes l8-modal-fade-in {
     from {
         opacity: 0;
     }
@@ -154,7 +154,7 @@ limitations under the License.
     }
 }
 
-@keyframes erp-modal-scale-in {
+@keyframes l8-modal-scale-in {
     from {
         opacity: 0;
         transform: scale(0.95);
@@ -179,7 +179,7 @@ limitations under the License.
 /* SHAKE ANIMATION (error feedback) */
 /* ============================================ */
 
-@keyframes erp-shake {
+@keyframes l8-shake {
     0%, 100% { transform: translateX(0); }
     25% { transform: translateX(-5px); }
     75% { transform: translateX(5px); }
@@ -196,7 +196,7 @@ limitations under the License.
 /* PULSE ANIMATION (attention/heartbeat) */
 /* ============================================ */
 
-@keyframes erp-pulse {
+@keyframes l8-pulse {
     0%, 100% {
         opacity: 1;
     }
@@ -205,7 +205,7 @@ limitations under the License.
     }
 }
 
-@keyframes erp-pulse-scale {
+@keyframes l8-pulse-scale {
     0%, 100% {
         transform: scale(1);
     }
@@ -218,7 +218,7 @@ limitations under the License.
 /* BOUNCE ANIMATION */
 /* ============================================ */
 
-@keyframes erp-bounce {
+@keyframes l8-bounce {
     0%, 100% {
         transform: translateY(0);
     }
@@ -232,25 +232,25 @@ limitations under the License.
 /* ============================================ */
 
 .layer8d-animate-spin {
-    animation: erp-spin 1s linear infinite;
+    animation: l8-spin 1s linear infinite;
 }
 
 .layer8d-animate-fade-in {
-    animation: erp-fade-in 0.2s ease-out;
+    animation: l8-fade-in 0.2s ease-out;
 }
 
 .layer8d-animate-fade-in-up {
-    animation: erp-fade-in-up 0.3s ease-out;
+    animation: l8-fade-in-up 0.3s ease-out;
 }
 
 .layer8d-animate-slide-in {
-    animation: erp-slide-in-right 0.3s ease-out;
+    animation: l8-slide-in-right 0.3s ease-out;
 }
 
 .layer8d-animate-shake {
-    animation: erp-shake 0.4s ease-in-out;
+    animation: l8-shake 0.4s ease-in-out;
 }
 
 .layer8d-animate-pulse {
-    animation: erp-pulse 2s ease-in-out infinite;
+    animation: l8-pulse 2s ease-in-out infinite;
 }

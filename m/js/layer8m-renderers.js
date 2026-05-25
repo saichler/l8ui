@@ -13,8 +13,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 /**
- * Layer8MRenderers - Shared rendering utilities for mobile HCM
- * Desktop Equivalent: shared/erp-renderers.js
+ * Layer8MRenderers - Shared rendering utilities for mobile
+ * Desktop Equivalent: shared/layer8d-renderers.js
  * REUSES Layer8MUtils formatting functions
  */
 (function() {

@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 /**
- * ERP Input Formatter - Utilities
+ * Layer 8 Input Formatter - Utilities
  * Shared utilities, validation helpers, and namespace initialization
  */
 (function() {

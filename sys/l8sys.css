@@ -195,7 +195,7 @@ limitations under the License.
     color: var(--layer8d-text-secondary, #718096);
 }
 
-/* ERP tag for roles display */
+/* Tag for roles display */
 .layer8d-tag {
     display: inline-block;
     padding: 2px 8px;

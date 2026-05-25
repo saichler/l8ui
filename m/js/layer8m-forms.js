@@ -13,8 +13,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 /**
- * Layer8MForms - Form handling for ERP mobile
- * Desktop Equivalent: shared/erp-forms.js
+ * Layer8MForms - Form handling for mobile
+ * Desktop Equivalent: shared/layer8d-forms.js
  *
  * Reference fields match desktop EXACTLY:
  * - Uses Layer8MReferenceRegistry for model configurations

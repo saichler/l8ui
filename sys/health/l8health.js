@@ -54,6 +54,7 @@ limitations under the License.
             containerId: 'health-table-container',
             endpoint: getHealthEndpoint(),
             modelName: 'L8Health',
+            primaryKey: 'service',
             columns: columns,
             pageSize: 15,
             sortable: true,

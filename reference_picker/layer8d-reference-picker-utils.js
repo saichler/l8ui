@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 /**
- * ERP Reference Picker - Utility Functions and Constants
+ * Layer 8 Reference Picker - Utility Functions and Constants
  * A reusable dropdown picker for selecting referenced entities
  */
 (function() {

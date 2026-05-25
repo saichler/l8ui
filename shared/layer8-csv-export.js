@@ -89,7 +89,7 @@ limitations under the License.
 
         /**
          * Parse endpoint string to extract serviceName and serviceArea.
-         * @param {string} endpoint - e.g., "/erp/30/Employee"
+         * @param {string} endpoint - e.g., "/{prefix}/{serviceArea}/{model}"
          * @returns {{ serviceName: string, serviceArea: number } | null}
          */
         parseEndpoint: function(endpoint) {

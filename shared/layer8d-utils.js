@@ -13,8 +13,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 /**
- * ERP Shared Utilities
- * Common utility functions used across all ERP modules
+ * Layer 8 Shared Utilities
+ * Common utility functions used across all Layer 8 modules
  */
 (function() {
     'use strict';

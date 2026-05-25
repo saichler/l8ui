@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 /**
- * ERP Shared Renderers
+ * Layer 8 Shared Renderers
  * UI rendering functions for consistent display across all modules
  */
 (function() {

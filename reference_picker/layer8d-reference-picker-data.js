@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 /**
- * ERP Reference Picker - Data Management
+ * Layer 8 Reference Picker - Data Management
  * Methods for L8Query building and server communication
  */
 (function() {

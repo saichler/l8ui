@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 /**
- * ERP Input Formatter - Core API
+ * Layer 8 Input Formatter - Core API
  * Main functions for attaching/detaching formatters to inputs
  */
 (function() {

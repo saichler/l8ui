@@ -8,7 +8,7 @@
  *       scopeField: 'employeeId',   // field used to filter data to current user
  *       scopeValue: username,       // resolved at init time (typically = username)
  *       sharedModels: ['Holiday', 'BenefitPlan'],  // models NOT filtered by scope
- *       moduleNamespace: 'HCM',     // ServiceRegistry namespace for form lookups
+ *       moduleNamespace: 'MyModule', // ServiceRegistry namespace for form lookups
  *       portalTitle: 'Employee Self-Service',
  *       contentAreaId: 'l8-portal-content-area',
  *       navMenuSelector: '.l8-portal-nav-menu',

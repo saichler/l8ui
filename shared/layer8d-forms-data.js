@@ -4,7 +4,7 @@
 Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
 */
 /**
- * ERP Form Data Handling
+ * Layer 8 Form Data Handling
  * Handles form data collection, validation, and CRUD operations
  */
 (function() {

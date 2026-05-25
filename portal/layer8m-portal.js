@@ -8,7 +8,7 @@
  *       mobileObject: 'MobileESS',  // name of the window object for mobile-specific methods
  *       scopeField: 'employeeId',   // field used to filter data to current user
  *       sharedModels: ['Holiday', 'BenefitPlan'],
- *       moduleNamespace: 'HCM',     // ServiceRegistry namespace for form lookups
+ *       moduleNamespace: 'MyModule', // ServiceRegistry namespace for form lookups
  *       contentAreaId: 'content-area',
  *       sidebarNavId: 'l8-portal-sidebar-nav',
  *       navMenuTitle: 'Menu'

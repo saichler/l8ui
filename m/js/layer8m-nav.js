@@ -75,7 +75,7 @@ limitations under the License.
 
     window.Layer8MNav = {
         /**
-         * Show home screen with ERP module cards
+         * Show home screen with Layer 8 module cards
          */
         showHome() {
             navStack = [];

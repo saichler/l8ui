@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 /**
- * ERP Input Formatter - Masking Engine
+ * Layer 8 Input Formatter - Masking Engine
  * Pattern matching and live formatting for masked inputs
  */
 (function() {

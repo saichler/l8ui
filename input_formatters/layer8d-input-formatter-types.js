@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 /**
- * ERP Input Formatter - Type Definitions
+ * Layer 8 Input Formatter - Type Definitions
  * Defines formatting rules for each field type
  *
  * Split files:

@@ -12,7 +12,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-// L8ERP - Login Page Authentication Functions
+// Layer 8 - Login Page Authentication Functions
 // Part 2 of 4 - Load after login-state.js
 
 // Handle login form submission

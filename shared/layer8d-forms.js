@@ -13,8 +13,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 /**
- * ERP Shared Form Handler
- * Generic form generation and handling for all ERP modules
+ * Layer 8 Shared Form Handler
+ * Generic form generation and handling for all Layer 8 modules
  *
  * This file combines the following modules:
  * - layer8d-forms-fields.js - Form field generation
