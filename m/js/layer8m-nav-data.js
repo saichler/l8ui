@@ -48,12 +48,27 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
                 viewOptions.transformData = transformData;
             }
 
+            // Per-type action permissions — mirrors desktop layer8d-service-registry.js.
+            // Empty permissions map ({}) means permissive mode — all actions allowed.
+            const permMap = window.Layer8DPermissions;
+            const hasPermissions = permMap && Object.keys(permMap).length > 0;
+            const perms = hasPermissions ? (permMap[serviceConfig.model] || []) : [];
+            const canCreate = !serviceConfig.readOnly && (!hasPermissions || perms.indexOf(1) !== -1);  // POST
+            const canUpdate = !serviceConfig.readOnly && (!hasPermissions || perms.indexOf(2) !== -1);  // PUT
+            const canDelete = !serviceConfig.readOnly && (!hasPermissions || perms.indexOf(4) !== -1);  // DELETE
+
             if (!serviceConfig.readOnly) {
                 viewOptions.statusField = 'status';
-                viewOptions.addButtonText = `Add ${serviceConfig.label.replace(/s$/, '')}`;
-                viewOptions.onAdd = serviceConfig.onAdd || (() => Layer8MNavCrud.openServiceForm(serviceConfig, formDef, null));
-                viewOptions.onEdit = serviceConfig.onEdit || ((id, item) => Layer8MNavCrud.openServiceForm(serviceConfig, formDef, item));
-                viewOptions.onDelete = serviceConfig.onDelete || ((id, item) => Layer8MNavCrud.deleteServiceRecord(serviceConfig, id, item));
+                if (canCreate) {
+                    viewOptions.addButtonText = `Add ${serviceConfig.label.replace(/s$/, '')}`;
+                    viewOptions.onAdd = serviceConfig.onAdd || (() => Layer8MNavCrud.openServiceForm(serviceConfig, formDef, null));
+                }
+                if (canUpdate) {
+                    viewOptions.onEdit = serviceConfig.onEdit || ((id, item) => Layer8MNavCrud.openServiceForm(serviceConfig, formDef, item));
+                }
+                if (canDelete) {
+                    viewOptions.onDelete = serviceConfig.onDelete || ((id, item) => Layer8MNavCrud.deleteServiceRecord(serviceConfig, id, item));
+                }
                 viewOptions.onRowClick = serviceConfig.onRowClick || ((item, id) => Layer8MNavCrud.showRecordDetails(serviceConfig, formDef, item));
             } else if (serviceConfig.onRowClick) {
                 viewOptions.onRowClick = serviceConfig.onRowClick;

@@ -183,6 +183,21 @@ limitations under the License.
         },
 
         /**
+         * GET request with authentication, returning raw text.
+         * Mirrors get(), but for endpoints that serve non-JSON payloads
+         * (e.g. server-rendered HTML fragments). Same 401 + error contract.
+         */
+        async fetchText(url) {
+            const response = await this.makeAuthenticatedRequest(url, { method: 'GET' });
+            if (!response) return null;
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(sanitizeServerError(errorText) || `Request failed: ${response.status}`);
+            }
+            return response.text();
+        },
+
+        /**
          * DELETE request with authentication
          */
         async delete(url, data = null) {
