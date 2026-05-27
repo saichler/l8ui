@@ -36,7 +36,7 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
                 endpoint: serviceConfig.endpoint,
                 modelName: serviceConfig.model,
                 columns: columns,
-                pageSize: 15,
+                pageSize: 60,
                 primaryKey: primaryKey,
                 baseWhereClause: serviceConfig.baseWhereClause || null,
                 viewConfig: serviceConfig.viewConfig || {},

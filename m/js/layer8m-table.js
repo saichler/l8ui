@@ -27,7 +27,7 @@ limitations under the License.
                 data: config.data || [],
                 endpoint: config.endpoint || null,
                 modelName: config.modelName || null,
-                rowsPerPage: config.rowsPerPage || 15,
+                rowsPerPage: config.rowsPerPage || 60,
                 serverSide: config.serverSide !== false,
                 totalCount: config.totalCount || 0,
                 filterable: config.filterable !== false,

@@ -103,7 +103,7 @@ limitations under the License.
             modelName: service.model,
             columns: columns,
             primaryKey: primaryKey,
-            pageSize: 10,
+            pageSize: 60,
             onAdd: canCreate ? () => moduleNS._openAddModal(service) : null,
             onEdit: canUpdate ? (id) => moduleNS._openEditModal(service, id) : null,
             onDelete: canDelete ? (id) => moduleNS._confirmDeleteItem(service, id) : null,

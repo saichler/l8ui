@@ -162,7 +162,7 @@
                 endpoint: Layer8DConfig.resolveEndpoint(svc.endpoint),
                 serverSide: true,
                 readOnly: svc.readOnly || false,
-                pageSize: 15,
+                pageSize: 60,
                 getItemId: function(item) { return item[pkField] || ''; },
                 onRowClick: function(item) {
                     ns._showDetail(svc, item);
