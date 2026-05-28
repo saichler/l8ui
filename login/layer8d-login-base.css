@@ -44,6 +44,30 @@ body {
     box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
     overflow: hidden;
     border: 1px solid var(--border-emphasis);
+    position: relative;
+}
+
+.layer8d-home-link {
+    position: absolute;
+    top: 12px;
+    left: 14px;
+    z-index: 5;
+    padding: 6px 12px;
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border: 1px solid var(--border-default);
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    font-family: 'Figtree', sans-serif;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.layer8d-home-link:hover {
+    background: var(--bg-secondary);
+    border-color: var(--noc-cyan);
+    color: var(--noc-cyan);
 }
 
 .layer8d-login-header {
