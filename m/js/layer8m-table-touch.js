@@ -14,6 +14,21 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
     var PULL_THRESHOLD = 60;
     var SWIPE_THRESHOLD = 80;
 
+    // Walk up the DOM looking for the nearest vertically scrollable ancestor.
+    // Falls back to document.scrollingElement so the page itself counts.
+    function findScrollAncestor(el) {
+        var node = el && el.parentElement;
+        while (node && node !== document.body && node !== document.documentElement) {
+            var style = window.getComputedStyle(node);
+            var oy = style.overflowY;
+            if ((oy === 'auto' || oy === 'scroll') && node.scrollHeight > node.clientHeight) {
+                return node;
+            }
+            node = node.parentElement;
+        }
+        return document.scrollingElement || document.documentElement;
+    }
+
     // ---- Pull-to-Refresh ----
 
     function attachPullToRefresh(table) {
@@ -25,7 +40,15 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
         var indicator = null;
 
         container.addEventListener('touchstart', function(e) {
+            // Only arm pull-to-refresh when the user is actually at the top of
+            // the scrolling region. The card container itself rarely scrolls —
+            // the scroll usually lives on an ancestor (e.g. .main-content) or
+            // on the page — so checking only `container.scrollTop` would arm
+            // the gesture mid-scroll and inject the indicator while the user
+            // is just scrolling back up, causing a visible jiggle.
             if (container.scrollTop > 0) return;
+            var scroller = findScrollAncestor(container);
+            if (scroller && scroller.scrollTop > 0) return;
             startY = e.touches[0].clientY;
             pulling = true;
         }, { passive: true });
