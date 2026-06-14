@@ -153,7 +153,12 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
                     window.MobileAia, window.MobileLending,
                     window.MobileFmcCore, window.MobileFmcCoaching,
                     window.MobileFmcNutrition, window.MobileFmcProgress,
-                    window.MobileFmcBilling
+                    window.MobileFmcBilling,
+                    window.MobileFleet, window.MobileInventory,
+                    window.MobileMaintenance, window.MobileRoutes,
+                    window.MobileAnalytics, window.MobileWarehouse,
+                    window.MobileCompliance, window.MobileReports,
+                    window.MobileAlarms, window.MobileNayax
                 ];
                 for (const reg of registries) {
                     if (reg && reg.getColumns) {
@@ -187,7 +192,12 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
                     window.MobileAia, window.MobileLending,
                     window.MobileFmcCore, window.MobileFmcCoaching,
                     window.MobileFmcNutrition, window.MobileFmcProgress,
-                    window.MobileFmcBilling
+                    window.MobileFmcBilling,
+                    window.MobileFleet, window.MobileInventory,
+                    window.MobileMaintenance, window.MobileRoutes,
+                    window.MobileAnalytics, window.MobileWarehouse,
+                    window.MobileCompliance, window.MobileReports,
+                    window.MobileAlarms, window.MobileNayax
                 ];
                 for (const reg of registries) {
                     if (reg && reg.getTransformData) {
@@ -215,7 +225,12 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
                     window.MobileAia, window.MobileLending,
                     window.MobileFmcCore, window.MobileFmcCoaching,
                     window.MobileFmcNutrition, window.MobileFmcProgress,
-                    window.MobileFmcBilling
+                    window.MobileFmcBilling,
+                    window.MobileFleet, window.MobileInventory,
+                    window.MobileMaintenance, window.MobileRoutes,
+                    window.MobileAnalytics, window.MobileWarehouse,
+                    window.MobileCompliance, window.MobileReports,
+                    window.MobileAlarms, window.MobileNayax
                 ];
                 for (const reg of registries) {
                     if (reg && reg.getFormDef) {
