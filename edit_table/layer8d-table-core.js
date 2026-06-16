@@ -20,13 +20,13 @@ class Layer8DTable {
         this.containerId = options.containerId;
         this.columns = options.columns || [];
         this.data = options.data || [];
-        this.pageSize = options.pageSize || 60;
+        this.pageSize = options.pageSize || 10;
         this.currentPage = 1;
         this.emptyMessage = options.emptyMessage || 'No data found.';
         this.onEdit = options.onEdit || null;
         this.onDelete = options.onDelete || null;
         this.showActions = options.showActions !== false;
-        this.pageSizeOptions = options.pageSizeOptions || [10, 25, 60, 100, 250];
+        this.pageSizeOptions = options.pageSizeOptions || [5, 10, 25, 50];
 
         // Server-side pagination support
         this.serverSide = options.serverSide || false;

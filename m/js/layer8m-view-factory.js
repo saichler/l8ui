@@ -50,7 +50,7 @@ limitations under the License.
             endpoint: Layer8MConfig.resolveEndpoint(options.endpoint),
             modelName: options.modelName,
             columns: options.columns,
-            rowsPerPage: options.pageSize || 60,
+            rowsPerPage: options.pageSize || 15,
             baseWhereClause: options.baseWhereClause || null,
             statusField: options.statusField || 'status',
             addButtonText: options.addButtonText,
