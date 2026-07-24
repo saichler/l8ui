@@ -79,12 +79,24 @@ function setupEventListeners() {
 }
 
 // Check for existing session
-function checkExistingSession() {
+async function checkExistingSession() {
     const token = sessionStorage.getItem('bearerToken');
     if (token && LOGIN_CONFIG.redirectUrl) {
-        // Redirect if token exists - use mobile detection
-        window.location.href = getRedirectUrl();
-        return;
+        // Validate token against server before redirecting
+        try {
+            const res = await fetch(LOGIN_CONFIG.authEndpoint, {
+                method: 'GET',
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+            if (res.ok) {
+                window.location.href = getRedirectUrl();
+                return;
+            }
+        } catch (e) {
+            // Network error - fall through to login form
+        }
+        // Token rejected or network error — clear it and show login
+        sessionStorage.removeItem('bearerToken');
     }
 
     // Check for remembered username
