@@ -19,6 +19,7 @@ limitations under the License.
 let isLoading = false;
 let tfaRequired = false;
 let tfaSetupRequired = false;
+let changePasswordRequired = false;
 let pendingAuth = null;
 
 // Initialize the login page
@@ -51,12 +52,14 @@ function setupEventListeners() {
     const loginForm = document.getElementById('login-form');
     const tfaForm = document.getElementById('tfa-form');
     const tfaSetupForm = document.getElementById('tfa-setup-form');
+    const changePasswordForm = document.getElementById('change-password-form');
     const backLink = document.getElementById('back-to-login');
     const backLinkSetup = document.getElementById('back-to-login-setup');
 
     loginForm.addEventListener('submit', handleLogin);
     tfaForm.addEventListener('submit', handleTfaVerify);
     tfaSetupForm.addEventListener('submit', handleTfaSetupVerify);
+    changePasswordForm.addEventListener('submit', handleChangePasswordSubmit);
     backLink.addEventListener('click', showLoginSection);
     backLinkSetup.addEventListener('click', showLoginSection);
 

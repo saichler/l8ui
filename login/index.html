@@ -26,6 +26,9 @@ limitations under the License.
     <link rel="stylesheet" href="layer8d-login-forms.css">
     <link rel="stylesheet" href="layer8d-login-tfa.css">
     <link rel="stylesheet" href="layer8d-login-components.css">
+    <!-- Change Password gate (Phase 10) dependencies -->
+    <link rel="stylesheet" href="../notification/layer8d-notification.css">
+    <link rel="stylesheet" href="../sys/security/l8security-password-strength.css">
 </head>
 <body>
     <div class="layer8d-login-container">
@@ -126,6 +129,20 @@ limitations under the License.
                     </div>
                     <a id="back-to-login-setup" class="layer8d-back-link">Back to login</a>
                 </div>
+
+                <!-- Forced Change Password Section (cannot be dismissed without success) -->
+                <div id="change-password-section" class="layer8d-tfa-section">
+                    <p class="layer8d-tfa-instructions">
+                        Your password must be changed before you can continue.
+                    </p>
+                    <form id="change-password-form">
+                        <div id="change-password-container"></div>
+                        <button type="submit" class="layer8d-btn-login">
+                            <span id="change-password-spinner" class="spinner" style="display: none;"></span>
+                            <span id="change-password-btn-text">Change Password</span>
+                        </button>
+                    </form>
+                </div>
             </div>
 
             <!-- Theme Toggle -->
@@ -157,6 +174,15 @@ limitations under the License.
     <script src="layer8d-login-state.js"></script>
     <script src="layer8d-login-auth.js"></script>
     <script src="layer8d-login-tfa.js"></script>
+
+    <!-- Change Password gate (Phase 10) dependencies -- reuses the shared
+         l8ui/sys/security/l8security-change-password.js component (Phase 11) -->
+    <script src="../shared/layer8d-config.js"></script>
+    <script src="../notification/layer8d-notification.js"></script>
+    <script src="../sys/security/l8security-password-strength.js"></script>
+    <script src="../sys/security/l8security-change-password.js"></script>
+    <script src="layer8d-login-changepass.js"></script>
+
     <script src="layer8d-login-ui.js"></script>
 </body>
 </html>

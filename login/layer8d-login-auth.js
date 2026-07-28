@@ -37,7 +37,15 @@ async function handleLogin(event) {
         const result = await authenticate(username, password);
 
         if (result.success) {
-            handleLoginSuccess(result, username, rememberMe);
+            if (result.mustChangePassword) {
+                // Forced password change gate (client-side only, same rigor
+                // as the TFA gate below) -- must succeed before the user is
+                // let into the app.
+                pendingAuth = { username, password, token: result.token, portal: result.portal };
+                showChangePasswordRequired();
+            } else {
+                handleLoginSuccess(result, username, rememberMe);
+            }
         } else if (result.setupTfa) {
             // TFA setup required - show QR code setup screen
             pendingAuth = { username, password, hash: result.tokenHash };
@@ -87,7 +95,12 @@ async function authenticate(username, password) {
         return { success: false, needTfa: true, tokenHash: data.tokenHash };
     }
 
-    return { success: true, token: data.token, portal: data.portal || '' };
+    return {
+        success: true,
+        token: data.token,
+        portal: data.portal || '',
+        mustChangePassword: !!data.mustChangePassword
+    };
 }
 
 // Detect if device is mobile
