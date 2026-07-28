@@ -145,7 +145,7 @@ limitations under the License.
             '</div>' +
             '<div class="form-group">' +
             '<input type="checkbox" id="l8sys-user-mustchange" name="l8sys-user-mustchange"' + (mustChangePassword ? ' checked' : '') + '>' +
-            '<label for="l8sys-user-mustchange"> Must Change Password</label>' +
+            '<label for="l8sys-user-mustchange"> Force password change on next login</label>' +
             '</div>' +
             '<div class="form-group">' +
             '<label>Assigned Roles</label>' +
@@ -180,6 +180,12 @@ limitations under the License.
             size: 'medium',
             showFooter: true,
             saveButtonText: 'Save',
+            onShow: function(body) {
+                var passwordEl = body.querySelector('#l8sys-user-password');
+                if (window.L8SecurityPasswordStrength && passwordEl) {
+                    L8SecurityPasswordStrength.renderPasswordStrengthHints(passwordEl, null);
+                }
+            },
             onSave: function() {
                 handleSave(service, false);
             }
