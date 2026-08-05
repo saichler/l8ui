@@ -27,12 +27,12 @@
                 f.section('Details', [
                     ...f.text('name', 'Name', true),
                     ...f.textarea('description', 'Description'),
-                    ...f.select('status', 'Status', enums.MAINTENANCE_STATUS)
+                    ...f.select('status', 'Status', enums.MAINTENANCE_STATUS.enum)
                 ]),
                 f.section('Schedule', [
                     ...f.date('startTime', 'Start Time', true),
                     ...f.date('endTime', 'End Time', true),
-                    ...f.select('recurrence', 'Recurrence', enums.RECURRENCE_TYPE),
+                    ...f.select('recurrence', 'Recurrence', enums.RECURRENCE_TYPE.enum),
                     ...f.number('recurrenceInterval', 'Recurrence Interval')
                 ]),
                 f.section('Scope', [

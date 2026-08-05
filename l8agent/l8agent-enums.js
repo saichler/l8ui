@@ -41,7 +41,7 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
         CONVO_STATUS: CONVO_STATUS.enum,
         CONVO_STATUS_VALUES: CONVO_STATUS.values,
         CONVO_STATUS_CLASSES: CONVO_STATUS.classes,
-        PROMPT_CATEGORY: PROMPT_CATEGORY,
+        PROMPT_CATEGORY: PROMPT_CATEGORY.enum,
         PROMPT_STATUS: PROMPT_STATUS.enum,
         PROMPT_STATUS_VALUES: PROMPT_STATUS.values,
         PROMPT_STATUS_CLASSES: PROMPT_STATUS.classes
@@ -53,7 +53,7 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
 
     const renderConvoStatus = createStatusRenderer(CONVO_STATUS.enum, CONVO_STATUS.classes);
     const renderPromptStatus = createStatusRenderer(PROMPT_STATUS.enum, PROMPT_STATUS.classes);
-    const renderPromptCategory = (value) => renderEnum(value, PROMPT_CATEGORY);
+    const renderPromptCategory = (value) => renderEnum(value, PROMPT_CATEGORY.enum);
 
     L8Agent.render = {
         convoStatus: renderConvoStatus,

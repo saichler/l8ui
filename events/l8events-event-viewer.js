@@ -26,10 +26,10 @@
             return f.form('Event Details', [
                 f.section('Event Information', [
                     ...f.text('eventId', 'Event ID'),
-                    ...f.select('category', 'Category', enums.EVENT_CATEGORY),
+                    ...f.select('category', 'Category', enums.EVENT_CATEGORY.enum),
                     ...f.text('eventType', 'Event Type'),
-                    ...f.select('severity', 'Severity', enums.SEVERITY),
-                    ...f.select('state', 'State', enums.EVENT_STATE)
+                    ...f.select('severity', 'Severity', enums.SEVERITY.enum),
+                    ...f.select('state', 'State', enums.EVENT_STATE.enum)
                 ]),
                 f.section('Source', [
                     ...f.text('sourceId', 'Source ID'),

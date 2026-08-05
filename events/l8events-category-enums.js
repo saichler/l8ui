@@ -6,31 +6,31 @@
     // ─── Category 1: Audit ───
 
     const AUDIT_EVENT_TYPE = Layer8EnumFactory.create([
-        { value: 0, label: 'Unspecified' },
-        { value: 1, label: 'Create' },
-        { value: 2, label: 'Update' },
-        { value: 3, label: 'Delete' },
-        { value: 4, label: 'Login' },
-        { value: 5, label: 'Logout' },
-        { value: 6, label: 'Config Change' },
-        { value: 7, label: 'Permission Change' },
-        { value: 8, label: 'Export' },
-        { value: 9, label: 'Import' }
+        ['Unspecified', null, ''],
+        ['Create', 'create', ''],
+        ['Update', 'update', ''],
+        ['Delete', 'delete', ''],
+        ['Login', 'login', ''],
+        ['Logout', 'logout', ''],
+        ['Config Change', 'config-change', ''],
+        ['Permission Change', 'permission-change', ''],
+        ['Export', 'export', ''],
+        ['Import', 'import', '']
     ]);
 
     // ─── Category 2: System ───
 
     const SYSTEM_EVENT_TYPE = Layer8EnumFactory.create([
-        { value: 0, label: 'Unspecified' },
-        { value: 1, label: 'Service Start' },
-        { value: 2, label: 'Service Stop' },
-        { value: 3, label: 'Health Check' },
-        { value: 4, label: 'Config Reload' },
-        { value: 5, label: 'License' },
-        { value: 6, label: 'Error' },
-        { value: 7, label: 'Upgrade' },
-        { value: 8, label: 'Backup' },
-        { value: 9, label: 'Restore' }
+        ['Unspecified', null, ''],
+        ['Service Start', 'service-start', ''],
+        ['Service Stop', 'service-stop', ''],
+        ['Health Check', 'health-check', ''],
+        ['Config Reload', 'config-reload', ''],
+        ['License', 'license', ''],
+        ['Error', 'error', ''],
+        ['Upgrade', 'upgrade', ''],
+        ['Backup', 'backup', ''],
+        ['Restore', 'restore', '']
     ]);
 
     const SYSTEM_EVENT_TYPE_CLASSES = {
@@ -42,15 +42,15 @@
     // ─── Category 3: Monitoring ───
 
     const MONITORING_EVENT_TYPE = Layer8EnumFactory.create([
-        { value: 0, label: 'Unspecified' },
-        { value: 1, label: 'Poll Success' },
-        { value: 2, label: 'Poll Failure' },
-        { value: 3, label: 'Target Unreachable' },
-        { value: 4, label: 'Target Recovered' },
-        { value: 5, label: 'Data Stale' },
-        { value: 6, label: 'Collection Start' },
-        { value: 7, label: 'Collection Complete' },
-        { value: 8, label: 'Parse Error' }
+        ['Unspecified', null, ''],
+        ['Poll Success', 'poll-success', ''],
+        ['Poll Failure', 'poll-failure', ''],
+        ['Target Unreachable', 'target-unreachable', ''],
+        ['Target Recovered', 'target-recovered', ''],
+        ['Data Stale', 'data-stale', ''],
+        ['Collection Start', 'collection-start', ''],
+        ['Collection Complete', 'collection-complete', ''],
+        ['Parse Error', 'parse-error', '']
     ]);
 
     const MONITORING_EVENT_TYPE_CLASSES = {
@@ -62,16 +62,16 @@
     // ─── Category 4: Security ───
 
     const SECURITY_EVENT_TYPE = Layer8EnumFactory.create([
-        { value: 0, label: 'Unspecified' },
-        { value: 1, label: 'Auth Success' },
-        { value: 2, label: 'Auth Failure' },
-        { value: 3, label: 'Access Denied' },
-        { value: 4, label: 'Privilege Escalation' },
-        { value: 5, label: 'Cert Expiry' },
-        { value: 6, label: 'Cert Renewed' },
-        { value: 7, label: 'Policy Violation' },
-        { value: 8, label: 'Brute Force' },
-        { value: 9, label: 'Token Revoked' }
+        ['Unspecified', null, ''],
+        ['Auth Success', 'auth-success', ''],
+        ['Auth Failure', 'auth-failure', ''],
+        ['Access Denied', 'access-denied', ''],
+        ['Privilege Escalation', 'privilege-escalation', ''],
+        ['Cert Expiry', 'cert-expiry', ''],
+        ['Cert Renewed', 'cert-renewed', ''],
+        ['Policy Violation', 'policy-violation', ''],
+        ['Brute Force', 'brute-force', ''],
+        ['Token Revoked', 'token-revoked', '']
     ]);
 
     const SECURITY_EVENT_TYPE_CLASSES = {
@@ -83,16 +83,16 @@
     // ─── Category 5: Integration ───
 
     const INTEGRATION_EVENT_TYPE = Layer8EnumFactory.create([
-        { value: 0, label: 'Unspecified' },
-        { value: 1, label: 'API Call Success' },
-        { value: 2, label: 'API Call Failure' },
-        { value: 3, label: 'Webhook Received' },
-        { value: 4, label: 'Webhook Failed' },
-        { value: 5, label: 'Sync Start' },
-        { value: 6, label: 'Sync Complete' },
-        { value: 7, label: 'Sync Failed' },
-        { value: 8, label: 'Connector Up' },
-        { value: 9, label: 'Connector Down' }
+        ['Unspecified', null, ''],
+        ['API Call Success', 'api-call-success', ''],
+        ['API Call Failure', 'api-call-failure', ''],
+        ['Webhook Received', 'webhook-received', ''],
+        ['Webhook Failed', 'webhook-failed', ''],
+        ['Sync Start', 'sync-start', ''],
+        ['Sync Complete', 'sync-complete', ''],
+        ['Sync Failed', 'sync-failed', ''],
+        ['Connector Up', 'connector-up', ''],
+        ['Connector Down', 'connector-down', '']
     ]);
 
     const INTEGRATION_EVENT_TYPE_CLASSES = {
@@ -104,123 +104,123 @@
     // ─── Category 7: Network ───
 
     const NETWORK_EVENT_TYPE = Layer8EnumFactory.create([
-        { value: 0, label: 'Unspecified' },
-        { value: 1, label: 'Device Status' },
-        { value: 2, label: 'Interface' },
-        { value: 3, label: 'BGP' },
-        { value: 4, label: 'OSPF' },
-        { value: 5, label: 'MPLS' },
-        { value: 6, label: 'LDP' },
-        { value: 7, label: 'Segment Routing' },
-        { value: 8, label: 'Traffic Engineering' },
-        { value: 9, label: 'VRF' },
-        { value: 10, label: 'QoS' },
-        { value: 11, label: 'Hardware' }
+        ['Unspecified', null, ''],
+        ['Device Status', 'device-status', ''],
+        ['Interface', 'interface', ''],
+        ['BGP', 'bgp', ''],
+        ['OSPF', 'ospf', ''],
+        ['MPLS', 'mpls', ''],
+        ['LDP', 'ldp', ''],
+        ['Segment Routing', 'segment-routing', ''],
+        ['Traffic Engineering', 'traffic-engineering', ''],
+        ['VRF', 'vrf', ''],
+        ['QoS', 'qos', ''],
+        ['Hardware', 'hardware', '']
     ]);
 
     // ─── Category 8: Kubernetes ───
 
     const KUBERNETES_EVENT_TYPE = Layer8EnumFactory.create([
-        { value: 0, label: 'Unspecified' },
-        { value: 1, label: 'Pod' },
-        { value: 2, label: 'Node' },
-        { value: 3, label: 'Deployment' },
-        { value: 4, label: 'StatefulSet' },
-        { value: 5, label: 'DaemonSet' },
-        { value: 6, label: 'Service' },
-        { value: 7, label: 'Namespace' },
-        { value: 8, label: 'Network Policy' }
+        ['Unspecified', null, ''],
+        ['Pod', 'pod', ''],
+        ['Node', 'node', ''],
+        ['Deployment', 'deployment', ''],
+        ['StatefulSet', 'statefulset', ''],
+        ['DaemonSet', 'daemonset', ''],
+        ['Service', 'service', ''],
+        ['Namespace', 'namespace', ''],
+        ['Network Policy', 'network-policy', '']
     ]);
 
     // ─── Category 9: Performance ───
 
     const PERFORMANCE_METRIC = Layer8EnumFactory.create([
-        { value: 0, label: 'Unspecified' },
-        { value: 1, label: 'CPU' },
-        { value: 2, label: 'Memory' },
-        { value: 3, label: 'Temperature' },
-        { value: 4, label: 'Traffic' },
-        { value: 5, label: 'Disk' },
-        { value: 6, label: 'Fan Speed' },
-        { value: 7, label: 'Power Load' },
-        { value: 8, label: 'Voltage' },
-        { value: 9, label: 'Latency' },
-        { value: 10, label: 'Packet Loss' }
+        ['Unspecified', null, ''],
+        ['CPU', 'cpu', ''],
+        ['Memory', 'memory', ''],
+        ['Temperature', 'temperature', ''],
+        ['Traffic', 'traffic', ''],
+        ['Disk', 'disk', ''],
+        ['Fan Speed', 'fan-speed', ''],
+        ['Power Load', 'power-load', ''],
+        ['Voltage', 'voltage', ''],
+        ['Latency', 'latency', ''],
+        ['Packet Loss', 'packet-loss', '']
     ]);
 
     const THRESHOLD_TYPE = Layer8EnumFactory.create([
-        { value: 0, label: 'Unspecified' },
-        { value: 1, label: 'Upper' },
-        { value: 2, label: 'Lower' }
+        ['Unspecified', null, ''],
+        ['Upper', 'upper', ''],
+        ['Lower', 'lower', '']
     ]);
 
     // ─── Category 12: Compute ───
 
     const COMPUTE_EVENT_TYPE = Layer8EnumFactory.create([
-        { value: 0, label: 'Unspecified' },
-        { value: 1, label: 'Hypervisor Status' },
-        { value: 2, label: 'VM Status' },
-        { value: 3, label: 'VM Migration' },
-        { value: 4, label: 'VM Resource' },
-        { value: 5, label: 'Host Resource' }
+        ['Unspecified', null, ''],
+        ['Hypervisor Status', 'hypervisor-status', ''],
+        ['VM Status', 'vm-status', ''],
+        ['VM Migration', 'vm-migration', ''],
+        ['VM Resource', 'vm-resource', ''],
+        ['Host Resource', 'host-resource', '']
     ]);
 
     // ─── Category 13: Storage ───
 
     const STORAGE_EVENT_TYPE = Layer8EnumFactory.create([
-        { value: 0, label: 'Unspecified' },
-        { value: 1, label: 'Array Status' },
-        { value: 2, label: 'Volume Status' },
-        { value: 3, label: 'Capacity' },
-        { value: 4, label: 'Replication' },
-        { value: 5, label: 'Disk' },
-        { value: 6, label: 'Controller' }
+        ['Unspecified', null, ''],
+        ['Array Status', 'array-status', ''],
+        ['Volume Status', 'volume-status', ''],
+        ['Capacity', 'capacity', ''],
+        ['Replication', 'replication', ''],
+        ['Disk', 'disk', ''],
+        ['Controller', 'controller', '']
     ]);
 
     // ─── Category 14: Power ───
 
     const POWER_EVENT_TYPE = Layer8EnumFactory.create([
-        { value: 0, label: 'Unspecified' },
-        { value: 1, label: 'PSU Status' },
-        { value: 2, label: 'PDU Status' },
-        { value: 3, label: 'UPS Status' },
-        { value: 4, label: 'Battery' },
-        { value: 5, label: 'Load' },
-        { value: 6, label: 'Voltage' },
-        { value: 7, label: 'Temperature' }
+        ['Unspecified', null, ''],
+        ['PSU Status', 'psu-status', ''],
+        ['PDU Status', 'pdu-status', ''],
+        ['UPS Status', 'ups-status', ''],
+        ['Battery', 'battery', ''],
+        ['Load', 'load', ''],
+        ['Voltage', 'voltage', ''],
+        ['Temperature', 'temperature', '']
     ]);
 
     // ─── Category 15: GPU ───
 
     const GPU_EVENT_TYPE = Layer8EnumFactory.create([
-        { value: 0, label: 'Unspecified' },
-        { value: 1, label: 'Status' },
-        { value: 2, label: 'Temperature' },
-        { value: 3, label: 'Memory' },
-        { value: 4, label: 'Utilization' },
-        { value: 5, label: 'Error' },
-        { value: 6, label: 'Power' }
+        ['Unspecified', null, ''],
+        ['Status', 'status', ''],
+        ['Temperature', 'temperature', ''],
+        ['Memory', 'memory', ''],
+        ['Utilization', 'utilization', ''],
+        ['Error', 'error', ''],
+        ['Power', 'power', '']
     ]);
 
     // ─── Category 16: Topology ───
 
     const TOPOLOGY_EVENT_TYPE = Layer8EnumFactory.create([
-        { value: 0, label: 'Unspecified' },
-        { value: 1, label: 'Link Discovered' },
-        { value: 2, label: 'Link Lost' },
-        { value: 3, label: 'Neighbor Change' },
-        { value: 4, label: 'Topology Change' }
+        ['Unspecified', null, ''],
+        ['Link Discovered', 'link-discovered', ''],
+        ['Link Lost', 'link-lost', ''],
+        ['Neighbor Change', 'neighbor-change', ''],
+        ['Topology Change', 'topology-change', '']
     ]);
 
     // ─── Category 17: Automation ───
 
     const AUTOMATION_EVENT_TYPE = Layer8EnumFactory.create([
-        { value: 0, label: 'Unspecified' },
-        { value: 1, label: 'Rule Triggered' },
-        { value: 2, label: 'Rule Completed' },
-        { value: 3, label: 'Rule Failed' },
-        { value: 4, label: 'Policy Violation' },
-        { value: 5, label: 'Remediation' }
+        ['Unspecified', null, ''],
+        ['Rule Triggered', 'rule-triggered', ''],
+        ['Rule Completed', 'rule-completed', ''],
+        ['Rule Failed', 'rule-failed', ''],
+        ['Policy Violation', 'policy-violation', ''],
+        ['Remediation', 'remediation', '']
     ]);
 
     const AUTOMATION_EVENT_TYPE_CLASSES = {

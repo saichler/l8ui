@@ -4,12 +4,12 @@
     const { createStatusRenderer, renderEnum } = Layer8DRenderers;
 
     const SEVERITY = Layer8EnumFactory.create([
-        { value: 0, label: 'Unspecified' },
-        { value: 1, label: 'Info' },
-        { value: 2, label: 'Warning' },
-        { value: 3, label: 'Minor' },
-        { value: 4, label: 'Major' },
-        { value: 5, label: 'Critical' }
+        ['Unspecified', null, ''],
+        ['Info', 'info', ''],
+        ['Warning', 'warning', ''],
+        ['Minor', 'minor', ''],
+        ['Major', 'major', ''],
+        ['Critical', 'critical', '']
     ]);
 
     const SEVERITY_CLASSES = {
@@ -22,11 +22,11 @@
     };
 
     const ALARM_STATE = Layer8EnumFactory.create([
-        { value: 0, label: 'Unspecified' },
-        { value: 1, label: 'Active' },
-        { value: 2, label: 'Acknowledged' },
-        { value: 3, label: 'Cleared' },
-        { value: 4, label: 'Suppressed' }
+        ['Unspecified', null, ''],
+        ['Active', 'active', ''],
+        ['Acknowledged', 'acknowledged', ''],
+        ['Cleared', 'cleared', ''],
+        ['Suppressed', 'suppressed', '']
     ]);
 
     const ALARM_STATE_CLASSES = {
@@ -38,11 +38,11 @@
     };
 
     const EVENT_STATE = Layer8EnumFactory.create([
-        { value: 0, label: 'Unspecified' },
-        { value: 1, label: 'New' },
-        { value: 2, label: 'Processed' },
-        { value: 3, label: 'Discarded' },
-        { value: 4, label: 'Archived' }
+        ['Unspecified', null, ''],
+        ['New', 'new', ''],
+        ['Processed', 'processed', ''],
+        ['Discarded', 'discarded', ''],
+        ['Archived', 'archived', '']
     ]);
 
     const EVENT_STATE_CLASSES = {
@@ -54,32 +54,32 @@
     };
 
     const EVENT_CATEGORY = Layer8EnumFactory.create([
-        { value: 0, label: 'Unspecified' },
-        { value: 1, label: 'Audit' },
-        { value: 2, label: 'System' },
-        { value: 3, label: 'Monitoring' },
-        { value: 4, label: 'Security' },
-        { value: 5, label: 'Integration' },
-        { value: 6, label: 'Custom' },
-        { value: 7, label: 'Network' },
-        { value: 8, label: 'Kubernetes' },
-        { value: 9, label: 'Performance' },
-        { value: 10, label: 'Syslog' },
-        { value: 11, label: 'Trap' },
-        { value: 12, label: 'Compute' },
-        { value: 13, label: 'Storage' },
-        { value: 14, label: 'Power' },
-        { value: 15, label: 'GPU' },
-        { value: 16, label: 'Topology' },
-        { value: 17, label: 'Automation' }
+        ['Unspecified', null, ''],
+        ['Audit', 'audit', ''],
+        ['System', 'system', ''],
+        ['Monitoring', 'monitoring', ''],
+        ['Security', 'security', ''],
+        ['Integration', 'integration', ''],
+        ['Custom', 'custom', ''],
+        ['Network', 'network', ''],
+        ['Kubernetes', 'kubernetes', ''],
+        ['Performance', 'performance', ''],
+        ['Syslog', 'syslog', ''],
+        ['Trap', 'trap', ''],
+        ['Compute', 'compute', ''],
+        ['Storage', 'storage', ''],
+        ['Power', 'power', ''],
+        ['GPU', 'gpu', ''],
+        ['Topology', 'topology', ''],
+        ['Automation', 'automation', '']
     ]);
 
     const MAINTENANCE_STATUS = Layer8EnumFactory.create([
-        { value: 0, label: 'Unspecified' },
-        { value: 1, label: 'Scheduled' },
-        { value: 2, label: 'Active' },
-        { value: 3, label: 'Completed' },
-        { value: 4, label: 'Cancelled' }
+        ['Unspecified', null, ''],
+        ['Scheduled', 'scheduled', ''],
+        ['Active', 'active', ''],
+        ['Completed', 'completed', ''],
+        ['Cancelled', 'cancelled', '']
     ]);
 
     const MAINTENANCE_STATUS_CLASSES = {
@@ -91,11 +91,11 @@
     };
 
     const RECURRENCE_TYPE = Layer8EnumFactory.create([
-        { value: 0, label: 'Unspecified' },
-        { value: 1, label: 'None' },
-        { value: 2, label: 'Daily' },
-        { value: 3, label: 'Weekly' },
-        { value: 4, label: 'Monthly' }
+        ['Unspecified', null, ''],
+        ['None', 'none', ''],
+        ['Daily', 'daily', ''],
+        ['Weekly', 'weekly', ''],
+        ['Monthly', 'monthly', '']
     ]);
 
     window.L8EventsEnums = {

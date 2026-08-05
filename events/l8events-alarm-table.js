@@ -29,8 +29,8 @@
                     ...f.text('alarmId', 'Alarm ID'),
                     ...f.text('name', 'Name'),
                     ...f.textarea('description', 'Description'),
-                    ...f.select('severity', 'Severity', enums.SEVERITY),
-                    ...f.select('state', 'State', enums.ALARM_STATE),
+                    ...f.select('severity', 'Severity', enums.SEVERITY.enum),
+                    ...f.select('state', 'State', enums.ALARM_STATE.enum),
                     ...f.text('definitionId', 'Definition ID')
                 ]),
                 f.section('Source', [
