@@ -67,6 +67,7 @@ All component documentation is in the [`rules/`](rules/) directory, with one `.m
 - [registration-page.md](rules/registration-page.md) — Registration page
 - [data-import-system.md](rules/data-import-system.md) — Data import system
 - [l8events-ui.md](rules/l8events-ui.md) — Event/alarm/maintenance UI components (desktop + mobile)
+- [l8notify-ui.md](rules/l8notify-ui.md) — Notification delivery-log and integration-config UI components (desktop + mobile)
 
 ### How-To Guides
 - [adding-module-desktop.md](rules/adding-module-desktop.md) — Adding a new desktop module

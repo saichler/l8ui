@@ -1,0 +1,12 @@
+/* L8Notify — Shared notification admin styles */
+/* Uses --layer8d-* theme tokens exclusively */
+
+/*
+ * Currently empty: every component in this directory (l8notify-enums.js,
+ * l8notify-integration-mgmt.js, l8notify-delivery-log.js,
+ * l8notify-target-editor.js) is data-only — getColumns()/getFormDefinition()/
+ * getInlineTableDef() output consumed by Layer8DTable/Layer8DForms, which
+ * supply their own styling. No custom DOM is generated here, so there is
+ * nothing to style. Add rules here only if a future component in this
+ * directory renders its own markup.
+ */
