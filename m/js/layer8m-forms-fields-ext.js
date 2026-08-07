@@ -27,7 +27,7 @@ limitations under the License.
     F.renderCurrencyField = function(config, value, readonly) {
         const requiredAttr = config.required ? 'required' : '';
         const readonlyAttr = readonly ? 'readonly' : '';
-        const displayValue = value ? (value / 100).toFixed(2) : '';
+        const displayValue = value ? Layer8FieldParsers.centsToDollars(value).toFixed(2) : '';
 
         return `
             <div class="mobile-form-field">
@@ -159,9 +159,7 @@ limitations under the License.
         const readonlyAttr = readonly ? 'readonly' : '';
         let displayValue = '';
         if (value) {
-            const hours = Math.floor(value / 60);
-            const mins = value % 60;
-            displayValue = `${hours}:${mins.toString().padStart(2, '0')}`;
+            displayValue = Layer8FieldParsers.minutesToHoursLabel(value);
         }
 
         return `
@@ -395,72 +393,20 @@ limitations under the License.
         `;
     };
 
-    // Tags & multiselect interaction handlers (called from inline onclick)
-    F.onTagKeydown = function(event, input) {
-        if (event.key !== 'Enter') return;
-        event.preventDefault();
-        const val = input.value.trim();
-        if (!val) return;
-        const wrapper = input.closest('.l8-tags-wrapper');
-        const hidden = wrapper.querySelector('input[data-tags-value]');
-        const chips = wrapper.querySelector('.l8-tags-chips');
-        let arr = [];
-        try { arr = JSON.parse(hidden.value || '[]'); } catch (e) { arr = []; }
-        if (arr.includes(val)) { input.value = ''; return; }
-        arr.push(val);
-        hidden.value = JSON.stringify(arr);
-        const chip = document.createElement('span');
-        chip.className = 'l8-tag-chip';
-        chip.innerHTML = `${Layer8MUtils.escapeHtml(val)}<span class="l8-tag-remove" onclick="Layer8MFormFields.removeTag(this)">&times;</span>`;
-        chips.appendChild(chip);
-        input.value = '';
-    };
-
-    F.removeTag = function(removeBtn) {
-        const chip = removeBtn.parentElement;
-        const wrapper = chip.closest('.l8-tags-wrapper');
-        const hidden = wrapper.querySelector('input[data-tags-value]');
-        const tagText = chip.firstChild.textContent;
-        let arr = [];
-        try { arr = JSON.parse(hidden.value || '[]'); } catch (e) { arr = []; }
-        arr = arr.filter(t => t !== tagText);
-        hidden.value = JSON.stringify(arr);
-        chip.remove();
-    };
-
-    F.toggleMultiselectDropdown = function(trigger) {
-        const dropdown = trigger.nextElementSibling;
-        dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
-    };
-
-    F.onMultiselectChange = function(checkbox) {
-        const wrapper = checkbox.closest('.l8-multiselect-wrapper');
-        const hidden = wrapper.querySelector('input[data-multiselect-value]');
-        const chips = wrapper.querySelector('.l8-multiselect-chips');
-        const dropdownEl = wrapper.querySelector('.l8-multiselect-dropdown');
-        const checked = dropdownEl.querySelectorAll('input[type="checkbox"]:checked');
-        const fieldOptions = {};
-        dropdownEl.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-            fieldOptions[cb.value] = cb.parentElement.textContent.trim();
-        });
-        const values = [];
-        let chipsHtml = '';
-        checked.forEach(cb => {
-            const numVal = parseInt(cb.value, 10);
-            values.push(isNaN(numVal) ? cb.value : numVal);
-            const label = fieldOptions[cb.value] || cb.value;
-            chipsHtml += `<span class="l8-tag-chip">${Layer8MUtils.escapeHtml(label)}<span class="l8-tag-remove" onclick="Layer8MFormFields.removeMultiselectValue(this, '${Layer8MUtils.escapeAttr(cb.value)}')">&times;</span></span>`;
-        });
-        hidden.value = JSON.stringify(values);
-        chips.innerHTML = chipsHtml;
-    };
-
-    F.removeMultiselectValue = function(removeBtn, val) {
-        const wrapper = removeBtn.closest('.l8-multiselect-wrapper');
-        const dropdownEl = wrapper.querySelector('.l8-multiselect-dropdown');
-        const cb = dropdownEl.querySelector(`input[value="${val}"]`);
-        if (cb) { cb.checked = false; F.onMultiselectChange(cb); }
-    };
+    // Tags & multiselect interaction handlers (called from inline onclick).
+    // Behavioral logic lives in shared/layer8-form-chips.js (identical on
+    // desktop and mobile) — this just supplies the mobile-specific escaping
+    // helpers and the onclick-embedded namespace name.
+    const _chips = Layer8FormChips.create({
+        escapeHtml: Layer8MUtils.escapeHtml,
+        escapeAttr: Layer8MUtils.escapeAttr,
+        namespace: 'Layer8MFormFields'
+    });
+    F.onTagKeydown = _chips.onTagKeydown;
+    F.removeTag = _chips.removeTag;
+    F.toggleMultiselectDropdown = _chips.toggleMultiselectDropdown;
+    F.onMultiselectChange = _chips.onMultiselectChange;
+    F.removeMultiselectValue = _chips.removeMultiselectValue;
 
     F.renderRichtextField = function(config, value, readonly) {
         const esc = Layer8MUtils.escapeHtml;

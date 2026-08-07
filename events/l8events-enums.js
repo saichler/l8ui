@@ -14,11 +14,11 @@
 
     const SEVERITY_CLASSES = {
         0: '',
-        1: 'status-muted',
-        2: 'status-info',
-        3: 'status-warning',
-        4: 'status-warning-high',
-        5: 'status-error'
+        1: 'layer8d-status-inactive',
+        2: 'layer8d-status-info',
+        3: 'layer8d-status-pending',
+        4: 'layer8d-status-warning-high',
+        5: 'layer8d-status-terminated'
     };
 
     const ALARM_STATE = Layer8EnumFactory.create([
@@ -31,10 +31,10 @@
 
     const ALARM_STATE_CLASSES = {
         0: '',
-        1: 'status-error',
-        2: 'status-info',
-        3: 'status-success',
-        4: 'status-muted'
+        1: 'layer8d-status-terminated',
+        2: 'layer8d-status-info',
+        3: 'layer8d-status-active',
+        4: 'layer8d-status-inactive'
     };
 
     const EVENT_STATE = Layer8EnumFactory.create([
@@ -47,10 +47,10 @@
 
     const EVENT_STATE_CLASSES = {
         0: '',
-        1: 'status-info',
-        2: 'status-success',
-        3: 'status-muted',
-        4: 'status-muted'
+        1: 'layer8d-status-info',
+        2: 'layer8d-status-active',
+        3: 'layer8d-status-inactive',
+        4: 'layer8d-status-inactive'
     };
 
     const EVENT_CATEGORY = Layer8EnumFactory.create([
@@ -84,10 +84,10 @@
 
     const MAINTENANCE_STATUS_CLASSES = {
         0: '',
-        1: 'status-info',
-        2: 'status-warning',
-        3: 'status-success',
-        4: 'status-muted'
+        1: 'layer8d-status-info',
+        2: 'layer8d-status-pending',
+        3: 'layer8d-status-active',
+        4: 'layer8d-status-inactive'
     };
 
     const RECURRENCE_TYPE = Layer8EnumFactory.create([

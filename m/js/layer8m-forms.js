@@ -213,7 +213,7 @@ limitations under the License.
                 if (input.type === 'checkbox' || input.classList.contains('l8-toggle-input')) {
                     formData[input.name] = input.checked ? 1 : 0;
                 } else if (input.dataset.format === 'currency') {
-                    formData[input.name] = Math.round(parseFloat(input.value || 0) * 100);
+                    formData[input.name] = Layer8FieldParsers.dollarsToCents(input.value || 0);
                 } else if (input.dataset.format === 'percentage') {
                     formData[input.name] = parseFloat(input.value || 0) / 100;
                 } else if (input.dataset.format === 'hours') {
@@ -372,38 +372,15 @@ limitations under the License.
             const refInputs = container.querySelectorAll('input.reference-input');
 
             refInputs.forEach(async input => {
-                let config = {};
-                try {
-                    config = JSON.parse(input.dataset.refConfig || '{}');
-                } catch (e) {
-                    console.warn('Invalid reference config for', input.name);
-                    return;
-                }
-
-                if (!config.modelName || !config.idColumn || !config.displayColumn) {
-                    console.warn('Reference input missing required config:', input.name);
-                    return;
-                }
+                const registry = window.Layer8MReferenceRegistry || null;
+                const config = Layer8ReferenceConfigResolver.resolve(input, registry);
+                if (!config) return;
 
                 if (!config.endpoint) {
                     config.endpoint = Layer8MReferencePicker.getEndpointForModel(config.modelName);
                     if (!config.endpoint) {
                         console.warn('No endpoint found for model:', config.modelName);
                         return;
-                    }
-                }
-
-                // Get displayFormat from registry (functions can't be serialized)
-                const lookupModel = input.dataset.lookupModel || config.modelName;
-                if (lookupModel && window.Layer8MReferenceRegistry) {
-                    const registryConfig = Layer8MReferenceRegistry.get(lookupModel);
-                    if (registryConfig) {
-                        if (registryConfig.displayFormat && !config.displayFormat) {
-                            config.displayFormat = registryConfig.displayFormat;
-                        }
-                        if (registryConfig.selectColumns && !config.selectColumns) {
-                            config.selectColumns = registryConfig.selectColumns;
-                        }
                     }
                 }
 

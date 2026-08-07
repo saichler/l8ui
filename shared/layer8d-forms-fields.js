@@ -296,7 +296,7 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
                 const periodValue = periodObj.periodValue || 0;
 
                 // Period Type select
-                const typeOptions = [['', '-- Select --'], ['1', 'Yearly'], ['2', 'Quarterly'], ['3', 'Monthly']];
+                const typeOptions = Layer8PeriodSelector.PERIOD_TYPE_OPTIONS;
                 let typeHtml = `<select name="${field.key}.__periodType" class="period-type-select" onchange="Layer8DFormsFields.onPeriodTypeChange(this)" ${field.required ? 'required' : ''}>`;
                 for (const [val, lbl] of typeOptions) {
                     typeHtml += `<option value="${val}"${String(periodType) === val ? ' selected' : ''}>${lbl}</option>`;
@@ -459,17 +459,9 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
     }
 
     function generatePeriodValueSelect(fieldKey, periodType, selectedValue) {
-        const months = [[1,'January'],[2,'February'],[3,'March'],[4,'April'],[5,'May'],[6,'June'],
-                        [7,'July'],[8,'August'],[9,'September'],[10,'October'],[11,'November'],[12,'December']];
-        const quarters = [[13,'Q1'],[14,'Q2'],[15,'Q3'],[16,'Q4']];
         const hidden = (Number(periodType) === 1);
-        let options = Number(periodType) === 2 ? quarters : Number(periodType) === 3 ? months : [];
-
         let html = `<select name="${fieldKey}.__periodValue" class="period-value-select"${hidden ? ' style="display:none"' : ''}>`;
-        html += '<option value="">--</option>';
-        for (const [val, lbl] of options) {
-            html += `<option value="${val}"${Number(selectedValue) === val ? ' selected' : ''}>${lbl}</option>`;
-        }
+        html += Layer8PeriodSelector.buildValueOptionsHtml(periodType, selectedValue);
         html += '</select>';
         return html;
     }

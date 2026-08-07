@@ -56,57 +56,28 @@ limitations under the License.
          */
         buildQuery(page, pageSize) {
             const pageIndex = page - 1;
-            const invalidFilters = [];
-            const filterConditions = [];
+            const { conditions, invalidFilters } = Layer8QueryBuilder.buildColumnFilterConditions(
+                this.filters, this.columns, Layer8DUtils.matchEnumValue
+            );
+            const whereConditions = this.baseWhereClause ? [this.baseWhereClause, ...conditions] : conditions;
 
-            if (this.baseWhereClause) {
-                filterConditions.push(this.baseWhereClause);
-            }
-
-            for (const [columnKey, filterValue] of Object.entries(this.filters)) {
-                if (!filterValue) continue;
-
-                const column = this.columns.find(c => c.key === columnKey);
-                if (!column) continue;
-
-                const filterKey = column.filterKey || column.key;
-
-                let queryValue;
-                if (column.enumValues) {
-                    const enumValue = Layer8DUtils.matchEnumValue(filterValue, column.enumValues);
-                    if (enumValue === null) {
-                        invalidFilters.push(columnKey);
-                        continue;
-                    }
-                    queryValue = enumValue;
-                } else if (column.enumOptions) {
-                    // enumOptions uses numeric keys — pass the value directly
-                    queryValue = filterValue;
-                } else if (column.type === 'boolean') {
-                    queryValue = filterValue;
-                } else {
-                    queryValue = `${filterValue}*`;
-                }
-
-                filterConditions.push(`${filterKey}=${queryValue}`);
-            }
-
-            let query = `select * from ${this.modelName}`;
-            if (filterConditions.length > 0) {
-                query += ` where ${filterConditions.join(' and ')}`;
-            }
-            query += ` limit ${pageSize} page ${pageIndex}`;
-
+            let sortClause = '', sortDescending = false;
             if (this.sortColumn) {
                 const column = this.columns.find(c => c.key === this.sortColumn);
-                const sortKey = column?.sortKey || column?.filterKey || this.sortColumn;
-                const desc = this.sortDirection === 'desc' ? ' descending' : '';
-                query += ` sort-by ${sortKey}${desc}`;
+                sortClause = column?.sortKey || column?.filterKey || this.sortColumn;
+                sortDescending = this.sortDirection === 'desc';
             }
 
-            if (this.realtime) {
-                query += ' register=true';
-            }
+            const query = Layer8QueryBuilder.assembleQuery({
+                modelName: this.modelName,
+                selectClause: '*',
+                whereConditions,
+                pageSize,
+                pageIndex,
+                sortClause,
+                sortDescending,
+                realtime: this.realtime
+            });
 
             return { query, invalidFilters };
         }
@@ -144,13 +115,8 @@ limitations under the License.
 
                 const data = await response.json();
 
-                let totalCount = 0;
-                if (page === 1 && data.metadata?.keyCount?.counts) {
-                    totalCount = data.metadata.keyCount.counts.Total || 0;
-                    this.totalItems = totalCount;
-                } else {
-                    totalCount = this.totalItems;
-                }
+                const totalCount = Layer8QueryBuilder.resolvePageTotal(page === 1, data.metadata, this.totalItems);
+                this.totalItems = totalCount;
 
                 let items = data.list || [];
                 if (this.transformData) {

@@ -50,14 +50,10 @@ limitations under the License.
     };
 
     /**
-     * Debounce utility for filtering
+     * Debounce utility for filtering — delegates to the shared Layer8DUtils implementation.
      */
     Layer8DReferencePicker._internal.debounce = function(func, wait) {
-        let timeout;
-        return function(...args) {
-            clearTimeout(timeout);
-            timeout = setTimeout(() => func.apply(this, args), wait);
-        };
+        return Layer8DUtils.debounce(func, wait);
     };
 
     /**

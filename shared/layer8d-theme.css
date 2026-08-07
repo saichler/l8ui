@@ -183,6 +183,12 @@ limitations under the License.
     color: var(--layer8d-info);
 }
 
+.layer8d-status-warning-high {
+    background: var(--layer8d-warning-bg);
+    color: var(--layer8d-error);
+    font-weight: 700;
+}
+
 /* ============================================ */
 /* TAGS */
 /* ============================================ */

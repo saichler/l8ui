@@ -39,20 +39,11 @@ limitations under the License.
     Layer8DDatePicker._internal.currentInput = null;
 
     /**
-     * Check if a date is disabled based on min/max options
+     * Check if a date is disabled based on min/max options.
+     * Delegates to the shared implementation in shared/layer8-datepicker-grid.js.
      */
     Layer8DDatePicker._internal.isDateDisabled = function(date, options) {
-        if (options.minDate) {
-            const min = new Date(options.minDate * 1000);
-            min.setHours(0, 0, 0, 0);
-            if (date < min) return true;
-        }
-        if (options.maxDate) {
-            const max = new Date(options.maxDate * 1000);
-            max.setHours(23, 59, 59, 999);
-            if (date > max) return true;
-        }
-        return false;
+        return Layer8DatepickerGrid.isDateDisabled(date, options.minDate, options.maxDate);
     };
 
     /**

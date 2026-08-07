@@ -34,9 +34,9 @@
     ]);
 
     const SYSTEM_EVENT_TYPE_CLASSES = {
-        0: '', 1: 'status-success', 2: 'status-error', 3: 'status-info',
-        4: 'status-info', 5: 'status-warning', 6: 'status-error',
-        7: 'status-info', 8: 'status-info', 9: 'status-info'
+        0: '', 1: 'layer8d-status-active', 2: 'layer8d-status-terminated', 3: 'layer8d-status-info',
+        4: 'layer8d-status-info', 5: 'layer8d-status-pending', 6: 'layer8d-status-terminated',
+        7: 'layer8d-status-info', 8: 'layer8d-status-info', 9: 'layer8d-status-info'
     };
 
     // ─── Category 3: Monitoring ───
@@ -54,9 +54,9 @@
     ]);
 
     const MONITORING_EVENT_TYPE_CLASSES = {
-        0: '', 1: 'status-success', 2: 'status-error', 3: 'status-error',
-        4: 'status-success', 5: 'status-warning', 6: 'status-info',
-        7: 'status-success', 8: 'status-error'
+        0: '', 1: 'layer8d-status-active', 2: 'layer8d-status-terminated', 3: 'layer8d-status-terminated',
+        4: 'layer8d-status-active', 5: 'layer8d-status-pending', 6: 'layer8d-status-info',
+        7: 'layer8d-status-active', 8: 'layer8d-status-terminated'
     };
 
     // ─── Category 4: Security ───
@@ -75,9 +75,9 @@
     ]);
 
     const SECURITY_EVENT_TYPE_CLASSES = {
-        0: '', 1: 'status-success', 2: 'status-error', 3: 'status-error',
-        4: 'status-warning', 5: 'status-warning', 6: 'status-success',
-        7: 'status-error', 8: 'status-error', 9: 'status-warning'
+        0: '', 1: 'layer8d-status-active', 2: 'layer8d-status-terminated', 3: 'layer8d-status-terminated',
+        4: 'layer8d-status-pending', 5: 'layer8d-status-pending', 6: 'layer8d-status-active',
+        7: 'layer8d-status-terminated', 8: 'layer8d-status-terminated', 9: 'layer8d-status-pending'
     };
 
     // ─── Category 5: Integration ───
@@ -96,9 +96,9 @@
     ]);
 
     const INTEGRATION_EVENT_TYPE_CLASSES = {
-        0: '', 1: 'status-success', 2: 'status-error', 3: 'status-info',
-        4: 'status-error', 5: 'status-info', 6: 'status-success',
-        7: 'status-error', 8: 'status-success', 9: 'status-error'
+        0: '', 1: 'layer8d-status-active', 2: 'layer8d-status-terminated', 3: 'layer8d-status-info',
+        4: 'layer8d-status-terminated', 5: 'layer8d-status-info', 6: 'layer8d-status-active',
+        7: 'layer8d-status-terminated', 8: 'layer8d-status-active', 9: 'layer8d-status-terminated'
     };
 
     // ─── Category 7: Network ───
@@ -224,8 +224,8 @@
     ]);
 
     const AUTOMATION_EVENT_TYPE_CLASSES = {
-        0: '', 1: 'status-info', 2: 'status-success', 3: 'status-error',
-        4: 'status-warning', 5: 'status-info'
+        0: '', 1: 'layer8d-status-info', 2: 'layer8d-status-active', 3: 'layer8d-status-terminated',
+        4: 'layer8d-status-pending', 5: 'layer8d-status-info'
     };
 
     // ─── Export ───

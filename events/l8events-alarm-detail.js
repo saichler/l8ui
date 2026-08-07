@@ -2,6 +2,7 @@
     'use strict';
 
     const enums = L8EventsEnums;
+    const escapeHtml = Layer8DUtils.escapeHtml;
 
     window.L8EventsAlarmDetail = {
         render: function(container, alarm, options) {
@@ -52,11 +53,11 @@
                         </div>
                         <div class="l8events-detail-field">
                             <label>Name</label>
-                            <span>${alarm.name || ''}</span>
+                            <span>${escapeHtml(alarm.name || '')}</span>
                         </div>
                         <div class="l8events-detail-field">
                             <label>Source</label>
-                            <span>${alarm.sourceName || alarm.sourceId || ''}</span>
+                            <span>${escapeHtml(alarm.sourceName || alarm.sourceId || '')}</span>
                         </div>
                         <div class="l8events-detail-field">
                             <label>Occurrences</label>
@@ -79,9 +80,9 @@
                     <div class="l8events-timeline-entry">
                         <div class="l8events-timeline-dot"></div>
                         <div class="l8events-timeline-content">
-                            <span class="l8events-timeline-transition">${fromLabel} &rarr; ${toLabel}</span>
-                            <span class="l8events-timeline-meta">${entry.changedBy || ''} ${date}</span>
-                            ${entry.reason ? '<span class="l8events-timeline-reason">' + entry.reason + '</span>' : ''}
+                            <span class="l8events-timeline-transition">${escapeHtml(fromLabel)} &rarr; ${escapeHtml(toLabel)}</span>
+                            <span class="l8events-timeline-meta">${escapeHtml(entry.changedBy || '')} ${escapeHtml(date)}</span>
+                            ${entry.reason ? '<span class="l8events-timeline-reason">' + escapeHtml(entry.reason) + '</span>' : ''}
                         </div>
                     </div>
                 `;
@@ -103,10 +104,10 @@
                 items += `
                     <div class="l8events-note">
                         <div class="l8events-note-header">
-                            <span class="l8events-note-author">${note.author || ''}</span>
-                            <span class="l8events-note-date">${date}</span>
+                            <span class="l8events-note-author">${escapeHtml(note.author || '')}</span>
+                            <span class="l8events-note-date">${escapeHtml(date)}</span>
                         </div>
-                        <div class="l8events-note-text">${note.text || ''}</div>
+                        <div class="l8events-note-text">${escapeHtml(note.text || '')}</div>
                     </div>
                 `;
             }

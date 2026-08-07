@@ -54,11 +54,11 @@ limitations under the License.
          */
         buildQuery(page, pageSize) {
             const pageIndex = page - 1;
-            const filterConditions = [];
+            const whereConditions = [];
             let isInvalid = false;
 
             if (this.baseWhereClause) {
-                filterConditions.push(this.baseWhereClause);
+                whereConditions.push(this.baseWhereClause);
             }
 
             if (this.filterValue) {
@@ -82,30 +82,31 @@ limitations under the License.
                         }
 
                         if (queryValue !== undefined) {
-                            filterConditions.push(`${filterKey}=${queryValue}`);
+                            whereConditions.push(`${filterKey}=${queryValue}`);
                         }
                     }
                 } else {
-                    filterConditions.push(`Id=${this.filterValue}*`);
+                    whereConditions.push(`Id=${this.filterValue}*`);
                 }
             }
 
-            let query = `select * from ${this.modelName}`;
-            if (filterConditions.length > 0) {
-                query += ` where ${filterConditions.join(' and ')}`;
-            }
-            query += ` limit ${pageSize} page ${pageIndex}`;
-
+            let sortClause = '', sortDescending = false;
             if (this.sortColumn) {
                 const column = this.columns.find(c => c.key === this.sortColumn);
-                const sortKey = column?.sortKey || column?.filterKey || this.sortColumn;
-                const desc = this.sortDirection === 'desc' ? ' descending' : '';
-                query += ` sort-by ${sortKey}${desc}`;
+                sortClause = column?.sortKey || column?.filterKey || this.sortColumn;
+                sortDescending = this.sortDirection === 'desc';
             }
 
-            if (this.realtime) {
-                query += ' register=true';
-            }
+            const query = Layer8QueryBuilder.assembleQuery({
+                modelName: this.modelName,
+                selectClause: '*',
+                whereConditions,
+                pageSize,
+                pageIndex,
+                sortClause,
+                sortDescending,
+                realtime: this.realtime
+            });
 
             return { query, isInvalid };
         }
@@ -125,11 +126,8 @@ limitations under the License.
                 const body = encodeURIComponent(JSON.stringify({ text: query }));
                 const response = await Layer8MAuth.get(this.endpoint + '?body=' + body);
 
-                let totalCount = this.totalItems;
-                if (page === 1 && response.metadata?.keyCount?.counts) {
-                    totalCount = response.metadata.keyCount.counts.Total || 0;
-                    this.totalItems = totalCount;
-                }
+                const totalCount = Layer8QueryBuilder.resolvePageTotal(page === 1, response.metadata, this.totalItems);
+                this.totalItems = totalCount;
 
                 let items = response.list || [];
                 if (this.transformData) {

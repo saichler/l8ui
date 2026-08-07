@@ -17,73 +17,38 @@ limitations under the License.
 
 // Debounce utility for server-side filtering
 Layer8DTable.prototype.debounce = function(func, wait) {
-    let timeout;
-    return (...args) => {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => func.apply(this, args), wait);
-    };
+    return Layer8DUtils.debounce(func, wait);
 };
 
-// Build L8Query with filter and sort conditions
+// Build L8Query with filter and sort conditions.
+// Filter/sort resolution and final query assembly are shared with
+// Layer8DDataSource via shared/layer8-query-builder.js — this is one of the
+// two places (Layer8DDataSource is the other) that use the per-column
+// filters-map mode; Layer8DTable always selects '*'.
 Layer8DTable.prototype.buildQuery = function(page, pageSize) {
     const pageIndex = page - 1;
-    const invalidFilters = [];
-    const filterConditions = [];
+    const { conditions, invalidFilters } = Layer8QueryBuilder.buildColumnFilterConditions(
+        this.filters, this.columns, Layer8DUtils.matchEnumValue
+    );
+    const whereConditions = this.baseWhereClause ? [this.baseWhereClause, ...conditions] : conditions;
 
-    // Start with base where clause if provided
-    if (this.baseWhereClause) {
-        filterConditions.push(this.baseWhereClause);
-    }
-
-    // Add filter conditions
-    for (const [columnKey, filterValue] of Object.entries(this.filters)) {
-        if (!filterValue) continue;
-
-        const column = this.columns.find(c => c.key === columnKey);
-        if (!column) continue;
-
-        const filterKey = column.filterKey || column.key;
-
-        let queryValue;
-        if (column.enumValues) {
-            // Enum column: validate and convert to enum value
-            const enumValue = Layer8DUtils.matchEnumValue(filterValue, column.enumValues);
-            if (enumValue === null) {
-                invalidFilters.push(columnKey);
-                continue;
-            }
-            queryValue = enumValue;
-        } else if (column.enumOptions) {
-            // enumOptions uses numeric keys — pass directly
-            queryValue = filterValue;
-        } else if (column.type === 'boolean') {
-            queryValue = filterValue;
-        } else {
-            // Non-enum column: use text with wildcard
-            queryValue = `${filterValue}*`;
-        }
-
-        filterConditions.push(`${filterKey}=${queryValue}`);
-    }
-
-    // Build query - only add WHERE clause if there are conditions
-    let query = `select * from ${this.modelName}`;
-    if (filterConditions.length > 0) {
-        query += ` where ${filterConditions.join(' and ')}`;
-    }
-    query += ` limit ${pageSize} page ${pageIndex}`;
-
-    // Add sort clause
+    let sortClause = '', sortDescending = false;
     if (this.sortColumn) {
         const column = this.columns.find(c => c.key === this.sortColumn);
-        const sortKey = column?.sortKey || column?.filterKey || this.sortColumn;
-        const desc = this.sortDirection === 'desc' ? ' descending' : '';
-        query += ` sort-by ${sortKey}${desc}`;
+        sortClause = column?.sortKey || column?.filterKey || this.sortColumn;
+        sortDescending = this.sortDirection === 'desc';
     }
 
-    if (this.realtime) {
-        query += ' register=true';
-    }
+    const query = Layer8QueryBuilder.assembleQuery({
+        modelName: this.modelName,
+        selectClause: '*',
+        whereConditions,
+        pageSize,
+        pageIndex,
+        sortClause,
+        sortDescending,
+        realtime: this.realtime
+    });
 
     return { query, invalidFilters };
 };
@@ -119,16 +84,10 @@ Layer8DTable.prototype.fetchData = async function(page, pageSize) {
 
         const data = await response.json();
 
-        // Extract total count from metadata — ONLY on page 1.
-        // Server only computes aggregate metadata on page 0 (first page).
-        // Page 2+ returns zero/stale metadata, so reuse the cached value.
-        let totalCount = 0;
-        if (page === 1 && data.metadata?.keyCount?.counts) {
-            totalCount = data.metadata.keyCount.counts.Total || 0;
-            this.totalItems = totalCount;
-        } else {
-            totalCount = this.totalItems || 0;
-        }
+        // Extract total count from metadata — see Layer8QueryBuilder.resolvePageTotal
+        // for why this must only be read on page 1.
+        const totalCount = Layer8QueryBuilder.resolvePageTotal(page === 1, data.metadata, this.totalItems);
+        this.totalItems = totalCount;
 
         // Transform data if transformer provided
         let items = data.list || [];

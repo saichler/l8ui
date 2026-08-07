@@ -1,12 +1,8 @@
 /* L8Events — Shared event/alarm styles */
 /* Uses --layer8d-* theme tokens exclusively */
-
-/* Severity badge colors */
-.l8events-severity-critical { color: var(--layer8d-error); }
-.l8events-severity-major { color: var(--layer8d-warning); font-weight: 600; }
-.l8events-severity-minor { color: var(--layer8d-warning); }
-.l8events-severity-warning { color: var(--layer8d-info, var(--layer8d-primary)); }
-.l8events-severity-info { color: var(--layer8d-text-muted); }
+/* Severity/state/status badges use the shared .layer8d-status-* classes
+   (layer8d-theme.css) via Layer8DRenderers.createStatusRenderer — no
+   component-local badge color classes are defined here. */
 
 /* Detail sections */
 .l8events-detail-section {

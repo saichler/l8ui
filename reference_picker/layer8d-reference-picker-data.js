@@ -22,44 +22,34 @@ limitations under the License.
     const internal = Layer8DReferencePicker._internal;
 
     /**
-     * Build L8Query for reference picker
-     * Key difference from edit_table: select <id>,<display> instead of select *
+     * Build L8Query for reference picker.
+     * Key difference from edit_table/Layer8DDataSource: selects specific
+     * columns (not '*'), filters on a single resolved column (not a
+     * per-column filters map), and always sorts (falls back to
+     * displayColumn) — assembled via the same shared
+     * shared/layer8-query-builder.js used by every other L8Query builder in
+     * this codebase.
      */
     internal.buildQuery = function(config, state) {
-        const pageIndex = state.currentPage;
-        const columns = config.selectColumns.join(',');
-
-        // Start building query with specific columns (not select *)
-        let query = `select ${columns} from ${config.modelName}`;
-
-        // Build where conditions
-        const conditions = [];
-
-        // Add base where clause if provided
+        const whereConditions = [];
         if (config.baseWhereClause) {
-            conditions.push(config.baseWhereClause);
+            whereConditions.push(config.baseWhereClause);
         }
-
-        // Add filter condition (search by display column)
         if (state.filterValue && state.filterValue.trim()) {
             const filterKey = config.filterColumn || config.displayColumn;
-            conditions.push(`${filterKey}=${state.filterValue.trim()}*`);
+            whereConditions.push(`${filterKey}=${state.filterValue.trim()}*`);
         }
 
-        // Add WHERE clause if there are conditions
-        if (conditions.length > 0) {
-            query += ` where ${conditions.join(' and ')}`;
-        }
-
-        // Add pagination
-        query += ` limit ${config.pageSize} page ${pageIndex}`;
-
-        // Add sorting
-        const sortColumn = config.sortColumn || config.displayColumn;
-        const sortDir = state.sortDirection === 'desc' ? ' descending' : '';
-        query += ` sort-by ${sortColumn}${sortDir}`;
-
-        return query;
+        return Layer8QueryBuilder.assembleQuery({
+            modelName: config.modelName,
+            selectClause: config.selectColumns.join(','),
+            whereConditions,
+            pageSize: config.pageSize,
+            pageIndex: state.currentPage,
+            sortClause: config.sortColumn || config.displayColumn,
+            sortDescending: state.sortDirection === 'desc',
+            realtime: false
+        });
     };
 
     /**
@@ -88,15 +78,9 @@ limitations under the License.
 
             const data = await response.json();
 
-            // Extract total count from metadata — ONLY on page 0 (first page).
-            // Server only computes aggregate metadata on the first page.
-            // Page 2+ returns zero/stale metadata, so reuse the cached value.
-            let totalCount = 0;
-            if (state.currentPage === 0 && data.metadata?.keyCount?.counts) {
-                totalCount = data.metadata.keyCount.counts.Total || 0;
-            } else {
-                totalCount = state.totalItems || 0;
-            }
+            // Extract total count from metadata — see Layer8QueryBuilder.resolvePageTotal
+            // for why this must only be read on the first page.
+            const totalCount = Layer8QueryBuilder.resolvePageTotal(state.currentPage === 0, data.metadata, state.totalItems);
 
             // Get items list
             const items = data.list || [];

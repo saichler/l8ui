@@ -426,6 +426,16 @@ limitations under the License.
         return text.substring(0, maxLength - 3) + '...';
     }
 
+    // Debounce a function — returns a wrapped function that delays invocation
+    // until `delay` ms have passed since the last call. Mirrors Layer8MUtils.debounce.
+    function debounce(fn, delay = 300) {
+        let timeout;
+        return function(...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => fn.apply(this, args), delay);
+        };
+    }
+
     // ========================================
     // EXPORT
     // ========================================
@@ -465,7 +475,10 @@ limitations under the License.
         truncate,
 
         // Enums
-        matchEnumValue
+        matchEnumValue,
+
+        // Timing
+        debounce
     };
 
 })();

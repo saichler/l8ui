@@ -128,17 +128,24 @@ limitations under the License.
         }
 
         buildQuery() {
-            const columns = this.options.selectColumns.join(',');
-            let query = `select ${columns} from ${this.options.modelName}`;
-            const conditions = [];
-            if (this.options.baseWhereClause) conditions.push(this.options.baseWhereClause);
+            // Assembled via the same shared shared/layer8-query-builder.js used
+            // by every other L8Query builder in this codebase (desktop's
+            // reference picker, both platforms' DataSource, and Layer8DTable).
+            const whereConditions = [];
+            if (this.options.baseWhereClause) whereConditions.push(this.options.baseWhereClause);
             if (this.filterValue && this.filterValue.trim()) {
-                conditions.push(`${this.options.filterColumn}=${this.filterValue.trim()}*`);
+                whereConditions.push(`${this.options.filterColumn}=${this.filterValue.trim()}*`);
             }
-            if (conditions.length > 0) query += ` where ${conditions.join(' and ')}`;
-            query += ` limit ${this.options.pageSize} page ${this.page}`;
-            query += ` sort-by ${this.options.sortColumn}${this.sortDirection === 'desc' ? ' descending' : ''}`;
-            return query;
+            return Layer8QueryBuilder.assembleQuery({
+                modelName: this.options.modelName,
+                selectClause: this.options.selectColumns.join(','),
+                whereConditions,
+                pageSize: this.options.pageSize,
+                pageIndex: this.page,
+                sortClause: this.options.sortColumn,
+                sortDescending: this.sortDirection === 'desc',
+                realtime: false
+            });
         }
 
         async loadData() {
@@ -150,7 +157,10 @@ limitations under the License.
                 const response = await Layer8MAuth.get(`${this.options.endpoint}?body=${body}`);
                 if (response) {
                     this.data = response.list || [];
-                    this.totalItems = response.metadata?.keyCount?.counts?.Total || this.data.length;
+                    // Extract total count from metadata — see
+                    // Layer8QueryBuilder.resolvePageTotal for why this must
+                    // only be read on the first page.
+                    this.totalItems = Layer8QueryBuilder.resolvePageTotal(this.page === 0, response.metadata, this.totalItems);
                 } else {
                     this.data = [];
                     this.totalItems = 0;

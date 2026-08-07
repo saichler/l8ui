@@ -149,37 +149,14 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
 
         const refInputs = container.querySelectorAll('input.reference-input');
         refInputs.forEach(async input => {
-            let config = {};
-            try {
-                config = JSON.parse(input.dataset.refConfig || '{}');
-            } catch (e) {
-                console.warn('Invalid reference config for', input.name);
-                return;
-            }
-
-            if (!config.modelName || !config.idColumn || !config.displayColumn) {
-                console.warn('Reference input missing required config:', input.name);
-                return;
-            }
+            const registry = typeof Layer8DReferenceRegistry !== 'undefined' ? Layer8DReferenceRegistry : null;
+            const config = Layer8ReferenceConfigResolver.resolve(input, registry);
+            if (!config) return;
 
             if (!config.endpoint) {
                 config.endpoint = getEndpointForModel(config.modelName);
                 if (!config.endpoint) {
                     return;
-                }
-            }
-
-            // Get displayFormat from registry
-            const lookupModel = input.dataset.lookupModel || config.modelName;
-            if (lookupModel && typeof Layer8DReferenceRegistry !== 'undefined') {
-                const registryConfig = Layer8DReferenceRegistry[lookupModel];
-                if (registryConfig) {
-                    if (registryConfig.displayFormat && !config.displayFormat) {
-                        config.displayFormat = registryConfig.displayFormat;
-                    }
-                    if (registryConfig.selectColumns && !config.selectColumns) {
-                        config.selectColumns = registryConfig.selectColumns;
-                    }
                 }
             }
 
@@ -235,11 +212,11 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
             if (!fieldDef || !fieldDef.columns) return;
 
             function getRows() {
-                try { return JSON.parse(hiddenInput.value || '[]'); } catch (e) { return []; }
+                return Layer8InlineTableState.getRows(hiddenInput);
             }
 
             function setRows(rows) {
-                hiddenInput.value = JSON.stringify(rows);
+                Layer8InlineTableState.setRows(hiddenInput, rows);
                 rerenderTable(table, fieldDef, rows, isReadOnly);
             }
 

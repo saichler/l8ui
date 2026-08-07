@@ -121,13 +121,6 @@ limitations under the License.
         daysContainer.innerHTML = '';
 
         const firstDayOfWeek = options.firstDayOfWeek || 0;
-        const firstDayOfMonth = new Date(year, month, 1);
-        const lastDayOfMonth = new Date(year, month + 1, 0);
-        const daysInMonth = lastDayOfMonth.getDate();
-
-        // Calculate starting day
-        let startDay = firstDayOfMonth.getDay() - firstDayOfWeek;
-        if (startDay < 0) startDay += 7;
 
         // Get today's date
         const today = new Date();
@@ -141,55 +134,31 @@ limitations under the License.
             selectedDate = new Date(selectedTimestamp * 1000);
         }
 
-        // Previous month days
-        const prevMonth = month === 0 ? 11 : month - 1;
-        const prevMonthYear = month === 0 ? year - 1 : year;
-        const daysInPrevMonth = new Date(prevMonthYear, prevMonth + 1, 0).getDate();
+        // Minimize empty rows: use a 5-row (35-cell) grid when the month fits,
+        // otherwise fall back to a 6-row (42-cell) grid.
+        const firstDayOfMonth = new Date(year, month, 1);
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        let startDay = firstDayOfMonth.getDay() - firstDayOfWeek;
+        if (startDay < 0) startDay += 7;
+        const gridSize = startDay + daysInMonth <= 35 ? 35 : 42;
 
-        // Render previous month's trailing days
-        for (let i = startDay - 1; i >= 0; i--) {
-            const day = daysInPrevMonth - i;
-            const btn = internal.createDayButton(day, prevMonthYear, prevMonth, {
-                isOtherMonth: true,
-                isToday: false,
-                isSelected: false,
-                isDisabled: internal.isDateDisabled(new Date(prevMonthYear, prevMonth, day), options)
-            });
-            daysContainer.appendChild(btn);
-        }
+        const cells = Layer8DatepickerGrid.buildCalendarCells(year, month, firstDayOfWeek, gridSize);
 
-        // Render current month days
-        for (let day = 1; day <= daysInMonth; day++) {
-            const isToday = year === todayYear && month === todayMonth && day === todayDate;
-            const isSelected = selectedDate &&
+        cells.forEach(cell => {
+            const isToday = cell.inCurrentMonth && year === todayYear && month === todayMonth && cell.day === todayDate;
+            const isSelected = cell.inCurrentMonth && selectedDate &&
                 year === selectedDate.getFullYear() &&
                 month === selectedDate.getMonth() &&
-                day === selectedDate.getDate();
+                cell.day === selectedDate.getDate();
 
-            const btn = internal.createDayButton(day, year, month, {
-                isOtherMonth: false,
+            const btn = internal.createDayButton(cell.day, cell.year, cell.month, {
+                isOtherMonth: !cell.inCurrentMonth,
                 isToday,
                 isSelected,
-                isDisabled: internal.isDateDisabled(new Date(year, month, day), options)
+                isDisabled: internal.isDateDisabled(new Date(cell.year, cell.month, cell.day), options)
             });
             daysContainer.appendChild(btn);
-        }
-
-        // Fill remaining days from next month
-        const totalCells = startDay + daysInMonth;
-        const remainingCells = totalCells <= 35 ? 35 - totalCells : 42 - totalCells;
-        const nextMonth = month === 11 ? 0 : month + 1;
-        const nextMonthYear = month === 11 ? year + 1 : year;
-
-        for (let day = 1; day <= remainingCells; day++) {
-            const btn = internal.createDayButton(day, nextMonthYear, nextMonth, {
-                isOtherMonth: true,
-                isToday: false,
-                isSelected: false,
-                isDisabled: internal.isDateDisabled(new Date(nextMonthYear, nextMonth, day), options)
-            });
-            daysContainer.appendChild(btn);
-        }
+        });
 
         // Update selects
         picker.querySelector('.layer8d-datepicker-month-select').value = month;

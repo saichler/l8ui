@@ -22,10 +22,10 @@
 
     const DELIVERY_STATUS_CLASSES = {
         0: '',
-        1: 'status-warning',
-        2: 'status-success',
-        3: 'status-error',
-        4: 'status-warning'
+        1: 'layer8d-status-pending',
+        2: 'layer8d-status-active',
+        3: 'layer8d-status-terminated',
+        4: 'layer8d-status-pending'
     };
 
     const INTEGRATION_TYPE = Layer8EnumFactory.create([

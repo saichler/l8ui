@@ -153,13 +153,7 @@ limitations under the License.
     // ========================================
     // PERIOD FIELD
     // ========================================
-
-    const PERIOD_MONTHS = [
-        [1, 'January'], [2, 'February'], [3, 'March'], [4, 'April'],
-        [5, 'May'], [6, 'June'], [7, 'July'], [8, 'August'],
-        [9, 'September'], [10, 'October'], [11, 'November'], [12, 'December']
-    ];
-    const PERIOD_QUARTERS = [[13, 'Q1'], [14, 'Q2'], [15, 'Q3'], [16, 'Q4']];
+    // Period data + option-building logic lives in shared/layer8-period-selector.js.
 
     F.renderPeriodField = function(config, value, readonly) {
         const periodObj = (typeof value === 'object' && value !== null) ? value : {};
@@ -170,7 +164,7 @@ limitations under the License.
         const reqAttr = config.required ? ' required' : '';
 
         // Period Type
-        const typeOptions = [['', '-- Select --'], ['1', 'Yearly'], ['2', 'Quarterly'], ['3', 'Monthly']];
+        const typeOptions = Layer8PeriodSelector.PERIOD_TYPE_OPTIONS;
         let typeHtml = `<select name="${config.key}.__periodType" class="mobile-form-select period-type-select" onchange="Layer8MFormFields.onPeriodTypeChange(this)"${disabled}${reqAttr}>`;
         for (const [val, lbl] of typeOptions) {
             typeHtml += `<option value="${val}"${String(periodType) === val ? ' selected' : ''}>${lbl}</option>`;
@@ -186,14 +180,8 @@ limitations under the License.
 
         // Period Value
         const hidden = (Number(periodType) === 1);
-        let options = [];
-        if (Number(periodType) === 2) options = PERIOD_QUARTERS;
-        else if (Number(periodType) === 3) options = PERIOD_MONTHS;
         let valHtml = `<select name="${config.key}.__periodValue" class="mobile-form-select period-value-select"${hidden ? ' style="display:none"' : ''}${disabled}>`;
-        valHtml += '<option value="">--</option>';
-        for (const [val, lbl] of options) {
-            valHtml += `<option value="${val}"${Number(periodValue) === val ? ' selected' : ''}>${lbl}</option>`;
-        }
+        valHtml += Layer8PeriodSelector.buildValueOptionsHtml(periodType, periodValue);
         valHtml += '</select>';
 
         return `
@@ -211,15 +199,7 @@ limitations under the License.
         if (!valueSelect) return;
 
         const periodType = Number(selectEl.value);
-        let options = [];
-        if (periodType === 2) options = PERIOD_QUARTERS;
-        else if (periodType === 3) options = PERIOD_MONTHS;
-
-        let html = '<option value="">--</option>';
-        for (const [val, lbl] of options) {
-            html += `<option value="${val}">${lbl}</option>`;
-        }
-        valueSelect.innerHTML = html;
+        valueSelect.innerHTML = Layer8PeriodSelector.buildValueOptionsHtml(periodType, null);
         valueSelect.style.display = (periodType === 1 || periodType === 0) ? 'none' : '';
     };
 

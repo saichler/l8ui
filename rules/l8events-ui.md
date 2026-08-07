@@ -20,6 +20,9 @@ logic that was deliberately avoided when this component was added.
 ## Prerequisites
 
 Load after these shared components (available on both desktop and mobile pages):
+- `Layer8DUtils` — `escapeHtml` (used by `l8events-alarm-detail.js` to escape alarm name/source,
+  state-change actor/reason, and note author/text before injecting them via `innerHTML` — all of
+  these are free-text fields a user can type, so this is a real XSS guard, not defensive styling)
 - `Layer8DRenderers` — `createStatusRenderer`, `renderEnum`
 - `Layer8EnumFactory` — `create()`
 - `Layer8ColumnFactory` — `col`, `status`, `enum`, `date`, `number`
@@ -91,6 +94,17 @@ L8EventsArchiveViewer.getArchivedEventColumns()   // eventType primary, severity
 ```
 Read-only column sets for archived alarm/event records (includes `archivedAt`, `archivedBy`,
 `archiveReason` where applicable).
+
+**`archivedAt`/`archivedBy`/`archiveReason` are NOT fields on `AlarmRecord`/`EventRecord`.** They
+belong to the separate `l8events.ArchiveInfo` message — `go/archive/archive.go`'s `Store` interface
+persists them as two distinct arguments (`SaveArchivedAlarm(alarm *AlarmRecord, info *ArchiveInfo)`),
+not one combined type. There is no protobuf message that embeds both. The consumer's own
+persistence/query layer for archived records MUST flatten `AlarmRecord`/`EventRecord` fields and
+`ArchiveInfo` fields into a single flat row (e.g. its own `ArchivedAlarm`/`ArchivedEvent` ORM type
+or a merged query projection) before feeding data to a table built from these columns. Skipping
+this produces the exact silent-empty-column failure described in `js-protobuf-field-names.md` —
+the column keys are correct, but nothing in the raw `AlarmRecord`/`EventRecord` JSON populates
+`archivedAt`/`archivedBy`/`archiveReason`, so those three columns render blank with no error.
 
 ## `window.L8EventsMaintenance`
 

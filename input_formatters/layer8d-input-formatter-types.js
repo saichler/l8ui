@@ -44,7 +44,7 @@ limitations under the License.
                 if (cents === null || cents === undefined || cents === '') return '';
                 const { symbol = this.symbol, decimals = this.decimals } = options;
 
-                const dollars = Number(cents) / Math.pow(10, decimals);
+                const dollars = Layer8FieldParsers.centsToDollars(cents, decimals);
                 if (isNaN(dollars)) return '';
 
                 const formatted = utils.formatWithCommas(dollars, decimals);
@@ -56,7 +56,7 @@ limitations under the License.
                 const cleaned = formatted.replace(/[^0-9.\-]/g, '');
                 const num = parseFloat(cleaned);
                 if (isNaN(num)) return null;
-                return Math.round(num * Math.pow(10, this.decimals));
+                return Layer8FieldParsers.dollarsToCents(num, this.decimals);
             },
 
             validate(cents, options = {}) {
@@ -194,10 +194,7 @@ limitations under the License.
                 if (raw === null || raw === undefined || raw === '') return '';
 
                 if (typeof raw === 'number' || !isNaN(raw)) {
-                    const totalMinutes = parseInt(raw, 10);
-                    const hours = Math.floor(totalMinutes / 60);
-                    const minutes = totalMinutes % 60;
-                    return `${hours}:${String(minutes).padStart(2, '0')}`;
+                    return Layer8FieldParsers.minutesToHoursLabel(raw);
                 }
 
                 return raw;

@@ -94,30 +94,27 @@ limitations under the License.
             const year = this.viewingMonth.getFullYear();
             const month = this.viewingMonth.getMonth();
 
-            const firstDay = new Date(year, month, 1);
-            const lastDay = new Date(year, month + 1, 0);
-            const startPadding = firstDay.getDay();
-            const totalDays = lastDay.getDate();
-
             const today = new Date();
             today.setHours(0, 0, 0, 0);
 
             const selected = new Date(this.selectedDate);
             selected.setHours(0, 0, 0, 0);
 
+            // Fixed 6-row (42-cell) grid, always Sunday-start.
+            const cells = Layer8DatepickerGrid.buildCalendarCells(year, month, 0, 42);
+
             let html = '';
+            cells.forEach(cell => {
+                if (!cell.inCurrentMonth) {
+                    // Preserves the original (year-month) data-date values for
+                    // padding cells: prev-month cells kept the viewed month's
+                    // own number, next-month cells used month+2 (1-indexed + 1).
+                    const dataMonth = cell.adjacency === 'prev' ? month : month + 2;
+                    html += `<button type="button" class="datepicker-day other-month" data-date="${year}-${dataMonth}-${cell.day}">${cell.day}</button>`;
+                    return;
+                }
 
-            // Previous month padding
-            const prevMonth = new Date(year, month, 0);
-            const prevDays = prevMonth.getDate();
-            for (let i = startPadding - 1; i >= 0; i--) {
-                const day = prevDays - i;
-                html += `<button type="button" class="datepicker-day other-month" data-date="${year}-${month}-${day}">${day}</button>`;
-            }
-
-            // Current month days
-            for (let day = 1; day <= totalDays; day++) {
-                const date = new Date(year, month, day);
+                const date = new Date(cell.year, cell.month, cell.day);
                 date.setHours(0, 0, 0, 0);
 
                 const isToday = date.getTime() === today.getTime();
@@ -129,31 +126,15 @@ limitations under the License.
                 if (isSelected) classes.push('selected');
                 if (isDisabled) classes.push('disabled');
 
-                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                html += `<button type="button" class="${classes.join(' ')}" data-date="${dateStr}" ${isDisabled ? 'disabled' : ''}>${day}</button>`;
-            }
-
-            // Next month padding
-            const remaining = 42 - (startPadding + totalDays);
-            for (let day = 1; day <= remaining; day++) {
-                html += `<button type="button" class="datepicker-day other-month" data-date="${year}-${month + 2}-${day}">${day}</button>`;
-            }
+                const dateStr = `${cell.year}-${String(cell.month + 1).padStart(2, '0')}-${String(cell.day).padStart(2, '0')}`;
+                html += `<button type="button" class="${classes.join(' ')}" data-date="${dateStr}" ${isDisabled ? 'disabled' : ''}>${cell.day}</button>`;
+            });
 
             return html;
         }
 
         isDateDisabled(date) {
-            if (this.options.minDate) {
-                const min = new Date(this.options.minDate * 1000);
-                min.setHours(0, 0, 0, 0);
-                if (date < min) return true;
-            }
-            if (this.options.maxDate) {
-                const max = new Date(this.options.maxDate * 1000);
-                max.setHours(0, 0, 0, 0);
-                if (date > max) return true;
-            }
-            return false;
+            return Layer8DatepickerGrid.isDateDisabled(date, this.options.minDate, this.options.maxDate);
         }
 
         setupListeners() {

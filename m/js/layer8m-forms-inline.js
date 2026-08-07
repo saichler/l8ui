@@ -41,7 +41,7 @@ limitations under the License.
             if (!fieldDef || !fieldDef.columns) return;
 
             function getRows() {
-                try { return JSON.parse(hiddenInput.value || '[]'); } catch (e) { return []; }
+                return Layer8InlineTableState.getRows(hiddenInput);
             }
 
             table.addEventListener('click', (e) => {
@@ -56,7 +56,7 @@ limitations under the License.
                         M._openMobileRowEditor(fieldDef, -1, {}, (newRow) => {
                             const rows = getRows();
                             rows.push(newRow);
-                            hiddenInput.value = JSON.stringify(rows);
+                            Layer8InlineTableState.setRows(hiddenInput, rows);
                             M._rerenderMobileTable(table, fieldDef, rows, false);
                         });
                     } else if (action === 'edit-row') {
@@ -65,7 +65,7 @@ limitations under the License.
                         M._openMobileRowEditor(fieldDef, rowIndex, rows[rowIndex] || {}, (updated) => {
                             const rows = getRows();
                             rows[rowIndex] = updated;
-                            hiddenInput.value = JSON.stringify(rows);
+                            Layer8InlineTableState.setRows(hiddenInput, rows);
                             M._rerenderMobileTable(table, fieldDef, rows, false);
                         });
                     } else if (action === 'delete-row') {
@@ -73,7 +73,7 @@ limitations under the License.
                         if (confirm('Delete this row?')) {
                             const rows = getRows();
                             rows.splice(rowIndex, 1);
-                            hiddenInput.value = JSON.stringify(rows);
+                            Layer8InlineTableState.setRows(hiddenInput, rows);
                             M._rerenderMobileTable(table, fieldDef, rows, false);
                         }
                     }
