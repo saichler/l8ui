@@ -37,7 +37,7 @@ limitations under the License.
         if (configLoaded) return;
 
         try {
-            const response = await fetch('login.json');
+            const response = await fetch('/login.json');
             if (!response.ok) {
                 console.error('Layer8DConfig: failed to load login.json (HTTP ' + response.status + '). API calls will fail.');
                 configLoaded = true;
