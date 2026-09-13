@@ -167,6 +167,14 @@ function handleLoginSuccess(result, username, rememberMe) {
         sessionStorage.setItem('userPortal', result.portal);
     }
 
+    // Store the user's tenant/customer scoping id (L8User.customer,
+    // AuthToken.customer) so a multi-tenant-scoped app can read its own
+    // trusted customerId client-side without a separate lookup. Empty for
+    // users not scoped to a single customer.
+    if (result.customer) {
+        sessionStorage.setItem('userCustomer', result.customer);
+    }
+
     // Handle remember me (persists username across sessions for auto-fill)
     if (rememberMe) {
         localStorage.setItem('rememberedUser', username);
