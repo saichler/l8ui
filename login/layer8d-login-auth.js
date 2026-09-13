@@ -99,6 +99,7 @@ async function authenticate(username, password) {
         success: true,
         token: data.token,
         portal: data.portal || '',
+        customer: data.customer || '',
         mustChangePassword: !!data.mustChangePassword
     };
 }
