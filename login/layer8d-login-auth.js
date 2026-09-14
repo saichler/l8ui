@@ -170,10 +170,16 @@ function handleLoginSuccess(result, username, rememberMe) {
 
     // Store the user's tenant/customer scoping id (L8User.customer,
     // AuthToken.customer) so a multi-tenant-scoped app can read its own
-    // trusted customerId client-side without a separate lookup. Empty for
-    // users not scoped to a single customer.
+    // trusted customerId client-side without a separate lookup. Must be
+    // explicitly CLEARED (not just left alone) when this login's response
+    // has none -- verified as a real bug: sessionStorage persists across
+    // logins within the same browser tab, so an unscoped login (e.g.
+    // opsadmin) after a previously scoped one kept the OLD customer value
+    // and silently skipped any "no customer" prompt a consuming app shows.
     if (result.customer) {
         sessionStorage.setItem('userCustomer', result.customer);
+    } else {
+        sessionStorage.removeItem('userCustomer');
     }
 
     // Handle remember me (persists username across sessions for auto-fill)
