@@ -115,7 +115,16 @@ limitations under the License.
         };
 
         const switcherKey = `${moduleKey}-${service.key}`;
-        const allViewTypes = service.supportedViews ? service.supportedViews.slice() : ['table'];
+        // service.supportedViews was never actually set anywhere -- the
+        // module-config-factory's svc() helper stores the same data as
+        // service.alternateViews (its 8th positional arg), so any service
+        // registered with an alternate view (e.g. secscan-config.js's
+        // 'groups' -> ['chart']) silently never got a working view
+        // switcher. alternateViews holds only the EXTRA view types, not
+        // the base one, so prepend viewType to it.
+        const allViewTypes = service.supportedViews
+            ? service.supportedViews.slice()
+            : (service.alternateViews ? [viewType].concat(service.alternateViews) : [viewType]);
         const hasDate = columns.some(c => c.type === 'date');
         const hasMoney = columns.some(c => c.type === 'money');
         if (hasDate && hasMoney && allViewTypes.indexOf('chart') === -1) {
