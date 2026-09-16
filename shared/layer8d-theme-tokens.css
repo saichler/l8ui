@@ -24,6 +24,13 @@ limitations under the License.
  *   --layer8d-primary          Accent color (buttons, links, focus)
  *   --layer8d-primary-dark     Accent hover/active state
  *   --layer8d-primary-light    Accent subtle backgrounds
+ *   --layer8d-on-primary       Text/icon color for content placed on a
+ *                              --layer8d-primary background (most themes'
+ *                              primary is dark/saturated enough for white
+ *                              text, but a theme is free to make primary a
+ *                              light color -- e.g. noir's near-white
+ *                              button -- so this must not be assumed to
+ *                              always be white)
  *   --layer8d-bg-white         Page/card background
  *   --layer8d-bg-light         Secondary background
  *   --layer8d-bg-input         Input field background
@@ -84,6 +91,7 @@ limitations under the License.
     --layer8d-primary: #0ea5e9;
     --layer8d-primary-dark: #0284c7;
     --layer8d-primary-light: #7dd3fc;
+    --layer8d-on-primary: #ffffff;
 
     /* Text Colors */
     --layer8d-text-dark: #2d3748;
@@ -603,6 +611,7 @@ limitations under the License.
     --layer8d-primary: #f2f2f6;
     --layer8d-primary-dark: #cfcfd6;
     --layer8d-primary-light: #b7b7c0;
+    --layer8d-on-primary: #0b0b0d;
 
     /* Backgrounds — near-black neutrals */
     --layer8d-bg-white: #141417;

@@ -115,7 +115,7 @@ limitations under the License.
 
 .mobile-table-pagination-btn.active {
     background: var(--layer8d-primary);
-    color: white;
+    color: var(--layer8d-on-primary, white);
 }
 
 .mobile-table-pagination-btn.disabled,
@@ -281,7 +281,7 @@ limitations under the License.
 .mobile-table-error-retry {
     padding: var(--spacing-sm) var(--spacing-lg);
     background: var(--layer8d-primary);
-    color: white;
+    color: var(--layer8d-on-primary, white);
     border: none;
     border-radius: var(--radius-md);
     font-weight: 600;

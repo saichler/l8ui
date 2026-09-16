@@ -66,7 +66,7 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
 .l8agent-msg-user {
     align-self: flex-end;
     background: var(--layer8d-primary);
-    color: #fff;
+    color: var(--layer8d-on-primary, #fff);
 }
 
 .l8agent-msg-user .l8agent-msg-role {

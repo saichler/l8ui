@@ -27,7 +27,7 @@ Layer 8 Ecosystem - Tree Grid Styles
 
 .layer8d-tree-grid-btn:first-child {
     background: var(--layer8d-primary);
-    color: #fff;
+    color: var(--layer8d-on-primary, #fff);
     border-color: var(--layer8d-primary);
 }
 

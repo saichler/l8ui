@@ -234,7 +234,7 @@ limitations under the License.
 
 .layer8d-btn-primary {
     background: var(--layer8d-primary);
-    color: white;
+    color: var(--layer8d-on-primary, white);
     box-shadow: 0 2px 4px rgba(14, 165, 233, 0.2);
 }
 

@@ -57,7 +57,7 @@ Layer 8 Ecosystem - Chart Component Styles
 
 .layer8d-chart-type-btn.active {
     background: var(--layer8d-primary);
-    color: #ffffff;
+    color: var(--layer8d-on-primary, #ffffff);
     border-color: var(--layer8d-primary);
 }
 

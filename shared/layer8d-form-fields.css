@@ -141,7 +141,7 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
     align-items: center;
     gap: 4px;
     background: var(--layer8d-primary, #4299e1);
-    color: #fff;
+    color: var(--layer8d-on-primary, #fff);
     padding: 2px 8px;
     border-radius: 12px;
     font-size: 12px;

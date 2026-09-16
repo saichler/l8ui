@@ -289,7 +289,7 @@ limitations under the License.
 .layer8d-refpicker-page-btn.active {
     background: var(--layer8d-primary, #0ea5e9);
     border-color: var(--layer8d-primary, #0ea5e9);
-    color: #fff;
+    color: var(--layer8d-on-primary, #fff);
 }
 
 .layer8d-refpicker-page-ellipsis {
@@ -335,7 +335,7 @@ limitations under the License.
     border: none;
     border-radius: 6px;
     background: var(--layer8d-primary, #0ea5e9);
-    color: #fff;
+    color: var(--layer8d-on-primary, #fff);
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;

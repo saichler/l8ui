@@ -185,7 +185,7 @@ limitations under the License.
 
 .mobile-popup-btn-save {
     background: var(--layer8d-primary);
-    color: white;
+    color: var(--layer8d-on-primary, white);
 }
 
 .mobile-popup-btn-danger {

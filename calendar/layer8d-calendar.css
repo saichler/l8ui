@@ -68,7 +68,7 @@ Layer 8 Ecosystem - Calendar View Styles
 
 .layer8d-calendar-btn.active {
     background: var(--layer8d-primary);
-    color: #fff;
+    color: var(--layer8d-on-primary, #fff);
     border-color: var(--layer8d-primary);
 }
 
@@ -121,7 +121,7 @@ Layer 8 Ecosystem - Calendar View Styles
 
 .layer8d-calendar-day-num.today {
     background: var(--layer8d-primary);
-    color: #fff;
+    color: var(--layer8d-on-primary, #fff);
     border-radius: 50%;
     width: 24px;
     height: 24px;
@@ -201,7 +201,7 @@ Layer 8 Ecosystem - Calendar View Styles
 
 .layer8d-calendar-week-date.today {
     background: var(--layer8d-primary);
-    color: #fff;
+    color: var(--layer8d-on-primary, #fff);
     border-radius: 50%;
     width: 28px;
     height: 28px;

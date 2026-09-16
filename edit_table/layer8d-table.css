@@ -112,7 +112,7 @@ limitations under the License.
 
 .l8-page-btn:hover:not(:disabled) {
     background: var(--layer8d-primary);
-    color: white;
+    color: var(--layer8d-on-primary, white);
     border-color: var(--layer8d-primary);
 }
 

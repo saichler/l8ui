@@ -200,13 +200,13 @@ limitations under the License.
 
 .layer8d-datepicker-day.selected {
     background: var(--layer8d-primary, #0ea5e9);
-    color: #fff;
+    color: var(--layer8d-on-primary, #fff);
     font-weight: 600;
 }
 
 .layer8d-datepicker-day.selected.today {
     background: var(--layer8d-primary, #0ea5e9);
-    color: #fff;
+    color: var(--layer8d-on-primary, #fff);
 }
 
 .layer8d-datepicker-day.disabled {
@@ -239,7 +239,7 @@ limitations under the License.
 
 .layer8d-datepicker-today-btn:hover {
     background: var(--layer8d-primary, #0ea5e9);
-    color: #fff;
+    color: var(--layer8d-on-primary, #fff);
 }
 
 .layer8d-datepicker-clear-btn {

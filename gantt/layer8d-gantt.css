@@ -27,7 +27,7 @@ Layer 8 Ecosystem - Gantt Chart Styles
 
 .layer8d-gantt-btn.active {
     background: var(--layer8d-primary);
-    color: #fff;
+    color: var(--layer8d-on-primary, #fff);
     border-color: var(--layer8d-primary);
 }
 

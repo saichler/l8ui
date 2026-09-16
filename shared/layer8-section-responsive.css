@@ -126,7 +126,7 @@ limitations under the License.
     .hcm-subnav-item.active {
         border-left: none;
         background: var(--layer8d-primary);
-        color: white;
+        color: var(--layer8d-on-primary, white);
     }
 
     /* Service Content */

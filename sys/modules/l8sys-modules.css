@@ -150,7 +150,7 @@
     font-weight: 600;
     cursor: pointer;
     background: var(--layer8d-primary);
-    color: white;
+    color: var(--layer8d-on-primary, white);
     transition: all 0.2s;
 }
 
