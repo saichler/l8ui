@@ -143,6 +143,13 @@ limitations under the License.
 .l8-table {
     width: 100%;
     border-collapse: collapse;
+    /* Fixed layout is what makes a long cell value truncate with an
+       ellipsis instead of growing its column (and wrapping onto a
+       second line) -- without it, table-layout:auto just expands the
+       column to fit the longest value. Columns with no explicit width
+       (th[data-column="..."] { width: ...% }, set per-table by the
+       project) split the remaining space evenly. */
+    table-layout: fixed;
 }
 
 .l8-table th,
@@ -150,6 +157,9 @@ limitations under the License.
     padding: 12px 16px;
     text-align: left;
     border-bottom: 1px solid var(--layer8d-border, #ddd7ce);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .l8-table th {
@@ -178,11 +188,24 @@ limitations under the License.
     justify-content: space-between;
     align-items: center;
     gap: 8px;
+    min-width: 0;
+}
+
+/* The label span needs its own overflow/ellipsis (not just the th's) --
+   flex children don't shrink below their content size, and text-overflow
+   only renders on the element that directly contains the overflowing
+   text, not a flex ancestor two levels up. */
+.l8-table-header-content span:first-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
 }
 
 .l8-sort-indicator {
     opacity: 0.5;
     font-size: 10px;
+    flex-shrink: 0;
 }
 
 /* Header row - Sticky */

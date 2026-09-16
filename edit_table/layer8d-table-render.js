@@ -137,7 +137,10 @@ Layer8DTable.prototype.renderHeaders = function() {
                 : '⇅';
             sortIndicator = `<span class="l8-sort-indicator">${icon}</span>`;
         }
-        return `<th class="${sortableClass}" data-column="${col.key}">
+        // Same ellipsis truncation as cells (narrow columns from a wide
+        // neighbor, e.g. a project-widened Name column, can truncate a
+        // header label too) -- title gives the full label back on hover.
+        return `<th class="${sortableClass}" data-column="${col.key}" title="${Layer8DUtils.escapeAttr(col.label)}">
             <div class="l8-table-header-content">
                 <span>${Layer8DUtils.escapeHtml(col.label)}</span>
                 ${sortIndicator}
@@ -225,15 +228,24 @@ Layer8DTable.prototype.renderBody = function(data) {
 Layer8DTable.prototype.renderRow = function(item, index) {
     let cells = this.columns.map(col => {
         let value;
+        let rawText;
         if (col.render) {
             value = col.render(item, index);
+            // col.render can return arbitrary markup (badges, tags, links)
+            // -- strip tags for the tooltip so it shows plain text, not markup.
+            rawText = value.replace(/<[^>]*>/g, '');
         } else if (col.key) {
-            value = this.getNestedValue(item, col.key);
-            value = Layer8DUtils.escapeHtml(value);
+            rawText = this.getNestedValue(item, col.key);
+            value = Layer8DUtils.escapeHtml(rawText);
         } else {
             value = '';
+            rawText = '';
         }
-        return `<td>${value}</td>`;
+        // Cells truncate with an ellipsis (.l8-table td, table-layout:fixed)
+        // rather than wrapping to a second line -- title gives the full
+        // value back as a native hover tooltip.
+        const titleAttr = rawText ? ` title="${Layer8DUtils.escapeAttr(rawText)}"` : '';
+        return `<td${titleAttr}>${value}</td>`;
     }).join('');
 
     if (this.showActions && (this.onEdit || this.onDelete || this.onToggleState)) {

@@ -33,7 +33,10 @@ limitations under the License.
     position: relative;
     width: calc(100% + 14px);
     margin: -7px -7px 20px -7px;
-    height: 120px;
+    /* Reduced 20% (was 120px) per explicit user request -- this hero
+       banner (icon + title + subtitle) was taking up too much vertical
+       space on every section page. */
+    height: 96px;
     background: linear-gradient(135deg, var(--layer8d-header-grad-start) 0%, var(--layer8d-header-grad-mid) 55%, var(--layer8d-header-grad-end) 100%);
     border-radius: 16px 16px 0 0;
     overflow: hidden;
@@ -79,15 +82,25 @@ limitations under the License.
     display: flex;
     align-items: center;
     gap: 20px;
-    padding: 30px;
+    padding: 24px;
     pointer-events: auto;
 }
 
 .l8-icon {
     flex-shrink: 0;
-    font-size: 48px;
+    font-size: 38px;
     filter: none;
     animation: l8-icon-float 3s ease-in-out infinite;
+    color: var(--layer8d-primary);
+}
+
+/* Sizing for a real <svg> icon (theme-aware, stroke="currentColor") passed
+   as config.icon instead of an emoji glyph -- font-size above only sizes
+   emoji, so this is additive and harmless for any project still using
+   emoji icons through this same mechanism. */
+.l8-icon svg {
+    width: 38px;
+    height: 38px;
 }
 
 @keyframes l8-icon-float {
@@ -100,7 +113,7 @@ limitations under the License.
 }
 
 .l8-title {
-    font-size: 36px;
+    font-size: 29px;
     color: var(--layer8d-text-dark);
     font-weight: 700;
     margin: 0;
@@ -112,7 +125,7 @@ limitations under the License.
 }
 
 .l8-subtitle {
-    font-size: 12px;
+    font-size: 10px;
     color: var(--layer8d-text-medium);
     font-weight: 600;
     text-transform: uppercase;
@@ -168,6 +181,12 @@ limitations under the License.
 
 .l8-module-tab .tab-icon {
     font-size: 16px;
+    display: inline-flex;
+}
+
+.l8-module-tab .tab-icon svg {
+    width: 16px;
+    height: 16px;
 }
 
 .l8-module-tab .tab-label {
@@ -257,6 +276,13 @@ limitations under the License.
     font-size: 16px;
     width: 20px;
     text-align: center;
+    display: inline-flex;
+    justify-content: center;
+}
+
+.l8-subnav-item .subnav-icon svg {
+    width: 16px;
+    height: 16px;
 }
 
 .l8-subnav-item .subnav-label {
