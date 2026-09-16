@@ -332,7 +332,12 @@ limitations under the License.
             if (!this.container) return;
             const rect = this.container.getBoundingClientRect();
             const w = rect.width || CHART_DEFAULTS.width;
-            const h = Math.max(300, Math.min(w * 0.6, CHART_DEFAULTS.height));
+            // viewConfig.height lets a caller fix the chart's height
+            // independent of its width (the default formula ties them
+            // together, which forces a tall chart whenever it's asked to
+            // span a wide container). Existing callers that never set
+            // this keep exactly the previous width-derived behavior.
+            const h = this.viewConfig.height || Math.max(300, Math.min(w * 0.6, CHART_DEFAULTS.height));
 
             this.container.innerHTML = '';
             if (this.title) {

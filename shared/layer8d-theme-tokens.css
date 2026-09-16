@@ -593,6 +593,83 @@ limitations under the License.
     --layer8d-gray-light-text: #9ca3af;
 }
 
+/* ============================================ */
+/* NOIR MONOCHROME THEME                        */
+/* ============================================ */
+
+[data-theme="noir"] {
+    /* Primary Colors — near-white on near-black, no hue; the only real
+       color in the whole palette is the red status accent below. */
+    --layer8d-primary: #f2f2f6;
+    --layer8d-primary-dark: #cfcfd6;
+    --layer8d-primary-light: #b7b7c0;
+
+    /* Backgrounds — near-black neutrals */
+    --layer8d-bg-white: #141417;
+    --layer8d-bg-light: #0b0b0d;
+    --layer8d-bg-input: #1b1b1f;
+    --layer8d-bg-card: #141417;
+    --layer8d-bg-hover: #1b1b1f;
+
+    /* Text — off-white ink and muted grays */
+    --layer8d-text-dark: #ededf0;
+    --layer8d-text-label: #f2f2f6;
+    --layer8d-text-medium: #b7b7c0;
+    --layer8d-text-muted: #8a8a93;
+    --layer8d-text-light: #62626b;
+
+    /* Borders — cool dark grays */
+    --layer8d-border: #2a2a30;
+    --layer8d-border-dark: #4a4a54;
+
+    /* Shadows */
+    --layer8d-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+    --layer8d-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.55);
+    --layer8d-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.55);
+
+    /* Focus Ring — white glow, not colored */
+    --layer8d-focus-ring: 0 0 0 3px rgba(242, 242, 246, 0.25);
+
+    /* Status Colors — Core: kept minimally legible (functional signals
+       still need to differ from each other and from body text), but
+       desaturated toward gray to stay in the monochrome family. Red is
+       the one real accent color, matching the reference palette. */
+    --layer8d-success: #7a9b7f;
+    --layer8d-success-bg: rgba(122, 155, 127, 0.15);
+    --layer8d-warning: #b39b6a;
+    --layer8d-warning-bg: rgba(179, 155, 106, 0.15);
+    --layer8d-error: #e06a6a;
+    --layer8d-error-bg: rgba(224, 106, 106, 0.15);
+    --layer8d-info: #8a8fa8;
+    --layer8d-info-bg: rgba(138, 143, 168, 0.12);
+
+    /* Section Header — subtle cool-gray gradient */
+    --layer8d-header-grad-start: #1b1b1f;
+    --layer8d-header-grad-mid: #16161a;
+    --layer8d-header-grad-end: #0b0b0d;
+    --layer8d-header-shadow: rgba(0, 0, 0, 0.5);
+
+    /* Semantic Status Colors */
+    --layer8d-green-light-bg: rgba(122, 155, 127, 0.2);
+    --layer8d-green-light-text: #a8c7ac;
+    --layer8d-green-bg: rgba(122, 155, 127, 0.15);
+    --layer8d-green-text: #9bbb9f;
+    --layer8d-red-bg: rgba(224, 106, 106, 0.2);
+    --layer8d-red-text: #eb9a9a;
+    --layer8d-yellow-bg: rgba(179, 155, 106, 0.2);
+    --layer8d-yellow-text: #d3bd8e;
+    --layer8d-orange-bg: rgba(224, 145, 106, 0.2);
+    --layer8d-orange-text: #e0ac8e;
+    --layer8d-blue-bg: rgba(138, 143, 168, 0.15);
+    --layer8d-blue-text: #b3b7c9;
+    --layer8d-indigo-bg: rgba(151, 143, 199, 0.15);
+    --layer8d-indigo-text: #c3bdda;
+    --layer8d-gray-bg: rgba(138, 138, 147, 0.2);
+    --layer8d-gray-text: #cacace;
+    --layer8d-gray-light-bg: rgba(138, 138, 147, 0.1);
+    --layer8d-gray-light-text: #a8a8b0;
+}
+
 /*
  * Theme Token Aliases
  *
