@@ -38,7 +38,15 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
                 columns: columns,
                 pageSize: 15,
                 primaryKey: primaryKey,
-                baseWhereClause: serviceConfig.baseWhereClause || null,
+                // serviceConfig.baseWhereClause can be a plain string or a
+                // function -- a function lets a project compute the filter
+                // at load time (e.g. from a value only known at runtime,
+                // like a post-login customer-picker selection) rather than
+                // when the static nav-config object is built at script-load
+                // time. Mirrors desktop's layer8d-service-registry.js.
+                baseWhereClause: (typeof serviceConfig.baseWhereClause === 'function'
+                    ? serviceConfig.baseWhereClause()
+                    : serviceConfig.baseWhereClause) || null,
                 viewConfig: serviceConfig.viewConfig || {},
                 getItemId: (item) => item[primaryKey],
                 realtime: serviceConfig.realtime || false

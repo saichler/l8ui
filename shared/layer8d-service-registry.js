@@ -97,6 +97,17 @@ limitations under the License.
         const canUpdate = !isReadOnly && (!hasPermissions || perms.indexOf(2) !== -1);  // PUT
         const canDelete = !isReadOnly && (!hasPermissions || perms.indexOf(4) !== -1);  // DELETE
 
+        // service.baseWhereClause can be a plain string (fixed filter) or a
+        // function (evaluated fresh every time this table initializes --
+        // e.g. re-navigating to a section after the customer picker
+        // resolved) -- a static string can't express "whatever the
+        // currently-selected customer is" since that's only known at
+        // runtime, well after this project's static module config
+        // (secscan-config.js) is built at script-load time.
+        const baseWhereClause = typeof service.baseWhereClause === 'function'
+            ? service.baseWhereClause()
+            : (service.baseWhereClause || null);
+
         const viewOptions = {
             containerId: containerId,
             endpoint: Layer8DConfig.resolveEndpoint(service.endpoint),
@@ -104,6 +115,7 @@ limitations under the License.
             columns: columns,
             primaryKey: primaryKey,
             pageSize: 10,
+            baseWhereClause: baseWhereClause,
             onAdd: canCreate ? () => moduleNS._openAddModal(service) : null,
             onEdit: canUpdate ? (id) => moduleNS._openEditModal(service, id) : null,
             onDelete: canDelete ? (id) => moduleNS._confirmDeleteItem(service, id) : null,
