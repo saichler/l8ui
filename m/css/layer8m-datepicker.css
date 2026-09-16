@@ -112,7 +112,7 @@ limitations under the License.
 
 .datepicker-day.selected {
     background: var(--primary);
-    color: white;
+    color: var(--layer8d-on-primary, white);
 }
 
 .datepicker-day.selected.today {
@@ -153,7 +153,7 @@ limitations under the License.
 
 .datepicker-action-btn.today-btn {
     background: var(--primary);
-    color: white;
+    color: var(--layer8d-on-primary, white);
 }
 
 .datepicker-action-btn.today-btn:active {

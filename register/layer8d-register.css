@@ -194,7 +194,7 @@ body {
 
 .layer8d-btn-refresh {
     background: linear-gradient(135deg, var(--noc-cyan) 0%, var(--noc-cyan-dark) 100%);
-    color: white;
+    color: var(--layer8d-on-primary, white);
     border: none;
     border-radius: 8px;
     width: 38px;
@@ -228,7 +228,7 @@ body {
     transition: all 0.3s ease;
     font-family: 'Figtree', sans-serif;
     background: linear-gradient(135deg, var(--noc-cyan) 0%, var(--noc-cyan-dark) 100%);
-    color: white;
+    color: var(--layer8d-on-primary, white);
     box-shadow: 0 4px 14px rgba(14, 165, 233, 0.3);
 }
 

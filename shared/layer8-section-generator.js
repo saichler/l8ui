@@ -215,24 +215,24 @@ ${this._generateInitScript(config)}
             <svg class="l8-illustration" viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                     <linearGradient id="${gradientId}" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style="stop-color:#0ea5e9;stop-opacity:0.4" />
-                        <stop offset="100%" style="stop-color:#0284c7;stop-opacity:0.2" />
+                        <stop offset="0%" style="stop-color:var(--layer8d-primary);stop-opacity:0.4" />
+                        <stop offset="100%" style="stop-color:var(--layer8d-primary-dark);stop-opacity:0.2" />
                     </linearGradient>
                 </defs>
                 <g opacity="0.1">
-                    <line x1="0" y1="30" x2="1200" y2="30" stroke="#0ea5e9" stroke-width="0.5"/>
-                    <line x1="0" y1="60" x2="1200" y2="60" stroke="#0ea5e9" stroke-width="0.5"/>
-                    <line x1="0" y1="90" x2="1200" y2="90" stroke="#0ea5e9" stroke-width="0.5"/>
-                    <line x1="200" y1="0" x2="200" y2="120" stroke="#0ea5e9" stroke-width="0.5"/>
-                    <line x1="400" y1="0" x2="400" y2="120" stroke="#0ea5e9" stroke-width="0.5"/>
-                    <line x1="600" y1="0" x2="600" y2="120" stroke="#0ea5e9" stroke-width="0.5"/>
-                    <line x1="800" y1="0" x2="800" y2="120" stroke="#0ea5e9" stroke-width="0.5"/>
-                    <line x1="1000" y1="0" x2="1000" y2="120" stroke="#0ea5e9" stroke-width="0.5"/>
+                    <line x1="0" y1="30" x2="1200" y2="30" stroke="var(--layer8d-primary)" stroke-width="0.5"/>
+                    <line x1="0" y1="60" x2="1200" y2="60" stroke="var(--layer8d-primary)" stroke-width="0.5"/>
+                    <line x1="0" y1="90" x2="1200" y2="90" stroke="var(--layer8d-primary)" stroke-width="0.5"/>
+                    <line x1="200" y1="0" x2="200" y2="120" stroke="var(--layer8d-primary)" stroke-width="0.5"/>
+                    <line x1="400" y1="0" x2="400" y2="120" stroke="var(--layer8d-primary)" stroke-width="0.5"/>
+                    <line x1="600" y1="0" x2="600" y2="120" stroke="var(--layer8d-primary)" stroke-width="0.5"/>
+                    <line x1="800" y1="0" x2="800" y2="120" stroke="var(--layer8d-primary)" stroke-width="0.5"/>
+                    <line x1="1000" y1="0" x2="1000" y2="120" stroke="var(--layer8d-primary)" stroke-width="0.5"/>
                 </g>
-                <circle cx="300" cy="50" r="3" fill="#0ea5e9" opacity="0.8">
+                <circle cx="300" cy="50" r="3" fill="var(--layer8d-primary)" opacity="0.8">
                     <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/>
                 </circle>
-                <circle cx="700" cy="50" r="3" fill="#0ea5e9" opacity="0.8">
+                <circle cx="700" cy="50" r="3" fill="var(--layer8d-primary)" opacity="0.8">
                     <animate attributeName="opacity" values="0.3;1;0.3" dur="2.5s" repeatCount="indefinite"/>
                 </circle>
             </svg>`;
