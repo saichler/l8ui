@@ -163,9 +163,14 @@
                         var that = this;
                         var cascadePaths = this._getCascadeDisablePaths(path);
                         if (cascadePaths.length > 0) {
+                            // Plain-text browser confirm() dialog -- never
+                            // include node.icon here, it can be real SVG
+                            // markup now (not just an emoji glyph), which
+                            // would render as literal tag text in a native
+                            // dialog that can't interpret HTML at all.
                             var cascadeLabels = cascadePaths.map(function(p) {
                                 var node = that._nodeMap[p];
-                                return node ? (node.icon ? node.icon + ' ' : '') + node.label : p;
+                                return node ? node.label : p;
                             });
                             var msg = 'Disabling this will also disable the following dependent items:\n\n' +
                                 cascadeLabels.map(function(l) { return '  ' + l; }).join('\n') +
@@ -276,11 +281,16 @@
                             row.appendChild(spacer);
                         }
 
-                        // Icon
+                        // Icon -- node.icon can be a real <svg ...> string
+                        // (theme-aware stroke="currentColor") now, not just
+                        // an emoji glyph, so this must be innerHTML, not
+                        // textContent (which would print raw markup as
+                        // text). Safe either way: plain emoji characters
+                        // render identically via innerHTML.
                         if (node.icon) {
                             var icon = document.createElement('span');
                             icon.className = 'l8-toggle-icon';
-                            icon.textContent = node.icon;
+                            icon.innerHTML = node.icon;
                             row.appendChild(icon);
                         }
 

@@ -41,6 +41,15 @@ limitations under the License.
     font-size: 16px;
     opacity: 0.7;
     transition: opacity 0.2s;
+    color: var(--layer8d-text-medium);
+    display: inline-flex;
+}
+
+/* Sizing for a real <svg> icon (stroke="currentColor", theme-aware)
+   instead of a fixed-color calendar emoji. */
+.date-picker-trigger svg {
+    width: 16px;
+    height: 16px;
 }
 
 .date-picker-trigger:hover {

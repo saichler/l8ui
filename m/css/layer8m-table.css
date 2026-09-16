@@ -236,6 +236,17 @@ limitations under the License.
     font-size: 48px;
     margin-bottom: var(--spacing-md);
     opacity: 0.5;
+    display: flex;
+    justify-content: center;
+}
+
+/* Sizing for a real <svg> default icon (stroke="currentColor", theme-
+   aware) -- additive, harmless for any caller still passing its own
+   emoji string via config.emptyIcon. */
+.mobile-table-empty-icon svg {
+    width: 48px;
+    height: 48px;
+    color: var(--layer8d-text-muted);
 }
 
 .mobile-table-empty h4 {

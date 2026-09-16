@@ -46,7 +46,10 @@
 
                     var iconSpan = document.createElement('span');
                     iconSpan.className = 'l8sys-dep-map-box-icon';
-                    iconSpan.textContent = mod.icon;
+                    // mod.icon is now a real <svg ...> string (theme-aware
+                    // stroke="currentColor"), not a plain emoji character --
+                    // .textContent would just print the raw markup as text.
+                    iconSpan.innerHTML = mod.icon;
 
                     var nameSpan = document.createElement('span');
                     nameSpan.className = 'l8sys-dep-map-box-name';
@@ -78,9 +81,14 @@
                     if (mod.depends.length > 0) {
                         var depsSpan = document.createElement('span');
                         depsSpan.className = 'l8sys-dep-map-box-deps';
+                        // Labels, not icons -- mod.icon is now SVG markup,
+                        // which doesn't read well concatenated inline as
+                        // plain text, and labels are more informative here
+                        // anyway (which modules are needed, not just an
+                        // icon glyph for each).
                         depsSpan.textContent = 'Needs: ' + mod.depends.map(function(d) {
-                            return graph.modules[d] ? graph.modules[d].icon : d;
-                        }).join(' ');
+                            return graph.modules[d] ? graph.modules[d].label : d;
+                        }).join(', ');
                         box.appendChild(depsSpan);
                     }
 

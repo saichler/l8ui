@@ -69,6 +69,16 @@
 
 .l8sys-dep-map-box-icon {
     font-size: 20px;
+    display: inline-flex;
+}
+
+/* Sizing for a real <svg> icon (stroke="currentColor", theme-aware)
+   instead of an emoji glyph -- without explicit width/height, an <svg>
+   with only a viewBox falls back to the browser's 300x150 default box
+   size instead of the font-size above. */
+.l8sys-dep-map-box-icon svg {
+    width: 20px;
+    height: 20px;
 }
 
 .l8sys-dep-map-box-name {

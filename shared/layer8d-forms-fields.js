@@ -350,7 +350,7 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
 
         return `<div class="date-input-wrapper">
             <input type="text" id="field-${field.key}" name="${field.key}" value="${escapeAttr(dateValue)}" ${required} placeholder="${datePlaceholder}" class="date-input" data-zero-label="${escapeAttr(zeroLabel)}" ${isZeroOrMissing ? 'data-is-zero="true"' : ''}>
-            <button type="button" class="date-picker-trigger" data-for="field-${field.key}" title="Open calendar">&#x1F4C5;</button>
+            <button type="button" class="date-picker-trigger" data-for="field-${field.key}" title="Open calendar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></button>
         </div>`;
     }
 
