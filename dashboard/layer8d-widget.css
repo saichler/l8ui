@@ -34,11 +34,15 @@ Layer 8 Ecosystem - Dashboard Widget Styles
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    background: var(--layer8d-bg-hover);
+    color: var(--layer8d-primary);
 }
 
 .layer8d-widget-icon svg {
     width: 22px;
     height: 22px;
+    stroke: currentColor;
+    fill: none;
 }
 
 .layer8d-widget-info {
