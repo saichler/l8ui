@@ -32,7 +32,7 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
 .l8agent-bubble-btn svg {
     width: 28px;
     height: 28px;
-    fill: #fff;
+    fill: currentColor;
 }
 
 .l8agent-bubble-panel {

@@ -345,19 +345,19 @@ limitations under the License.
 }
 
 .l8-btn-danger {
-    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    background: var(--layer8d-error, #ef4444);
     color: white;
-    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.3);
+    box-shadow: var(--layer8d-shadow-md);
     border: none;
 }
 
 .l8-btn-danger:hover {
     transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+    box-shadow: var(--layer8d-shadow-lg);
 }
 
 .l8-btn-danger.l8-btn-small {
-    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    background: var(--layer8d-error, #ef4444);
     color: white;
     border: none;
 }

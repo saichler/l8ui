@@ -12,8 +12,8 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
 (function() {
     'use strict';
 
-    const PRIMARY_COLOR = '#0ea5e9';
-    const SECONDARY_COLOR = '#0284c7';
+    const PRIMARY_COLOR = 'var(--layer8d-primary)';
+    const SECONDARY_COLOR = 'var(--layer8d-primary-dark)';
 
     // Template registry - populated by project-specific template files
     const ELEMENT_TEMPLATES = {};
