@@ -235,6 +235,19 @@ limitations under the License.
     color: var(--text-secondary);
 }
 
+/* Optional breakdown line under .nav-stat-label -- for a card whose one
+   value is a total that a caller also wants broken down (e.g. by
+   severity), instead of growing a bespoke multi-value card variant. */
+.nav-stat-sublabel {
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
+    opacity: 0.75;
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 /* Section Title */
 .nav-section-title {
     font-size: var(--font-size-sm);

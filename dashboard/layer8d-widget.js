@@ -47,12 +47,20 @@ limitations under the License.
             const miniChartHtml = opts.miniChart ? this._renderMiniChart(opts.miniChart) : '';
             const iconSvg = kpi.iconSvg || '';
 
+            // opts.subtitle: optional pre-escaped HTML line under the label
+            // (e.g. a per-severity breakdown) -- callers needing a
+            // multi-value card (several counts under one label, not just
+            // one big number) pass this instead of the framework growing
+            // a bespoke multi-value card variant.
+            const subtitleHtml = opts.subtitle ? `<div class="layer8d-widget-subtitle">${opts.subtitle}</div>` : '';
+
             return `<div class="layer8d-widget" onclick="${kpi.onClick || ''}">
                 <div class="layer8d-widget-header">
                     ${iconSvg ? `<div class="layer8d-widget-icon ${kpi.icon || ''}">${iconSvg}</div>` : ''}
                     <div class="layer8d-widget-info">
                         <div class="layer8d-widget-value">${escapeHtml(formatNumber(value))}</div>
                         <div class="layer8d-widget-label">${escapeHtml(kpi.label)}</div>
+                        ${subtitleHtml}
                     </div>
                     ${trendHtml}
                 </div>

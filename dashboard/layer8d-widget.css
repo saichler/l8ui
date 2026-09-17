@@ -63,6 +63,15 @@ Layer 8 Ecosystem - Dashboard Widget Styles
     margin-top: 2px;
 }
 
+.layer8d-widget-subtitle {
+    font-size: 11px;
+    color: var(--layer8d-text-light, var(--layer8d-text-medium));
+    margin-top: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 /* Trend indicator */
 .layer8d-widget-trend {
     display: flex;
