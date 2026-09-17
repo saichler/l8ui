@@ -27,6 +27,11 @@ limitations under the License.
     }
 
     function formatNumber(num) {
+        // A caller can pass a pre-formatted string value (e.g. a
+        // per-severity breakdown "C:1 H:2 M:3 L:4") instead of a single
+        // number -- pass it through untouched rather than running it
+        // through K/M abbreviation logic meant for a plain count.
+        if (typeof num === 'string') return num;
         if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
         if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
         return String(num);
@@ -53,12 +58,18 @@ limitations under the License.
             // one big number) pass this instead of the framework growing
             // a bespoke multi-value card variant.
             const subtitleHtml = opts.subtitle ? `<div class="layer8d-widget-subtitle">${opts.subtitle}</div>` : '';
+            // opts.valueClass: extra class on the value element -- a
+            // caller passing a longer string value (e.g. a per-severity
+            // breakdown) instead of a single number can hook a smaller
+            // font-size for it without this shared widget growing a
+            // bespoke variant.
+            const valueClass = opts.valueClass ? ` ${opts.valueClass}` : '';
 
             return `<div class="layer8d-widget" onclick="${kpi.onClick || ''}">
                 <div class="layer8d-widget-header">
                     ${iconSvg ? `<div class="layer8d-widget-icon ${kpi.icon || ''}">${iconSvg}</div>` : ''}
                     <div class="layer8d-widget-info">
-                        <div class="layer8d-widget-value">${escapeHtml(formatNumber(value))}</div>
+                        <div class="layer8d-widget-value${valueClass}">${escapeHtml(formatNumber(value))}</div>
                         <div class="layer8d-widget-label">${escapeHtml(kpi.label)}</div>
                         ${subtitleHtml}
                     </div>
