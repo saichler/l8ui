@@ -52,6 +52,13 @@ limitations under the License.
             columns: options.columns,
             rowsPerPage: options.pageSize || 15,
             baseWhereClause: options.baseWhereClause || null,
+            // Layer8MEditTable extends Layer8MTable, which already reads
+            // config.defaultSort fine (confirmed) -- this explicit option
+            // whitelist just never forwarded it, so every service
+            // registered through the generic nav-config path (all of them
+            // except a customInit one like groups-view-m.js's own direct
+            // `new Layer8MTable`) had no way to set an initial sort order.
+            defaultSort: options.defaultSort || null,
             statusField: options.statusField || 'status',
             addButtonText: options.addButtonText,
             getItemId: options.getItemId,

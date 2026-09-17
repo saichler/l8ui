@@ -49,7 +49,14 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
                     : serviceConfig.baseWhereClause) || null,
                 viewConfig: serviceConfig.viewConfig || {},
                 getItemId: (item) => item[primaryKey],
-                realtime: serviceConfig.realtime || false
+                realtime: serviceConfig.realtime || false,
+                // Same gap baseWhereClause had above: this generic pipeline
+                // built viewOptions without ever forwarding
+                // serviceConfig.defaultSort, so any service registered
+                // through the standard nav-config path had no way to set
+                // an initial sort order (Layer8MTable itself already reads
+                // config.defaultSort fine -- confirmed live, unaffected).
+                defaultSort: serviceConfig.defaultSort || null
             };
 
             if (transformData) {
