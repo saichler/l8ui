@@ -679,6 +679,94 @@ limitations under the License.
     --layer8d-gray-light-text: #a8a8b0;
 }
 
+/* ============================================ */
+/* PORCELAIN THEME (light, ink-on-paper mono)   */
+/* ============================================ */
+
+/*
+ * Sourced from a "porcelain" dashboard concept: warm-white paper on a
+ * pale gray backdrop, near-black "ink" text/accent, and a fully
+ * monochrome status palette -- red is the only real hue anywhere in
+ * the reference (mirrors noir's own rationale below, just inverted to
+ * a light background instead of dark).
+ */
+[data-theme="porcelain"] {
+    /* Primary Colors -- near-black "ink" accent on a paper-white surface */
+    --layer8d-primary: #1a1a1e;
+    --layer8d-primary-dark: #000000;
+    --layer8d-primary-light: #6f6f78;
+    --layer8d-on-primary: #ffffff;
+
+    /* Backgrounds -- warm-white paper on a pale gray backdrop */
+    --layer8d-bg-white: #ffffff;
+    --layer8d-bg-light: #f3f3f6;
+    --layer8d-bg-input: #ececef;
+    --layer8d-bg-card: #ffffff;
+    --layer8d-bg-hover: #ececef;
+
+    /* Text -- ink and muted grays */
+    --layer8d-text-dark: #18181c;
+    --layer8d-text-label: #18181c;
+    --layer8d-text-medium: #6f6f78;
+    --layer8d-text-muted: #9a9aa2;
+    --layer8d-text-light: #b8b8c0;
+
+    /* Borders */
+    --layer8d-border: #e2e2e8;
+    --layer8d-border-dark: #d0d0d8;
+
+    /* Shadows (soft, matching the reference's paper-card shadow) */
+    --layer8d-shadow-sm: 0 1px 2px rgba(20, 20, 25, 0.05);
+    --layer8d-shadow-md: 0 4px 6px rgba(20, 20, 25, 0.08);
+    --layer8d-shadow-lg: 0 8px 24px rgba(20, 20, 25, 0.08);
+
+    /* Focus Ring */
+    --layer8d-focus-ring: 0 0 0 3px rgba(26, 26, 30, 0.15);
+
+    /* Status Colors — Core: same monochrome-plus-red rationale as noir
+       (functional signals still need to differ from each other and
+       from body text), just re-toned for a light/paper background.
+       Success/warning are the reference's own --teal/--amber pill
+       colors; red is the one real accent color, matching the
+       reference palette exactly. */
+    --layer8d-success: #4a4a54;
+    --layer8d-success-bg: rgba(74, 74, 84, 0.12);
+    --layer8d-warning: #82828c;
+    --layer8d-warning-bg: rgba(130, 130, 140, 0.13);
+    --layer8d-error: #c0392b;
+    --layer8d-error-bg: rgba(192, 57, 43, 0.12);
+    --layer8d-info: #8a8a93;
+    --layer8d-info-bg: rgba(138, 138, 147, 0.12);
+
+    /* Section Header */
+    --layer8d-header-gradient: linear-gradient(135deg, #f8f8fa 0%, #f3f3f6 55%, #ececef 100%);
+    --layer8d-header-shadow: 0 8px 24px rgba(20, 20, 25, 0.08);
+    --layer8d-header-grad-start: #f8f8fa;
+    --layer8d-header-grad-mid: #f3f3f6;
+    --layer8d-header-grad-end: #ececef;
+
+    /* Semantic Status Colors -- desaturated toward the paper/ink family,
+       same "just enough tint to stay distinguishable" approach as noir. */
+    --layer8d-green-light-bg: #e2ece4;
+    --layer8d-green-light-text: #3d5c43;
+    --layer8d-green-bg: #dfe6e0;
+    --layer8d-green-text: #34493a;
+    --layer8d-red-bg: #f3d9d5;
+    --layer8d-red-text: #8a291d;
+    --layer8d-yellow-bg: #ece7da;
+    --layer8d-yellow-text: #6b5d3a;
+    --layer8d-orange-bg: #ede0d6;
+    --layer8d-orange-text: #7a4f36;
+    --layer8d-blue-bg: #dde0e6;
+    --layer8d-blue-text: #3d4656;
+    --layer8d-indigo-bg: #e2e0ea;
+    --layer8d-indigo-text: #453f5c;
+    --layer8d-gray-bg: #e6e6ea;
+    --layer8d-gray-text: #47474f;
+    --layer8d-gray-light-bg: #f0f0f3;
+    --layer8d-gray-light-text: #6f6f78;
+}
+
 /*
  * Theme Token Aliases
  *

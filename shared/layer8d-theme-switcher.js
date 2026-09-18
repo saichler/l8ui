@@ -26,11 +26,12 @@ You may obtain a copy of the License at:
         forest: { label: 'Forest', colors: ['#0f1a14', '#162920', '#22c55e'], metaColor: '#0f1a14' },
         slate:  { label: 'Slate',  colors: ['#ffffff', '#edf2f7', '#4299e1'], metaColor: '#edf2f7' },
         'dark-s': { label: 'Dark-S', colors: ['#141414', '#1c1c1c', '#FF9E42'], metaColor: '#141414' },
-        noir: { label: 'Noir', colors: ['#0b0b0d', '#141417', '#f2f2f6'], metaColor: '#0b0b0d' }
+        noir: { label: 'Noir', colors: ['#0b0b0d', '#141417', '#f2f2f6'], metaColor: '#0b0b0d' },
+        porcelain: { label: 'Porcelain', colors: ['#ffffff', '#f3f3f6', '#1a1a1e'], metaColor: '#f3f3f6' }
     };
 
     window.Layer8DThemeSwitcher = {
-        themes: ['light', 'dark', 'ocean', 'sunset', 'forest', 'slate', 'dark-s', 'noir'],
+        themes: ['light', 'dark', 'ocean', 'sunset', 'forest', 'slate', 'dark-s', 'noir', 'porcelain'],
         _open: false,
 
         init: function() {
