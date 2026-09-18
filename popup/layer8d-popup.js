@@ -102,6 +102,11 @@ limitations under the License.
             cancelBtn.className = 'btn btn-secondary';
             cancelBtn.textContent = config.cancelButtonText || 'Cancel';
             cancelBtn.addEventListener('click', function() {
+                // Optional caller hook for a cancel-time side effect (e.g.
+                // marking whatever this popup was about as explicitly
+                // stopped, not just dismissed) -- undefined for every
+                // existing caller, so this is purely additive.
+                if (config.onCancel) config.onCancel();
                 close();
             });
 
