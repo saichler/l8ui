@@ -36,7 +36,7 @@ limitations under the License.
         },
         dateFormat: 'mm/dd/yyyy',
         login: {
-            logo: '/l8ui/images/logo.gif'
+            logo: '/l8ui/images/logo.svg'
         }
     };
 

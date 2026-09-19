@@ -23,7 +23,7 @@ limitations under the License.
     const DEFAULT_CONFIG = {
         dateFormat: 'mm/dd/yyyy',
         apiPrefix: '',
-        logo: '/l8ui/images/logo.gif'
+        logo: '/l8ui/images/logo.svg'
     };
 
     // Current configuration (starts with defaults)

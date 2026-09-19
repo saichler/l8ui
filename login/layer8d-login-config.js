@@ -33,7 +33,7 @@ async function loadConfig() {
         LOGIN_CONFIG = {
             appTitle: 'Layer 8',
             appDescription: 'Powered by the Layer 8 Ecosystem',
-            logo: '/l8ui/images/logo.gif',
+            logo: '/l8ui/images/logo.svg',
             authEndpoint: '/auth',
             redirectUrl: '/app.html',
             showRememberMe: true,
