@@ -41,7 +41,11 @@ function applyConfiguration() {
     // logo.gif next to this page.
     if (LOGIN_CONFIG.logo) {
         const logoImg = document.querySelector('.app-logo');
-        if (logoImg) logoImg.src = LOGIN_CONFIG.logo;
+        if (logoImg && typeof Layer8DLogo !== 'undefined') {
+            Layer8DLogo.register(logoImg, LOGIN_CONFIG.logo);
+        } else if (logoImg) {
+            logoImg.src = LOGIN_CONFIG.logo;
+        }
     }
 
     const rememberMeSection = document.getElementById('remember-me-section');

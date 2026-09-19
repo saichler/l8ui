@@ -33,6 +33,14 @@ You may obtain a copy of the License at:
     window.Layer8DThemeSwitcher = {
         themes: ['light', 'dark', 'ocean', 'sunset', 'forest', 'slate', 'dark-s', 'noir', 'porcelain'],
         _open: false,
+        _listeners: [],
+
+        // Subscribe to theme changes (initial apply + every later switch).
+        // Used by layer8d-logo.js to keep the SVG logo's colors in sync
+        // with the active theme's --layer8d-primary* triad.
+        onChange: function(fn) {
+            this._listeners.push(fn);
+        },
 
         init: function() {
             var saved = localStorage.getItem(STORAGE_KEY);
@@ -149,6 +157,9 @@ You may obtain a copy of the License at:
             }
             this._updateToggleButtons(name);
             this._updateMetaThemeColor(name);
+            for (var i = 0; i < this._listeners.length; i++) {
+                this._listeners[i](name);
+            }
         },
 
         _updateToggleButtons: function(theme) {
