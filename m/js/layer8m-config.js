@@ -34,7 +34,10 @@ limitations under the License.
         api: {
             typeCode: 30
         },
-        dateFormat: 'mm/dd/yyyy'
+        dateFormat: 'mm/dd/yyyy',
+        login: {
+            logo: '/l8ui/images/logo.gif'
+        }
     };
 
     // Registered module configurations (populated by project via registerModules)
@@ -93,6 +96,14 @@ limitations under the License.
 
         getDateFormat() {
             return _config?.dateFormat || DEFAULT_CONFIG.dateFormat;
+        },
+
+        /**
+         * Get the configured app logo path (login.json's login.logo) --
+         * the same field the login page and desktop app shell also read.
+         */
+        getLogo() {
+            return _config?.login?.logo || DEFAULT_CONFIG.login.logo;
         },
 
         /**

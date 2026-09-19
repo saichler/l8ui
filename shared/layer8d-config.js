@@ -22,7 +22,8 @@ limitations under the License.
     // Default configuration — no apiPrefix fallback, must be loaded from login.json
     const DEFAULT_CONFIG = {
         dateFormat: 'mm/dd/yyyy',
-        apiPrefix: ''
+        apiPrefix: '',
+        logo: '/l8ui/images/logo.gif'
     };
 
     // Current configuration (starts with defaults)
@@ -49,6 +50,13 @@ limitations under the License.
             // Extract app config section
             if (data.app) {
                 currentConfig = { ...DEFAULT_CONFIG, ...data.app };
+            }
+            // login.logo (not app.*) is the same field the login page
+            // itself reads (layer8d-login-config.js) -- one login.json
+            // value drives the logo everywhere, login page and app shell
+            // alike.
+            if (data.login && data.login.logo) {
+                currentConfig.logo = data.login.logo;
             }
 
             configLoaded = true;
@@ -85,6 +93,14 @@ limitations under the License.
     }
 
     /**
+     * Get the configured app logo path (login.json's login.logo)
+     * @returns {string} Logo URL/path
+     */
+    function getLogo() {
+        return currentConfig.logo || DEFAULT_CONFIG.logo;
+    }
+
+    /**
      * Resolve a relative endpoint path to a full API endpoint
      * @param {string} path - Relative path (e.g., '/30/Employee')
      * @returns {string} Full endpoint
@@ -115,6 +131,7 @@ limitations under the License.
         setPrefix,
         getDateFormat,
         getApiPrefix,
+        getLogo,
         resolveEndpoint,
         getConfig,
         isLoaded

@@ -36,6 +36,14 @@ function applyConfiguration() {
     document.getElementById('app-description').textContent = LOGIN_CONFIG.appDescription;
     document.title = `Login - ${LOGIN_CONFIG.appTitle}`;
 
+    // Project-configurable app logo (login.json's login.logo) -- defaults
+    // to the same file every project used to hardcode as a co-located
+    // logo.gif next to this page.
+    if (LOGIN_CONFIG.logo) {
+        const logoImg = document.querySelector('.app-logo');
+        if (logoImg) logoImg.src = LOGIN_CONFIG.logo;
+    }
+
     const rememberMeSection = document.getElementById('remember-me-section');
     if (!LOGIN_CONFIG.showRememberMe) {
         rememberMeSection.style.display = 'none';
