@@ -70,8 +70,11 @@ limitations under the License.
         }
         header.innerHTML = titleHtml + '<button class="probler-popup-close" type="button">&times;</button>';
 
-        // Close button handler
+        // Close button handler -- same onCancel hook as the footer Cancel
+        // button (dismissed without completing the popup's own action),
+        // not just a bare close().
         header.querySelector('.probler-popup-close').addEventListener('click', function() {
+            if (config.onCancel) config.onCancel();
             close();
         });
 
@@ -133,6 +136,7 @@ limitations under the License.
         // Click on overlay background closes popup
         overlay.addEventListener('click', function(e) {
             if (e.target === overlay) {
+                if (config.onCancel) config.onCancel();
                 close();
             }
         });
@@ -140,6 +144,7 @@ limitations under the License.
         // Escape key closes popup
         const escHandler = function(e) {
             if (e.key === 'Escape') {
+                if (config.onCancel) config.onCancel();
                 close();
             }
         };
