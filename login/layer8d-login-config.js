@@ -35,6 +35,8 @@ async function loadConfig() {
             appDescription: 'Powered by the Layer 8 Ecosystem',
             logo: '/l8ui/images/logo.svg',
             authEndpoint: '/auth',
+            forgotPasswordEndpoint: '/forgotPassword',
+            resetPasswordEndpoint: '/resetPassword',
             redirectUrl: '/app.html',
             showRememberMe: true,
             showRegister: false,

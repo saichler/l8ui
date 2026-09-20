@@ -29,6 +29,8 @@ limitations under the License.
     <!-- Change Password gate (Phase 10) dependencies -->
     <link rel="stylesheet" href="../notification/layer8d-notification.css">
     <link rel="stylesheet" href="../sys/security/l8security-password-strength.css">
+    <!-- "Forgot password?" link styling (shared with the recovery pages) -->
+    <link rel="stylesheet" href="layer8d-recovery.css">
 </head>
 <body>
     <div class="layer8d-login-container">
@@ -64,6 +66,9 @@ limitations under the License.
                         <div class="form-group">
                             <label for="password">Password</label>
                             <input type="password" id="password" name="password" placeholder="Enter your password" autocomplete="current-password" required>
+                        </div>
+                        <div class="layer8d-forgot-link">
+                            <a href="forgot-password.html">Forgot password?</a>
                         </div>
                         <div id="remember-me-section" class="remember-me">
                             <input type="checkbox" id="remember-me" name="remember-me">

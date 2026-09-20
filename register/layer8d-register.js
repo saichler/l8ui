@@ -21,42 +21,19 @@ document.addEventListener('DOMContentLoaded', function() {
     const btnText = document.getElementById('btn-text');
     const messageDiv = document.getElementById('message');
 
-    loadCaptcha();
-
-    refreshCaptchaBtn.addEventListener('click', loadCaptcha);
+    Layer8DCaptchaWidget.attach(captchaImage, refreshCaptchaBtn, onCaptchaError);
 
     form.addEventListener('submit', function(e) {
         e.preventDefault();
         register();
     });
 
-    function loadCaptcha() {
-        captchaImage.src = '';
-        captchaImage.alt = 'Loading...';
+    function onCaptchaError() {
+        showMessage('Failed to load captcha. Please refresh.', 'error');
+    }
 
-        fetch('/captcha', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(function(response) {
-            if (!response.ok) {
-                throw new Error('Failed to load captcha');
-            }
-            return response.json();
-        })
-        .then(function(data) {
-            if (data.captcha) {
-                captchaImage.src = 'data:image/png;base64,' + data.captcha;
-                captchaImage.alt = 'Captcha';
-            }
-        })
-        .catch(function(error) {
-            console.error('Error loading captcha:', error);
-            captchaImage.alt = 'Failed to load captcha';
-            showMessage('Failed to load captcha. Please refresh.', 'error');
-        });
+    function loadCaptcha() {
+        Layer8DCaptchaWidget.reload(captchaImage, onCaptchaError);
     }
 
     function register() {
