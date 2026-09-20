@@ -34,7 +34,24 @@ document.addEventListener('DOMContentLoaded', function() {
     var token = params.get('token');
 
     if (typeof loadConfig === 'function') {
-        loadConfig();
+        loadConfig().then(applyLogo);
+    }
+
+    // applyLogo mirrors layer8d-login-state.js's own handling, so these pages
+    // pick up a project's configured logo exactly like the login page.
+    function applyLogo() {
+        if (typeof LOGIN_CONFIG === 'undefined' || !LOGIN_CONFIG || !LOGIN_CONFIG.logo) {
+            return;
+        }
+        var logoImg = document.querySelector('.app-logo');
+        if (!logoImg) {
+            return;
+        }
+        if (typeof Layer8DLogo !== 'undefined') {
+            Layer8DLogo.register(logoImg, LOGIN_CONFIG.logo);
+        } else {
+            logoImg.src = LOGIN_CONFIG.logo;
+        }
     }
 
     // No usable link: show the error state and no form at all.

@@ -35,9 +35,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     Layer8DCaptchaWidget.attach(captchaImage, refreshCaptchaBtn, onCaptchaError);
 
-    // login.json may override the endpoint; the default matches l8web's route.
+    // login.json may override the endpoint and the app logo; the defaults
+    // match l8web's route and the shared logo the login page uses.
     if (typeof loadConfig === 'function') {
-        loadConfig();
+        loadConfig().then(applyLogo);
     }
 
     form.addEventListener('submit', function(e) {
@@ -50,6 +51,23 @@ document.addEventListener('DOMContentLoaded', function() {
             return LOGIN_CONFIG.forgotPasswordEndpoint;
         }
         return DEFAULT_ENDPOINT;
+    }
+
+    // applyLogo mirrors layer8d-login-state.js's own handling, so these pages
+    // pick up a project's configured logo exactly like the login page.
+    function applyLogo() {
+        if (typeof LOGIN_CONFIG === 'undefined' || !LOGIN_CONFIG || !LOGIN_CONFIG.logo) {
+            return;
+        }
+        var logoImg = document.querySelector('.app-logo');
+        if (!logoImg) {
+            return;
+        }
+        if (typeof Layer8DLogo !== 'undefined') {
+            Layer8DLogo.register(logoImg, LOGIN_CONFIG.logo);
+        } else {
+            logoImg.src = LOGIN_CONFIG.logo;
+        }
     }
 
     function onCaptchaError() {
