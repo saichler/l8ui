@@ -25,7 +25,36 @@
                     }
                 });
                 var endpoint = Layer8DConfig.resolveEndpoint('/0/ModConfig');
-                if (!resp.ok) throw new Error('Server returned ' + resp.status + ' for endpoint: ' + endpoint);
+                if (!resp.ok) {
+                    // An account that may not READ the module config is a normal
+                    // state, not an outage: module config only toggles which
+                    // modules are shown, and the real access boundary is
+                    // /permissions plus the server's own deny rules. Treating it
+                    // as fatal made app.js's `if (!configLoaded) return;` abort
+                    // init before loadSection(), so a restricted user got a
+                    // completely blank #content-area with every sidebar link
+                    // still showing -- and showErrorAndLogout() on top of it
+                    // (ModconfigFailureNoLogout).
+                    //
+                    // Leaving _loaded false is the documented safe default:
+                    // isEnabled() then reports everything visible, which hides
+                    // nothing and grants nothing the server would refuse.
+                    var denied = resp.status === 401 || resp.status === 403;
+                    if (!denied) {
+                        var text = '';
+                        try { text = await resp.text(); } catch (e) { /* body already consumed */ }
+                        denied = text.indexOf('access denied') !== -1;
+                    }
+                    if (denied) {
+                        console.warn('Module config not readable by this account (' +
+                            resp.status + ') -- continuing with all modules visible.');
+                        this._disabledPaths = new Set();
+                        this._configId = null;
+                        this._loaded = false;
+                        return true;
+                    }
+                    throw new Error('Server returned ' + resp.status + ' for endpoint: ' + endpoint);
+                }
                 var data = await resp.json();
                 // Empty list = first startup, everything enabled
                 if (data.list && data.list.length > 0) {

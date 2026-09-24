@@ -45,14 +45,17 @@ limitations under the License.
             const svg = chart.svgEl;
             const plotW = w - pad.left - pad.right;
             const plotH = h - pad.top - pad.bottom;
-            const maxVal = Math.max(...data.map(d => d.value), 1);
+            const dom = this._domain(data);
+            // Pixels from the bottom of the plot for a value.
+            const posOf = (v) => plotH * ((v - dom.min) / dom.span);
+            const zeroY = pad.top + plotH - posOf(0);
             const barW = Math.max(8, Math.min(60, (plotW / data.length) * 0.7));
             const gap = (plotW - barW * data.length) / (data.length + 1);
 
             // Y-axis grid lines
-            const ticks = this._getTicks(maxVal);
+            const ticks = this._getTicks(dom.min, dom.max);
             ticks.forEach(tick => {
-                const y = pad.top + plotH - (tick / maxVal) * plotH;
+                const y = pad.top + plotH - posOf(tick);
                 svg.appendChild(createEl('line', {
                     x1: pad.left, y1: y, x2: w - pad.right, y2: y,
                     stroke: Layer8DChart.DEFAULTS.gridColor, 'stroke-dasharray': '3,3'
@@ -65,17 +68,19 @@ limitations under the License.
                 svg.appendChild(label);
             });
 
-            // X-axis line
+            // X-axis line, drawn at zero rather than at the bottom: with
+            // negative values present, zero is no longer the plot floor.
             svg.appendChild(createEl('line', {
-                x1: pad.left, y1: h - pad.bottom, x2: w - pad.right, y2: h - pad.bottom,
+                x1: pad.left, y1: zeroY, x2: w - pad.right, y2: zeroY,
                 stroke: Layer8DChart.DEFAULTS.gridColor
             }));
 
             // Bars
             data.forEach((d, i) => {
                 const x = pad.left + gap + i * (barW + gap);
-                const barH = (d.value / maxVal) * plotH;
-                const y = pad.top + plotH - barH;
+                const valueY = pad.top + plotH - posOf(Number(d.value) || 0);
+                const y = Math.min(zeroY, valueY);
+                const barH = Math.abs(valueY - zeroY);
                 const color = chart.getColor(i);
 
                 const rect = createEl('rect', {
@@ -113,14 +118,17 @@ limitations under the License.
             const svg = chart.svgEl;
             const plotW = w - pad.left - pad.right;
             const plotH = h - pad.top - pad.bottom;
-            const maxVal = Math.max(...data.map(d => d.value), 1);
+            const dom = this._domain(data);
+            // Pixels from the left edge of the plot for a value.
+            const posOf = (v) => plotW * ((v - dom.min) / dom.span);
+            const zeroX = pad.left + posOf(0);
             const barH = Math.max(8, Math.min(40, (plotH / data.length) * 0.7));
             const gap = (plotH - barH * data.length) / (data.length + 1);
 
             // X-axis grid lines
-            const ticks = this._getTicks(maxVal);
+            const ticks = this._getTicks(dom.min, dom.max);
             ticks.forEach(tick => {
-                const x = pad.left + (tick / maxVal) * plotW;
+                const x = pad.left + posOf(tick);
                 svg.appendChild(createEl('line', {
                     x1: x, y1: pad.top, x2: x, y2: h - pad.bottom,
                     stroke: Layer8DChart.DEFAULTS.gridColor, 'stroke-dasharray': '3,3'
@@ -133,20 +141,22 @@ limitations under the License.
                 svg.appendChild(label);
             });
 
-            // Y-axis line
+            // Y-axis line at zero, not at the left edge -- see _renderVertical.
             svg.appendChild(createEl('line', {
-                x1: pad.left, y1: pad.top, x2: pad.left, y2: h - pad.bottom,
+                x1: zeroX, y1: pad.top, x2: zeroX, y2: h - pad.bottom,
                 stroke: Layer8DChart.DEFAULTS.gridColor
             }));
 
             // Bars
             data.forEach((d, i) => {
                 const y = pad.top + gap + i * (barH + gap);
-                const bw = (d.value / maxVal) * plotW;
+                const valueX = pad.left + posOf(Number(d.value) || 0);
+                const bx = Math.min(zeroX, valueX);
+                const bw = Math.abs(valueX - zeroX);
                 const color = chart.getColor(i);
 
                 const rect = createEl('rect', {
-                    x: pad.left, y: y, width: bw, height: barH,
+                    x: bx, y: y, width: bw, height: barH,
                     fill: color, rx: 3, class: 'layer8d-chart-bar'
                 });
 
@@ -172,14 +182,39 @@ limitations under the License.
             });
         },
 
-        _getTicks(maxVal) {
+        /**
+         * Value domain for a bar chart, always including zero.
+         *
+         * The old code took `Math.max(...values, 1)` alone and pinned the
+         * baseline to the bottom of the plot, so a negative value produced a
+         * negative rect height. SVG rejects that outright ("<rect> attribute
+         * height: A negative value is not valid"), the bar never drew, and the
+         * console filled with errors -- every variance, delta or profit/loss
+         * series silently lost its negative bars.
+         */
+        _domain(data) {
+            const values = data.map(d => Number(d.value) || 0);
+            let max = Math.max(...values, 0);
+            let min = Math.min(...values, 0);
+            if (max === min) max = min + 1;   // all-zero data still needs a span
+            return { min: min, max: max, span: max - min };
+        },
+
+        _getTicks(min, max) {
+            // Backwards compatible: _getTicks(maxVal) means a 0..maxVal domain.
+            if (max === undefined) { max = min; min = 0; }
             const count = 5;
-            const step = Math.ceil(maxVal / count);
+            const span = max - min;
+            if (span <= 0) return [max];
+            const rawStep = span / count;
+            const mag = Math.pow(10, Math.floor(Math.log10(rawStep)));
+            const step = Math.max(mag, Math.ceil(rawStep / mag) * mag);
             const ticks = [];
-            for (let i = step; i <= maxVal; i += step) {
-                ticks.push(i);
+            for (let t = Math.ceil(min / step) * step; t <= max + step * 0.001; t += step) {
+                ticks.push(Math.abs(t) < step * 1e-9 ? 0 : t);
             }
-            if (ticks.length === 0) ticks.push(maxVal);
+            if (min < 0 && max > 0 && ticks.indexOf(0) === -1) ticks.push(0);
+            if (ticks.length === 0) ticks.push(max);
             return ticks;
         },
 
