@@ -225,7 +225,8 @@ limitations under the License.
                 }
 
                 if (input.type === 'checkbox' || input.classList.contains('l8-toggle-input')) {
-                    formData[input.name] = input.checked ? 1 : 0;
+                    // Protobuf bool fields take true/false (a number is rejected), as desktop sends.
+                    formData[input.name] = input.checked;
                 } else if (input.dataset.format === 'currency') {
                     formData[input.name] = Layer8FieldParsers.dollarsToCents(input.value || 0);
                 } else if (input.dataset.format === 'percentage') {
