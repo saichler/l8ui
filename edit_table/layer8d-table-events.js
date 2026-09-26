@@ -132,6 +132,12 @@ Layer8DTable.prototype.attachEventListeners = function() {
         Layer8ExportHelper.attachHandlers(this.container, this.endpoint, this.modelName);
     }
 
+    // Link columns (Layer8ColumnFactory.link) call their own onClick
+    Layer8ColumnFactory.attachLinks(this.container, this.columns, (link) => {
+        const row = link.closest('tr[data-row-index]');
+        return row ? this.data[parseInt(row.dataset.rowIndex, 10)] : null;
+    });
+
     // Row click handler for details view
     if (this.onRowClick) {
         this.container.querySelectorAll('tbody tr.l8-clickable-row').forEach(row => {

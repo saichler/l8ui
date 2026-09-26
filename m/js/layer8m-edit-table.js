@@ -331,6 +331,12 @@ limitations under the License.
                 });
             });
 
+            // Link columns (Layer8ColumnFactory.link) call their own onClick
+            Layer8ColumnFactory.attachLinks(container, this.config.columns, (link) => {
+                const card = link.closest('.mobile-edit-table-card');
+                return card ? this._findItemById(card.dataset.id) : null;
+            });
+
             // Card click handler for onRowClick (opens details view)
             if (this.config.onRowClick) {
                 container.querySelectorAll('.mobile-edit-table-card').forEach(card => {

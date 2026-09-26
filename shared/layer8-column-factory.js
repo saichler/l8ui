@@ -317,10 +317,35 @@ limitations under the License.
                 filterKey: key,
                 render: (item) => {
                     const text = displayFn ? displayFn(item) : (item[key] || '');
-                    return `<a href="#" class="layer8d-link" data-action="click">${escapeHtml(text)}</a>`;
+                    return `<a href="#" class="layer8d-link" data-action="click" data-col-key="${escapeHtml(key)}">${escapeHtml(text)}</a>`;
                 },
                 onClick: onClick
             }];
+        },
+
+        /**
+         * Wire the links of link() columns rendered in a container: a click
+         * calls the column's onClick with the row's item, and neither
+         * follows the link nor reaches the row's or card's own click.
+         * Tables call it after every render.
+         * @param {Element} container - The rendered table or card list
+         * @param {Array} columns - The table's columns
+         * @param {Function} itemFor - Returns the item of a clicked link element
+         */
+        attachLinks: function(container, columns, itemFor) {
+            container.querySelectorAll('a.layer8d-link[data-col-key]').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const col = columns.find(c => c.key === link.dataset.colKey && typeof c.onClick === 'function');
+                    const item = itemFor(link);
+                    if (!col || !item) {
+                        console.error(`Layer8ColumnFactory.attachLinks: no ${!col ? 'onClick column' : 'item'} for link column "${link.dataset.colKey}"`);
+                        return;
+                    }
+                    col.onClick(item);
+                });
+            });
         },
 
         /**
