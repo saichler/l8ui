@@ -35,7 +35,17 @@ limitations under the License.
         return null;
     }
 
+    // Every registry create() made; the mobile nav looks models up in them.
+    var created = [];
+
     window.Layer8MModuleRegistry = {
+        /**
+         * All registries made with create(), in creation order.
+         */
+        all: function() {
+            return created.slice();
+        },
+
         create: function(exportName, moduleMap) {
             const entries = Object.entries(moduleMap);
             const modules = entries.map(function(e) { return e[1]; });
@@ -96,6 +106,7 @@ limitations under the License.
             }
 
             window[exportName] = registry;
+            created.push(registry);
             return registry;
         }
     };

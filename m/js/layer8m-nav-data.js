@@ -13,6 +13,30 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
     // Set active table callback
     const setActiveTable = (table) => { window._Layer8MNavActiveTable = table; };
 
+    // Older registry globals some projects still assign by hand instead of
+    // through Layer8MModuleRegistry.create(); resolved at lookup time.
+    const LEGACY_REGISTRIES = [
+        'MobileHCM', 'MobileFIN', 'MobileSCM', 'MobileSales', 'MobileMfg', 'MobileCrm', 'MobileBi',
+        'MobileDoc', 'MobileComp', 'MobilePrj', 'MobileEcom', 'MobileSYS', 'MobileMonitoring', 'MobileALM',
+        'MobileSystem', 'MobileTargets', 'MobileAia', 'MobileLending', 'MobileFmcCore', 'MobileFmcCoaching',
+        'MobileFmcNutrition', 'MobileFmcProgress', 'MobileFmcBilling', 'MobileFleet', 'MobileInventory',
+        'MobileMaintenance', 'MobileRoutes', 'MobileAnalytics', 'MobileWarehouse', 'MobileCompliance',
+        'MobileReports', 'MobileAlarms', 'MobileNayax', 'MobileCls', 'MobileNtr', 'MobileSup', 'MobileClt',
+        'MobileBiz', 'MobileSecScan'
+    ];
+
+    // mobileRegistries lists the project's mobile module registries: every
+    // one made with Layer8MModuleRegistry.create(), under any name, then
+    // the hand-assigned legacy globals not already among them.
+    function mobileRegistries() {
+        const list = Layer8MModuleRegistry.all();
+        LEGACY_REGISTRIES.forEach(name => {
+            const reg = window[name];
+            if (reg && list.indexOf(reg) === -1) list.push(reg);
+        });
+        return list;
+    }
+
     window.Layer8MNavData = {
         /**
          * Load service data into a view (table, chart, kanban, etc.)
@@ -157,25 +181,7 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
          */
         getServiceColumns(serviceConfig) {
             if (serviceConfig.model) {
-                // Try all registered mobile module registries
-                const registries = [
-                    window.MobileHCM, window.MobileFIN, window.MobileSCM,
-                    window.MobileSales, window.MobileMfg, window.MobileCrm,
-                    window.MobileBi, window.MobileDoc, window.MobileComp,
-                    window.MobilePrj, window.MobileEcom, window.MobileSYS,
-                    window.MobileMonitoring, window.MobileALM,
-                    window.MobileSystem, window.MobileTargets,
-                    window.MobileAia, window.MobileLending,
-                    window.MobileFmcCore, window.MobileFmcCoaching,
-                    window.MobileFmcNutrition, window.MobileFmcProgress,
-                    window.MobileFmcBilling,
-                    window.MobileFleet, window.MobileInventory,
-                    window.MobileMaintenance, window.MobileRoutes,
-                    window.MobileAnalytics, window.MobileWarehouse,
-                    window.MobileCompliance, window.MobileReports,
-                    window.MobileAlarms, window.MobileNayax,
-                    window.MobileCls, window.MobileNtr, window.MobileSup, window.MobileClt, window.MobileBiz, window.MobileSecScan
-                ];
+                const registries = mobileRegistries();
                 for (const reg of registries) {
                     if (reg && reg.getColumns) {
                         const columns = reg.getColumns(serviceConfig.model);
@@ -198,24 +204,7 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
          */
         getServiceTransformData(serviceConfig) {
             if (serviceConfig.model) {
-                const registries = [
-                    window.MobileHCM, window.MobileFIN, window.MobileSCM,
-                    window.MobileSales, window.MobileMfg, window.MobileCrm,
-                    window.MobileBi, window.MobileDoc, window.MobileComp,
-                    window.MobilePrj, window.MobileEcom, window.MobileSYS,
-                    window.MobileMonitoring, window.MobileALM,
-                    window.MobileSystem, window.MobileTargets,
-                    window.MobileAia, window.MobileLending,
-                    window.MobileFmcCore, window.MobileFmcCoaching,
-                    window.MobileFmcNutrition, window.MobileFmcProgress,
-                    window.MobileFmcBilling,
-                    window.MobileFleet, window.MobileInventory,
-                    window.MobileMaintenance, window.MobileRoutes,
-                    window.MobileAnalytics, window.MobileWarehouse,
-                    window.MobileCompliance, window.MobileReports,
-                    window.MobileAlarms, window.MobileNayax,
-                    window.MobileCls, window.MobileNtr, window.MobileSup, window.MobileClt, window.MobileBiz, window.MobileSecScan
-                ];
+                const registries = mobileRegistries();
                 for (const reg of registries) {
                     if (reg && reg.getTransformData) {
                         const transform = reg.getTransformData(serviceConfig.model);
@@ -231,25 +220,7 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
          */
         getServiceFormDef(serviceConfig) {
             if (serviceConfig.model) {
-                // Try all registered mobile module registries
-                const registries = [
-                    window.MobileHCM, window.MobileFIN, window.MobileSCM,
-                    window.MobileSales, window.MobileMfg, window.MobileCrm,
-                    window.MobileBi, window.MobileDoc, window.MobileComp,
-                    window.MobilePrj, window.MobileEcom, window.MobileSYS,
-                    window.MobileMonitoring, window.MobileALM,
-                    window.MobileSystem, window.MobileTargets,
-                    window.MobileAia, window.MobileLending,
-                    window.MobileFmcCore, window.MobileFmcCoaching,
-                    window.MobileFmcNutrition, window.MobileFmcProgress,
-                    window.MobileFmcBilling,
-                    window.MobileFleet, window.MobileInventory,
-                    window.MobileMaintenance, window.MobileRoutes,
-                    window.MobileAnalytics, window.MobileWarehouse,
-                    window.MobileCompliance, window.MobileReports,
-                    window.MobileAlarms, window.MobileNayax,
-                    window.MobileCls, window.MobileNtr, window.MobileSup, window.MobileClt, window.MobileBiz, window.MobileSecScan
-                ];
+                const registries = mobileRegistries();
                 for (const reg of registries) {
                     if (reg && reg.getFormDef) {
                         const formDef = reg.getFormDef(serviceConfig.model);
