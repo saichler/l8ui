@@ -202,8 +202,8 @@ limitations under the License.
                 if (input.classList.contains('reference-input')) {
                     const refId = input.dataset.refId;
                     if (refId && refId !== '' && refId !== 'undefined') {
-                        const numRefId = parseInt(refId, 10);
-                        formData[input.name] = isNaN(numRefId) ? refId : numRefId;
+                        // Every Layer 8 ID is a string UUID: keep it as picked.
+                        formData[input.name] = refId;
                     } else {
                         formData[input.name] = null;
                     }

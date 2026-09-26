@@ -95,13 +95,8 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
                         }
                         break;
                     case 'reference':
-                        const refId = element.dataset.refId;
-                        if (refId) {
-                            const numRefId = parseInt(refId, 10);
-                            value = isNaN(numRefId) ? refId : numRefId;
-                        } else {
-                            value = null;
-                        }
+                        // Every Layer 8 ID is a string UUID: keep it as picked.
+                        value = element.dataset.refId || null;
                         break;
 
                     // String formatted types
