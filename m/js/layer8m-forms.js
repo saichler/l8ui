@@ -36,6 +36,20 @@ limitations under the License.
         return key.split('.').reduce(function(o, k) { return o && o[k]; }, obj);
     }
 
+    /**
+     * Deep property write for dot-notation keys (e.g., 'policy.names' sets
+     * obj.policy.names). Matches desktop setNestedValue in layer8d-forms-data.js
+     */
+    function setNestedValue(obj, key, value) {
+        const parts = key.split('.');
+        let current = obj;
+        for (let i = 0; i < parts.length - 1; i++) {
+            if (!current[parts[i]] || typeof current[parts[i]] !== 'object') current[parts[i]] = {};
+            current = current[parts[i]];
+        }
+        current[parts[parts.length - 1]] = value;
+    }
+
     window.Layer8MForms = {
         /**
          * Render a form field based on type
@@ -299,6 +313,15 @@ limitations under the License.
                 delete formData[baseKey + '.__periodType'];
                 delete formData[baseKey + '.__periodYear'];
                 delete formData[baseKey + '.__periodValue'];
+            }
+
+            // A dotted key edits a nested field ('policy.names' ->
+            // { policy: { names } }), as desktop collects it.
+            for (const key of Object.keys(formData)) {
+                if (!key.includes('.')) continue;
+                const value = formData[key];
+                delete formData[key];
+                setNestedValue(formData, key, value);
             }
 
             return formData;
