@@ -280,7 +280,7 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
                 const clickClass = isReadOnly ? ' l8-clickable-row' : '';
                 html += `<div class="form-inline-table-row${clickClass}" data-row-index="${idx}" style="grid-template-columns: ${gridCols}">`;
                 visibleCols.forEach(col => {
-                    html += `<span class="form-inline-table-cell">${Layer8DFormsFields.formatInlineTableCell ? Layer8DFormsFields.formatInlineTableCell(col, row[col.key]) : (row[col.key] || '-')}</span>`;
+                    html += `<span class="form-inline-table-cell">${Layer8DFormsFields.formatInlineTableCell ? Layer8DFormsFields.formatInlineTableCell(col, row[col.key], row) : (row[col.key] || '-')}</span>`;
                 });
                 if (!isReadOnly) {
                     html += `<span class="form-inline-table-actions">`;
@@ -322,6 +322,23 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
             onSave: () => {
                 const data = Layer8DFormsData.collectFormData(miniFormDef);
                 if (!data) return;
+                // Reference columns store an id, but a reader of the row sees the
+                // raw id in the cell — so when a sibling display column named by
+                // the "<prefix>Id" → "<prefix>Name" convention also exists in the
+                // same inline table, copy the picker's visible text into it.
+                const popupBody = Layer8DPopup.getBody && Layer8DPopup.getBody();
+                if (popupBody) {
+                    const colKeys = new Set(fieldDef.columns.map(c => c.key));
+                    fieldDef.columns.forEach(col => {
+                        if (col.type !== 'reference' || !col.key.endsWith('Id')) return;
+                        const siblingKey = col.key.slice(0, -2) + 'Name';
+                        if (!colKeys.has(siblingKey)) return;
+                        const refInput = popupBody.querySelector(`input.reference-input[name="${col.key}"]`);
+                        if (refInput && refInput.value) {
+                            data[siblingKey] = refInput.value;
+                        }
+                    });
+                }
                 // Preserve hidden fields from original row
                 fieldDef.columns.forEach(col => {
                     if (col.hidden && rowData[col.key] !== undefined) {

@@ -18,8 +18,17 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
     // INLINE TABLE (embedded child records)
     // ========================================
 
-    function formatInlineTableCell(col, value) {
-        // Delegates to the single display formatter — col has same shape as field
+    function formatInlineTableCell(col, value, row) {
+        // Reference cells store an id — if a sibling display column follows the
+        // "<prefix>Id" → "<prefix>Name" convention and is populated on the row,
+        // render that instead of the raw id. Falls through to the default
+        // formatter otherwise.
+        if (col.type === 'reference' && typeof col.key === 'string' && col.key.endsWith('Id') && row) {
+            var siblingKey = col.key.slice(0, -2) + 'Name';
+            if (row[siblingKey]) {
+                return escapeHtml(String(row[siblingKey]));
+            }
+        }
         return escapeHtml(F.formatFieldDisplayValue(col, value));
     }
 
@@ -46,7 +55,7 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
                 const clickClass = readOnly ? ' l8-clickable-row' : '';
                 html += `<div class="form-inline-table-row${clickClass}" data-row-index="${idx}" style="grid-template-columns: ${gridCols}">`;
                 visibleCols.forEach(col => {
-                    html += `<span class="form-inline-table-cell">${formatInlineTableCell(col, row[col.key])}</span>`;
+                    html += `<span class="form-inline-table-cell">${formatInlineTableCell(col, row[col.key], row)}</span>`;
                 });
                 if (!readOnly) {
                     html += `<span class="form-inline-table-actions">`;
