@@ -94,7 +94,9 @@ limitations under the License.
                     <div class="layer8d-calendar-day-events">`;
 
                 events.slice(0, maxShow).forEach((item, i) => {
-                    const title = cal._getNestedValue(item, cal.titleField) || 'Event';
+                    const title = typeof cal.viewConfig.formatEventLabel === 'function'
+                        ? cal.viewConfig.formatEventLabel(item)
+                        : (cal._getNestedValue(item, cal.titleField) || 'Event');
                     const color = _getColors()[i % _getColors().length];
                     const id = cal._getItemId(item);
                     html += `<div class="layer8d-calendar-event" style="background:${color}" data-id="${escapeHtml(String(id))}">${escapeHtml(title)}</div>`;
@@ -143,7 +145,9 @@ limitations under the License.
                     <div class="layer8d-calendar-week-events">`;
 
                 events.forEach((item, j) => {
-                    const title = cal._getNestedValue(item, cal.titleField) || 'Event';
+                    const title = typeof cal.viewConfig.formatEventLabel === 'function'
+                        ? cal.viewConfig.formatEventLabel(item)
+                        : (cal._getNestedValue(item, cal.titleField) || 'Event');
                     const color = _getColors()[j % _getColors().length];
                     const id = cal._getItemId(item);
                     html += `<div class="layer8d-calendar-event" style="background:${color}" data-id="${escapeHtml(String(id))}">${escapeHtml(title)}</div>`;
