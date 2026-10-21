@@ -126,6 +126,9 @@ limitations under the License.
             const v = this._getNestedValue(item, field);
             if (!v) return 0;
             if (typeof v === 'number') return v;
+            // protojson serialises int64 fields as strings — try numeric parse first
+            const n = Number(v);
+            if (!isNaN(n) && n > 0) return n;
             return new Date(v).getTime() / 1000 || 0;
         }
 
