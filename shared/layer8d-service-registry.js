@@ -87,15 +87,16 @@ limitations under the License.
         const viewType = service.viewType || 'table';
 
         const isReadOnly = service.readOnly === true;
+        const vc = service.viewConfig || {};
 
         // Check per-type action permissions from the security provider
         // Empty permissions map ({}) means permissive mode — all actions allowed
         const permMap = window.Layer8DPermissions;
         const hasPermissions = permMap && Object.keys(permMap).length > 0;
         const perms = hasPermissions ? (permMap[service.model] || []) : [];
-        const canCreate = !isReadOnly && (!hasPermissions || perms.indexOf(1) !== -1);  // POST
-        const canUpdate = !isReadOnly && (!hasPermissions || perms.indexOf(2) !== -1);  // PUT
-        const canDelete = !isReadOnly && (!hasPermissions || perms.indexOf(4) !== -1);  // DELETE
+        const canCreate = !isReadOnly && vc.canAdd !== false && (!hasPermissions || perms.indexOf(1) !== -1);  // POST
+        const canUpdate = !isReadOnly && vc.canEdit !== false && (!hasPermissions || perms.indexOf(2) !== -1);  // PUT
+        const canDelete = !isReadOnly && vc.canDelete !== false && (!hasPermissions || perms.indexOf(4) !== -1);  // DELETE
 
         // service.baseWhereClause can be a plain string (fixed filter) or a
         // function (evaluated fresh every time this table initializes --

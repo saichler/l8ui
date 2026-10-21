@@ -62,6 +62,9 @@ limitations under the License.
                 if (registryConfig.selectColumns && !config.selectColumns) {
                     config.selectColumns = registryConfig.selectColumns;
                 }
+                if (registryConfig.baseWhereClause && !config.baseWhereClause) {
+                    config.baseWhereClause = registryConfig.baseWhereClause;
+                }
             }
         }
 

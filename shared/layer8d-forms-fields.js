@@ -428,6 +428,7 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
                     idColumn: registryConfig.idColumn,
                     displayColumn: registryConfig.displayColumn,
                     selectColumns: registryConfig.selectColumns,
+                    baseWhereClause: registryConfig.baseWhereClause,
                     displayLabel: registryConfig.displayLabel,
                     ...field.referenceConfig,
                     title: field.referenceConfig?.title || `Select ${field.label}`
