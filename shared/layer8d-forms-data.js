@@ -86,6 +86,15 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
                             value = parseDateToTimestamp(element.value);
                         }
                         break;
+                    case 'datetimelocal':
+                        // datetime-local input value is "YYYY-MM-DDTHH:MM" — convert to unix epoch (seconds).
+                        if (!element.value) {
+                            value = null;
+                        } else {
+                            const ts = new Date(element.value).getTime();
+                            value = isNaN(ts) ? null : Math.floor(ts / 1000);
+                        }
+                        break;
                     case 'select':
                         if (element.value) {
                             const numVal = parseInt(element.value, 10);

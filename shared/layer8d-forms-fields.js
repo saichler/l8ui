@@ -181,6 +181,20 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
                 break;
             }
 
+            case 'datetimelocal': {
+                // Editable datetime-local input; value is a unix epoch (seconds) or 0/null.
+                const dtlVal = (value && value !== 0)
+                    ? (function() {
+                        const d = new Date(Number(value) * 1000);
+                        const pad = n => String(n).padStart(2, '0');
+                        return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()) +
+                               'T' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+                    })()
+                    : '';
+                inputHtml = `<input type="datetime-local" id="field-${field.key}" name="${field.key}" value="${escapeAttr(dtlVal)}" ${required}>`;
+                break;
+            }
+
             case 'date':
                 inputHtml = generateDateInput(field, value);
                 break;

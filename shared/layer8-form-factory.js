@@ -326,6 +326,19 @@ limitations under the License.
         },
 
         /**
+         * Create an editable datetime field (datetime-local input, stored as unix epoch seconds).
+         */
+        datetimelocal: function(key, label, required) {
+            const field = {
+                key: key,
+                label: label || this._toTitleCase(key),
+                type: 'datetimelocal'
+            };
+            if (required) field.required = true;
+            return [field];
+        },
+
+        /**
          * Create a time-of-day field (native time picker, HH:MM).
          */
         time: function(key, label, required) {
