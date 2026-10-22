@@ -86,6 +86,18 @@ limitations under the License.
             case 'datetime':
                 return formatDateTime(value);
 
+            case 'datetimelocal': {
+                var n = typeof value === 'number' ? value : Number(value);
+                if (!isNaN(n) && n > 0) {
+                    var d = new Date(n * 1000);
+                    if (!isNaN(d.getTime())) {
+                        return d.toLocaleDateString([], { year: 'numeric', month: 'short', day: 'numeric' }) +
+                               ' ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    }
+                }
+                return String(value);
+            }
+
             case 'time':
                 return String(value);
 
