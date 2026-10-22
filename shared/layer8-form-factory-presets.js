@@ -67,10 +67,10 @@ limitations under the License.
 
     F.audit = function() {
         return [
-            { key: 'createdBy', label: 'Created By', type: 'text', readOnly: true },
-            { key: 'createdAt', label: 'Created At', type: 'date', readOnly: true },
-            { key: 'modifiedBy', label: 'Modified By', type: 'text', readOnly: true },
-            { key: 'modifiedAt', label: 'Modified At', type: 'date', readOnly: true }
+            { key: 'auditInfo.createdBy',  label: 'Created By',  type: 'text',     readOnly: true },
+            { key: 'auditInfo.createdAt',  label: 'Created At',  type: 'datetime', readOnly: true },
+            { key: 'auditInfo.modifiedBy', label: 'Modified By', type: 'text',     readOnly: true },
+            { key: 'auditInfo.modifiedAt', label: 'Modified At', type: 'datetime', readOnly: true }
         ];
     };
 
