@@ -49,7 +49,9 @@ limitations under the License.
                 onDataLoaded: config.onDataLoaded || null,
                 onCardClick: config.onCardClick || null,
                 onError: config.onError || null,
-                ...config
+                ...config,
+                // Live by default; pass realtime: false to opt a table out.
+                realtime: config.realtime !== false
             };
 
             this.currentPage = 1;
@@ -63,7 +65,6 @@ limitations under the License.
             this.hasError = false;
             this.errorMessage = '';
             this._wsUnsubscribe = null;
-            this._notificationsPaused = false;
 
             this.init();
         }
@@ -179,7 +180,6 @@ limitations under the License.
 
                 this._updateServerData(items, totalCount);
                 this.currentPage = page;
-                this._notificationsPaused = false;
 
                 if (this.config.realtime && typeof Layer8DWebSocket !== 'undefined' && !this._wsUnsubscribe) {
                     this._wsUnsubscribe = Layer8DWebSocket.subscribe(this.config.modelName, this._handleChangeNotification.bind(this));

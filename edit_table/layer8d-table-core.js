@@ -59,9 +59,10 @@ class Layer8DTable {
         this.filterDebounceMs = options.filterDebounceMs || 1000;
 
         // Real-time change notifications
-        this.realtime = options.realtime || false;
+        // Live by default: a server-side table registers its query and applies
+        // pushed changes. Pass realtime: false to opt a table out.
+        this.realtime = options.realtime !== false;
         this._wsUnsubscribe = null;
-        this._notificationsPaused = false;
 
         // Sorting and filtering state
         this.sortColumn = options.defaultSort?.column || null;

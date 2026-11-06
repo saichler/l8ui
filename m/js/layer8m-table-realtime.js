@@ -20,54 +20,24 @@ limitations under the License.
 
     if (typeof Layer8MTable === 'undefined') return;
 
+    // Apply a pushed change to the page of cards in place and re-render. In
+    // server mode the page lives in config.data (see _getPageData). Only a
+    // change that arrives without its record falls back to re-fetching.
     Layer8MTable.prototype._handleChangeNotification = function(msg) {
-        if (this._notificationsPaused) return;
-
-        if (msg.action === 'update') {
-            var record = msg.record;
-            if (this.config.transformData) {
-                record = this.config.transformData(record);
-            }
-            var getItemId = this.config.getItemId;
-            for (var i = 0; i < this.filteredData.length; i++) {
-                var itemId = getItemId ? getItemId(this.filteredData[i]) : this.filteredData[i].id;
-                if (String(itemId) === String(msg.primaryKey)) {
-                    this.filteredData[i] = record;
-                    this._updateCard(i, record);
-                    return;
-                }
-            }
-        } else if (msg.action === 'delete' || msg.action === 'add') {
-            this._notificationsPaused = true;
-            var self = this;
-            setTimeout(function() {
-                self._notificationsPaused = false;
-                self.fetchData(self.currentPage);
-            }, 500);
+        var getItemId = this.config.getItemId || function(item) { return item.id; };
+        var change = Layer8DWebSocket.applyChange(this.config.data, msg, {
+            getId: getItemId,
+            transform: this.config.transformData,
+            pageSize: this.config.rowsPerPage,
+            firstPage: this.currentPage === 1
+        });
+        if (change.missingRecord) {
+            this.fetchData(this.currentPage);
+            return;
         }
-    };
-
-    Layer8MTable.prototype._updateCard = function(index, item) {
-        var container = document.getElementById(this.containerId);
-        if (!container) return;
-        var cards = container.querySelectorAll('.mobile-table-card');
-        var existingCard = cards[index];
-        if (!existingCard) return;
-
-        var tempDiv = document.createElement('div');
-        if (this.config.renderCard) {
-            tempDiv.innerHTML = this.config.renderCard(item, index, this);
-        } else {
-            tempDiv.innerHTML = this._renderDefaultCard(item, index);
-        }
-        var newCard = tempDiv.firstElementChild;
-        if (!newCard) return;
-
-        existingCard.replaceWith(newCard);
-        newCard.classList.add('layer8m-card-changed');
-        setTimeout(function() {
-            newCard.classList.remove('layer8m-card-changed');
-        }, 2000);
+        if (change.index < 0 && change.totalDelta === 0) return;
+        this.config.totalCount = Math.max(0, (this.config.totalCount || 0) + change.totalDelta);
+        this.render();
     };
 
     Layer8MTable.prototype.destroy = function() {

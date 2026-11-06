@@ -68,7 +68,7 @@ limitations under the License.
             onRowClick: options.onRowClick,
             transformData: options.transformData,
             onDataLoaded: options.onDataLoaded,
-            realtime: options.realtime || false
+            realtime: options.realtime !== false
         });
     });
 

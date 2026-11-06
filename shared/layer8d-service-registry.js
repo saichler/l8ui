@@ -124,7 +124,7 @@ limitations under the License.
             addButtonText: `Add ${service.label.replace(/s$/, '')}`,
             viewConfig: service.viewConfig || {},
             defaultSort: service.defaultSort || null,
-            realtime: service.realtime || false
+            realtime: service.realtime !== false
         };
 
         const switcherKey = `${moduleKey}-${service.key}`;

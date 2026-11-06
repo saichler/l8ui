@@ -28,7 +28,8 @@ limitations under the License.
             this.columns = options.columns || [];
             this.transformData = options.transformData || null;
             this.primaryKey = options.primaryKey || 'id';
-            this.realtime = options.realtime || false;
+            // Live by default; pass realtime: false to opt out.
+            this.realtime = options.realtime !== false;
 
             // State
             this.currentPage = 1;
@@ -39,14 +40,11 @@ limitations under the License.
             this.sortColumn = null;
             this.sortDirection = 'asc';
             this._wsUnsubscribe = null;
-            this._notificationsPaused = false;
 
             // Callbacks
             this._onDataLoaded = options.onDataLoaded || null;
             this._onError = options.onError || null;
             this._onMetadata = options.onMetadata || null;
-            this.onItemChanged = null;
-            this.onPageStructureChanged = null;
         }
 
         /**
@@ -136,7 +134,6 @@ limitations under the License.
 
                 this.currentPage = page;
                 this.data = items;
-                this._notificationsPaused = false;
 
                 if (this.realtime && typeof Layer8DWebSocket !== 'undefined' && !this._wsUnsubscribe) {
                     this._wsUnsubscribe = Layer8DWebSocket.subscribe(this.modelName, this._handleChangeNotification.bind(this));
@@ -203,37 +200,27 @@ limitations under the License.
         }
 
         _handleChangeNotification(msg) {
-            if (this._notificationsPaused) return;
-
+            // Apply the change to the loaded items in place and hand the view
+            // its updated items through the same callback a fetch uses, so
+            // every view re-renders live without a re-fetch. Only a change that
+            // arrives without its record falls back to re-fetching.
             var pk = this.primaryKey;
-
-            if (msg.action === 'update') {
-                var record = msg.record;
-                if (this.transformData) {
-                    record = this.transformData(record);
-                }
-                var index = -1;
-                for (var i = 0; i < this.data.length; i++) {
-                    if (String(this.data[i][pk]) === String(msg.primaryKey)) {
-                        index = i;
-                        break;
-                    }
-                }
-                if (index >= 0) {
-                    this.data[index] = record;
-                    if (this.onItemChanged) this.onItemChanged(record, index, 'update');
-                }
-            } else if (msg.action === 'delete' || msg.action === 'add') {
-                this._notificationsPaused = true;
-                if (this.onPageStructureChanged) {
-                    var self = this;
-                    this.onPageStructureChanged(msg.action, function() {
-                        self._notificationsPaused = false;
-                        self.fetchData(self.currentPage);
-                    }, function() {
-                        // ignore — stay paused until next manual refresh
-                    });
-                }
+            var change = Layer8DWebSocket.applyChange(this.data, msg, {
+                getId: function(item) { return item[pk]; },
+                transform: this.transformData,
+                pageSize: this.pageSize,
+                firstPage: this.currentPage === 1
+            });
+            if (change.missingRecord) {
+                this.fetchData(this.currentPage);
+                return;
+            }
+            if (change.index < 0 && change.totalDelta === 0) return;
+            this.totalItems = Math.max(0, this.totalItems + change.totalDelta);
+            if (this._onDataLoaded) {
+                this._onDataLoaded({
+                    items: this.data, totalCount: this.totalItems, metadata: null, invalidFilters: []
+                });
             }
         }
 

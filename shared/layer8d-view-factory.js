@@ -137,7 +137,7 @@ limitations under the License.
             onRowClick: options.onRowClick,
             addButtonText: options.addButtonText,
             defaultSort: options.defaultSort || null,
-            realtime: options.realtime || false
+            realtime: options.realtime !== false
         });
         return table;
     });
