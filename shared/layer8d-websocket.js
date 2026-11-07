@@ -13,6 +13,42 @@
     var reconnectDelay = 1000;
     var maxReconnectDelay = 30000;
     var connected = false;
+    var hasConnected = false;
+
+    // Live registrations: at most MAX_LIVE client components hold a server
+    // registration at a time, oldest first. Registering a new component past
+    // the limit evicts the oldest: its listeners are detached and each of its
+    // queries is sent with register=Unregister, so the service's cache drops
+    // it. A component that registers again (a revisit) moves to the newest.
+    var MAX_LIVE = 5;
+    var live = [];
+
+    function liveIndex(id) {
+        for (var i = 0; i < live.length; i++) {
+            if (live[i].id === id) return i;
+        }
+        return -1;
+    }
+
+    function detach(entry) {
+        var unsubs = entry.listeners;
+        entry.listeners = [];
+        for (var i = 0; i < unsubs.length; i++) unsubs[i]();
+        if (entry.onDetach) entry.onDetach();
+        entry.owner = null;
+    }
+
+    function sendUnregister(entry) {
+        var token = sessionStorage.bearerToken;
+        if (!token) return;
+        entry.queries.forEach(function(q) {
+            var body = encodeURIComponent(JSON.stringify({
+                text: q.text, register: 'L8_REGISTER_UNREGISTER', registerId: entry.id }));
+            fetch(q.endpoint + '?body=' + body, {
+                headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' }
+            }).catch(function() {});
+        });
+    }
 
     function connect() {
         var token = sessionStorage.bearerToken;
@@ -26,6 +62,15 @@
         ws.onopen = function() {
             reconnectDelay = 1000;
             connected = true;
+            // The server drops a user's registrations when their websocket
+            // closes, so after a reconnect every live component fetches again,
+            // which registers it again and picks up what changed meanwhile.
+            if (hasConnected) {
+                live.slice().forEach(function(entry) {
+                    if (entry.onReconnect) entry.onReconnect();
+                });
+            }
+            hasConnected = true;
         };
 
         ws.onmessage = function(event) {
@@ -79,6 +124,102 @@
 
         isConnected: function() {
             return connected;
+        },
+
+        /**
+         * Registers a component's query for live change notifications and
+         * returns the query body to send: the text plus register=Register and
+         * registerId=id, which the server keys the registration by (per user).
+         * Call it on every fetch -- paging or a new filter replaces the
+         * registration. The component becomes the newest of the MAX_LIVE live
+         * components; the oldest past the limit is evicted.
+         *
+         * @param {string} id - stable id of the component (e.g. its container id)
+         * @param {Object} owner - the component instance; a new instance under
+         *   the same id (a revisit) takes the slot over and detaches the old one
+         * @param {string} endpoint - resolved endpoint the query is sent to
+         * @param {string} text - the L8QL query text
+         * @param {{onDetach: ?function(), onReconnect: ?function()}} hooks -
+         *   onDetach: the component's listeners were removed (evicted or taken
+         *   over), so it is no longer live; onReconnect: fetch again after the
+         *   websocket reconnected
+         * @returns {{text: string, register: string, registerId: string}}
+         */
+        registerQuery: function(id, owner, endpoint, text, hooks) {
+            var index = liveIndex(id);
+            var entry;
+            if (index >= 0) {
+                entry = live.splice(index, 1)[0];
+                if (entry.owner !== owner) {
+                    // Taken over by another instance (a revisit, or a shell
+                    // that reuses one container for every service): drop the
+                    // old instance's listeners, and unregister its queries on
+                    // other endpoints -- the one on this endpoint is replaced
+                    // by this registration itself.
+                    detach(entry);
+                    var stale = entry.queries.filter(function(q) { return q.endpoint !== endpoint; });
+                    if (stale.length) sendUnregister({ id: id, queries: stale });
+                    entry.queries = [];
+                }
+            } else {
+                entry = { id: id, owner: null, listeners: [], queries: [] };
+            }
+            entry.owner = owner;
+            entry.onDetach = hooks && hooks.onDetach;
+            entry.onReconnect = hooks && hooks.onReconnect;
+            entry.queries = entry.queries.filter(function(q) { return q.endpoint !== endpoint; });
+            entry.queries.push({ endpoint: endpoint, text: text });
+            live.push(entry);
+
+            while (live.length > MAX_LIVE) {
+                var oldest = live.shift();
+                detach(oldest);
+                sendUnregister(oldest);
+            }
+            return { text: text, register: 'L8_REGISTER_REGISTER', registerId: id };
+        },
+
+        /**
+         * Subscribes a registered component to pushed changes of modelType.
+         * The listener belongs to the component's live slot: evicting or
+         * taking over the slot removes it.
+         * @returns {function()} unsubscribe
+         */
+        listen: function(id, owner, modelType, callback) {
+            var index = liveIndex(id);
+            if (index < 0 || live[index].owner !== owner) return function() {};
+            var entry = live[index];
+            var unsubscribe = this.subscribe(modelType, callback);
+            entry.listeners.push(unsubscribe);
+            return function() {
+                var i = entry.listeners.indexOf(unsubscribe);
+                if (i >= 0) entry.listeners.splice(i, 1);
+                unsubscribe();
+            };
+        },
+
+        /**
+         * A destroyed component stops listening. Its registration stays in
+         * its slot (no Unregister): the same component usually registers
+         * again right away (a view switch), and an Unregister racing that
+         * registration could drop it. The slot is replaced or evicted later.
+         */
+        release: function(id, owner) {
+            var index = liveIndex(id);
+            if (index >= 0 && live[index].owner === owner) {
+                var entry = live[index];
+                var unsubs = entry.listeners;
+                entry.listeners = [];
+                for (var i = 0; i < unsubs.length; i++) unsubs[i]();
+                entry.owner = null;
+                entry.onDetach = null;
+                entry.onReconnect = null;
+            }
+        },
+
+        /** Ids of the live components, oldest first (diagnostics and tests). */
+        liveIds: function() {
+            return live.map(function(entry) { return entry.id; });
         },
 
         /**

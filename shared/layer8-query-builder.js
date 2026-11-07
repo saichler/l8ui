@@ -24,7 +24,7 @@ limitations under the License.
 // filters (single free-text filter vs. per-column filter map) and sort keys,
 // so this module does NOT force them into one shape — it only provides
 // assembleQuery(), the final "select X from Y where ... limit ... page ...
-// sort-by ... register=true" string template, which IS identical across all
+// sort-by ..." string template, which IS identical across all
 // five once each caller has resolved its own where-conditions/sort-clause.
 // In particular: Layer8MDataSource's single-filter mode has its own
 // hardcoded-`Id`-column fallback that desktop's per-column filter map has no
@@ -92,8 +92,8 @@ limitations under the License.
      * @param {string} [parts.sortClause] - pre-resolved sort key, WITHOUT the
      *   'sort-by ' prefix or ' descending' suffix (pass '' to omit sorting)
      * @param {boolean} [parts.sortDescending]
-     * @param {boolean} [parts.realtime]
-     * @returns {string}
+     * @returns {string}  (live registration is not part of the text: it travels
+     *   as fields of the query body, see Layer8DWebSocket.registerQuery)
      */
     function assembleQuery(parts) {
         let query = `select ${parts.selectClause} from ${parts.modelName}`;
@@ -107,10 +107,6 @@ limitations under the License.
         if (parts.sortClause) {
             const desc = parts.sortDescending ? ' descending' : '';
             query += ` sort-by ${parts.sortClause}${desc}`;
-        }
-
-        if (parts.realtime) {
-            query += ' register=true';
         }
 
         return query;

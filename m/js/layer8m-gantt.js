@@ -41,6 +41,7 @@ limitations under the License.
 
             if (this.config.endpoint && this.config.modelName) {
                 const ds = new Layer8MDataSource({
+                    registerId: this.containerId,
                     endpoint: Layer8MConfig.resolveEndpoint(this.config.endpoint),
                     modelName: this.config.modelName,
                     columns: this.config.columns || [],

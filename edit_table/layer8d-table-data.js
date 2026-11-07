@@ -46,11 +46,26 @@ Layer8DTable.prototype.buildQuery = function(page, pageSize) {
         pageSize,
         pageIndex,
         sortClause,
-        sortDescending,
-        realtime: this.realtime
+        sortDescending
     });
 
     return { query, invalidFilters };
+};
+
+Layer8DTable.prototype._isLive = function() {
+    return this.realtime && typeof Layer8DWebSocket !== 'undefined';
+};
+
+// The body of a fetch: a live table registers its query (one of the
+// Layer8DWebSocket live slots) on every fetch, so the server always matches
+// the page and filter the table currently shows.
+Layer8DTable.prototype._queryBody = function(query) {
+    if (!this._isLive()) return { text: query };
+    var self = this;
+    return Layer8DWebSocket.registerQuery(this._registerId, this, this.endpoint, query, {
+        onDetach: function() { self._wsUnsubscribe = null; },
+        onReconnect: function() { self.fetchData(self.currentPage, self.pageSize); }
+    });
 };
 
 // Fetch data from server
@@ -63,7 +78,7 @@ Layer8DTable.prototype.fetchData = async function(page, pageSize) {
     const { query, invalidFilters } = this.buildQuery(page, pageSize);
 
     try {
-        const body = encodeURIComponent(JSON.stringify({ text: query }));
+        const body = encodeURIComponent(JSON.stringify(this._queryBody(query)));
         const response = await fetch(this.endpoint + '?body=' + body, {
             method: 'GET',
             headers: typeof getAuthHeaders === 'function' ? getAuthHeaders() : { 'Content-Type': 'application/json' }
@@ -99,9 +114,10 @@ Layer8DTable.prototype.fetchData = async function(page, pageSize) {
         this.setServerData(items, totalCount);
         this.setInvalidFilters(invalidFilters);
 
-        // Subscribe to real-time change notifications
-        if (this.realtime && typeof Layer8DWebSocket !== 'undefined' && !this._wsUnsubscribe) {
-            this._wsUnsubscribe = Layer8DWebSocket.subscribe(this.modelName, this._handleChangeNotification.bind(this));
+        // Listen for pushed changes while this table is live
+        if (this._isLive() && !this._wsUnsubscribe) {
+            this._wsUnsubscribe = Layer8DWebSocket.listen(this._registerId, this, this.modelName,
+                this._handleChangeNotification.bind(this));
         }
 
         // Call optional callback for additional processing
@@ -222,10 +238,8 @@ Layer8DTable.prototype._handleChangeNotification = function(msg) {
     }
 };
 
-// Unsubscribe from WebSocket notifications and clean up
+// Stop listening for pushed changes and clean up
 Layer8DTable.prototype.destroy = function() {
-    if (this._wsUnsubscribe) {
-        this._wsUnsubscribe();
-        this._wsUnsubscribe = null;
-    }
+    if (this._isLive()) Layer8DWebSocket.release(this._registerId, this);
+    this._wsUnsubscribe = null;
 };

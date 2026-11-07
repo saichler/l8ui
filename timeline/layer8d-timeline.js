@@ -217,6 +217,7 @@ limitations under the License.
         Layer8DViewFactory.register('timeline', function(options) {
             const ds = new Layer8DDataSource({
                 endpoint: options.endpoint,
+                registerId: options.containerId,
                 modelName: options.modelName,
                 columns: options.columns,
                 pageSize: options.viewConfig?.pageSize || 20

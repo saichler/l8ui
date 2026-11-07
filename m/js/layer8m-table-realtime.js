@@ -40,11 +40,24 @@ limitations under the License.
         this.render();
     };
 
+    Layer8MTable.prototype._isLive = function() {
+        return this.config.realtime && typeof Layer8DWebSocket !== 'undefined';
+    };
+
+    // The body of a fetch: a live table registers its query (one of the
+    // Layer8DWebSocket live slots) on every fetch.
+    Layer8MTable.prototype._queryBody = function(query) {
+        if (!this._isLive()) return { text: query };
+        var self = this;
+        return Layer8DWebSocket.registerQuery(this._registerId, this, this.config.endpoint, query, {
+            onDetach: function() { self._wsUnsubscribe = null; },
+            onReconnect: function() { self.fetchData(self.currentPage); }
+        });
+    };
+
     Layer8MTable.prototype.destroy = function() {
-        if (this._wsUnsubscribe) {
-            this._wsUnsubscribe();
-            this._wsUnsubscribe = null;
-        }
+        if (this._isLive()) Layer8DWebSocket.release(this._registerId, this);
+        this._wsUnsubscribe = null;
     };
 
 })();

@@ -62,6 +62,9 @@ class Layer8DTable {
         // Live by default: a server-side table registers its query and applies
         // pushed changes. Pass realtime: false to opt a table out.
         this.realtime = options.realtime !== false;
+        // The live-slot id the server keys this table's registration by: the
+        // container, so reopening the same service takes its slot over.
+        this._registerId = options.registerId || options.containerId;
         this._wsUnsubscribe = null;
 
         // Sorting and filtering state

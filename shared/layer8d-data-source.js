@@ -19,6 +19,9 @@ limitations under the License.
 (function() {
     'use strict';
 
+    // Numbers data sources that have no container id, for their register id.
+    var Layer8DataSourceSeq = { n: 0 };
+
     class Layer8DDataSource {
         constructor(options) {
             this.endpoint = options.endpoint || null;
@@ -30,6 +33,11 @@ limitations under the License.
             this.primaryKey = options.primaryKey || 'id';
             // Live by default; pass realtime: false to opt out.
             this.realtime = options.realtime !== false;
+            // The live-slot id the server keys this source's registration by:
+            // the view's container when given, so reopening the view takes its
+            // slot over; otherwise unique to this instance.
+            this.registerId = options.registerId || options.containerId ||
+                ('ds-' + (this.modelName || '') + '-' + (++Layer8DataSourceSeq.n));
 
             // State
             this.currentPage = 1;
@@ -73,8 +81,7 @@ limitations under the License.
                 pageSize,
                 pageIndex,
                 sortClause,
-                sortDescending,
-                realtime: this.realtime
+                sortDescending
             });
 
             return { query, invalidFilters };
@@ -95,7 +102,7 @@ limitations under the License.
             const { query, invalidFilters } = this.buildQuery(page, pageSize);
 
             try {
-                const body = encodeURIComponent(JSON.stringify({ text: query }));
+                const body = encodeURIComponent(JSON.stringify(this._queryBody(query)));
                 const response = await fetch(this.endpoint + '?body=' + body, {
                     method: 'GET',
                     headers: typeof getAuthHeaders === 'function' ? getAuthHeaders() : { 'Content-Type': 'application/json' }
@@ -124,8 +131,9 @@ limitations under the License.
                 this.currentPage = page;
                 this.data = items;
 
-                if (this.realtime && typeof Layer8DWebSocket !== 'undefined' && !this._wsUnsubscribe) {
-                    this._wsUnsubscribe = Layer8DWebSocket.subscribe(this.modelName, this._handleChangeNotification.bind(this));
+                if (this._isLive() && !this._wsUnsubscribe) {
+                    this._wsUnsubscribe = Layer8DWebSocket.listen(this.registerId, this, this.modelName,
+                        this._handleChangeNotification.bind(this));
                 }
 
                 const result = { items, totalCount, metadata: data.metadata, invalidFilters };
@@ -218,14 +226,28 @@ limitations under the License.
             }
         }
 
+        _isLive() {
+            return this.realtime && typeof Layer8DWebSocket !== 'undefined';
+        }
+
         /**
-         * Unsubscribe from WebSocket and clean up
+         * The body of a fetch: a live source registers its query (one of the
+         * Layer8DWebSocket live slots) on every fetch.
+         */
+        _queryBody(query) {
+            if (!this._isLive()) return { text: query };
+            return Layer8DWebSocket.registerQuery(this.registerId, this, this.endpoint, query, {
+                onDetach: () => { this._wsUnsubscribe = null; },
+                onReconnect: () => { this.fetchData(this.currentPage); }
+            });
+        }
+
+        /**
+         * Stop listening for pushed changes and clean up
          */
         destroy() {
-            if (this._wsUnsubscribe) {
-                this._wsUnsubscribe();
-                this._wsUnsubscribe = null;
-            }
+            if (this._isLive()) Layer8DWebSocket.release(this.registerId, this);
+            this._wsUnsubscribe = null;
         }
     }
 

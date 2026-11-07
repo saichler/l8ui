@@ -64,6 +64,10 @@ limitations under the License.
             this.isLoading = false;
             this.hasError = false;
             this.errorMessage = '';
+            // The live-slot id the server keys this table's registration by.
+            // The mobile shell reuses one container for every service, so the
+            // model is part of it.
+            this._registerId = this.config.registerId || (containerId + ':' + this.config.modelName);
             this._wsUnsubscribe = null;
 
             this.init();
@@ -147,10 +151,6 @@ limitations under the License.
                 query += ` sort-by ${sortKey}${desc}`;
             }
 
-            if (this.config.realtime) {
-                query += ' register=true';
-            }
-
             return { query, isInvalid };
         }
 
@@ -165,7 +165,7 @@ limitations under the License.
             this.isInvalidFilter = isInvalid;
 
             try {
-                const body = encodeURIComponent(JSON.stringify({ text: query }));
+                const body = encodeURIComponent(JSON.stringify(this._queryBody(query)));
                 const response = await Layer8MAuth.get(this.config.endpoint + '?body=' + body);
 
                 let totalCount = this.config.totalCount;
@@ -181,8 +181,9 @@ limitations under the License.
                 this._updateServerData(items, totalCount);
                 this.currentPage = page;
 
-                if (this.config.realtime && typeof Layer8DWebSocket !== 'undefined' && !this._wsUnsubscribe) {
-                    this._wsUnsubscribe = Layer8DWebSocket.subscribe(this.config.modelName, this._handleChangeNotification.bind(this));
+                if (this._isLive() && !this._wsUnsubscribe) {
+                    this._wsUnsubscribe = Layer8DWebSocket.listen(this._registerId, this, this.config.modelName,
+                        this._handleChangeNotification.bind(this));
                 }
 
                 if (this.config.onDataLoaded) {
