@@ -243,6 +243,17 @@ limitations under the License.
         }
 
         /**
+         * Shown again: become the newest live component, or fetch again (which
+         * registers again) if the slot was evicted meanwhile.
+         */
+        activate() {
+            if (!this._isLive()) return;
+            if (!Layer8DWebSocket.touch(this.registerId, this)) {
+                this.fetchData(this.currentPage);
+            }
+        }
+
+        /**
          * Stop listening for pushed changes and clean up
          */
         destroy() {

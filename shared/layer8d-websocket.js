@@ -199,6 +199,19 @@
         },
 
         /**
+         * A component shown again without fetching (switching back to a
+         * table that already exists) is used again: it moves to the newest.
+         * Returns false when the component no longer holds its slot (it was
+         * evicted or taken over); it must then fetch to register again.
+         */
+        touch: function(id, owner) {
+            var index = liveIndex(id);
+            if (index < 0 || live[index].owner !== owner) return false;
+            live.push(live.splice(index, 1)[0]);
+            return true;
+        },
+
+        /**
          * A destroyed component stops listening. Its registration stays in
          * its slot (no Unregister): the same component usually registers
          * again right away (a view switch), and an Unregister racing that

@@ -119,6 +119,17 @@ for (const id of ['g', 'h', 'i', 'j', 'k']) component(id, '/erp/30/' + id, id).r
 const unregs = sentBodies().filter((s) => s.body.registerId === 'dashboard').map((s) => s.endpoint).sort();
 check('evicting the dashboard unregisters every query', unregs, ['/erp/30/Employee', '/erp/60/SalesOrder']);
 
+// touch(): a component shown again without fetching moves to the newest;
+// one that lost its slot reports false (it must fetch to register again).
+const t1 = {}, t2 = {};
+WS.registerQuery('t1', t1, '/erp/30/T1', 'select * from T1', {});
+WS.registerQuery('t2', t2, '/erp/30/T2', 'select * from T2', {});
+check('touch moves to newest', WS.touch('t1', t1), true);
+check('touched is newest', WS.liveIds().slice(-1), ['t1']);
+check('touch by a non-owner fails', WS.touch('t2', {}), false);
+check('touch of an evicted id fails', WS.touch('b', comps.b), false);
+sentBodies();
+
 // After a reconnect every live component is asked to fetch (re-register).
 const reconnected = [];
 WS.registerQuery('r', {}, '/erp/30/R', 'select * from R', { onReconnect: () => reconnected.push('r') });

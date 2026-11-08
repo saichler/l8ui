@@ -128,8 +128,14 @@ limitations under the License.
             });
 
             const tableId = `${moduleKey}-${serviceKey}-table`;
-            if (!moduleNS._state.serviceTables[tableId]) {
+            const existing = moduleNS._state.serviceTables[tableId];
+            if (!existing) {
                 Layer8DServiceRegistry.initializeServiceTable(moduleNS, parentModule, moduleKey, service, tableId);
+            } else if (typeof existing.activate === 'function') {
+                // Shown again: counts as use for the live slots.
+                existing.activate();
+            } else if (existing.dataSource && typeof existing.dataSource.activate === 'function') {
+                existing.dataSource.activate();
             }
         };
 

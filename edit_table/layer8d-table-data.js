@@ -68,6 +68,17 @@ Layer8DTable.prototype._queryBody = function(query) {
     });
 };
 
+// Shown again (switching back to this service): a live table becomes the
+// newest live component, or, if its slot was evicted meanwhile, fetches its
+// page again -- which registers it again and shows what changed while it was
+// not live.
+Layer8DTable.prototype.activate = function() {
+    if (!this._isLive() || !this.endpoint) return;
+    if (!Layer8DWebSocket.touch(this._registerId, this)) {
+        this.fetchData(this.currentPage, this.pageSize);
+    }
+};
+
 // Fetch data from server
 Layer8DTable.prototype.fetchData = async function(page, pageSize) {
     if (!this.endpoint || !this.modelName) {
