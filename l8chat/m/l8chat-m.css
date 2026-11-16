@@ -1,0 +1,90 @@
+/*
+ * © 2025 Sharon Aicler (saichler@gmail.com)
+ *
+ * Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
+ * You may obtain a copy of the License at:
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ */
+
+/* l8chat mobile layout. Loaded after l8chat.css, whose view styles it reuses. */
+
+.l8chat-m-bubble-btn {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--layer8d-primary);
+    color: var(--layer8d-on-primary, white);
+    border: none;
+    box-shadow: var(--layer8d-shadow-lg);
+    z-index: 9998;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.l8chat-m-bubble-btn svg { width: 26px; height: 26px; }
+
+.l8chat-m-bubble-btn.l8chat-bubble-unread .l8chat-bubble-badge { display: block; }
+
+.l8chat-m-panel {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: none;
+    background: var(--layer8d-bg-white);
+}
+
+.l8chat-m-panel.l8chat-m-open { display: flex; }
+
+.l8chat-m { display: flex; flex-direction: column; width: 100%; height: 100%; }
+
+.l8chat-m-header {
+    display: flex;
+    align-items: center;
+    gap: var(--layer8d-space-sm);
+    padding: var(--layer8d-space-sm) var(--layer8d-space-md);
+    background: var(--layer8d-primary);
+    color: var(--layer8d-on-primary, white);
+}
+
+.l8chat-m-back,
+.l8chat-m-close {
+    background: none;
+    border: none;
+    color: var(--layer8d-on-primary, white);
+    padding: 4px;
+    display: flex;
+}
+
+.l8chat-m-title {
+    flex: 1;
+    font-weight: var(--layer8d-font-weight-semibold);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.l8chat-m-screen { display: none; flex: 1; min-height: 0; flex-direction: column; }
+
+.l8chat-m-screen.l8chat-m-active { display: flex; }
+
+.l8chat-m .l8chat-convlist { min-width: 0; }
+
+.l8chat-m .l8chat-convlist-header { display: flex; }
+
+.l8chat-m .l8chat-peer,
+.l8chat-m .l8chat-conv { padding: 10px var(--layer8d-space-md); }
+
+.l8chat-m .l8chat-msg { max-width: 90%; }
+
+.l8chat-m .l8chat-input { font-size: var(--layer8d-font-base); }
+
+.l8chat-m .l8chat-group-lists { flex-direction: column; }
+
+.l8chat-m .l8chat-group-moves { flex-direction: row; justify-content: center; }
+
+.l8chat-m .l8chat-group-box { height: 160px; }
