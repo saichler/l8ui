@@ -157,9 +157,21 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
             });
         }
 
-        var record = await Layer8DFormsData.fetchRecord(
-            serviceConfig.endpoint, serviceConfig.primaryKey, recordId, serviceConfig.modelName
-        );
+        var record;
+        try {
+            record = await Layer8DFormsData.fetchRecord(
+                serviceConfig.endpoint, serviceConfig.primaryKey, recordId, serviceConfig.modelName
+            );
+        } catch (err) {
+            var errMsg = err && err.message ? err.message : 'Failed to load record';
+            if (container) {
+                container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--layer8d-error,#dc2626);">' + errMsg + '</div>';
+            } else {
+                Layer8DPopup.close();
+                Layer8DNotification.error('Failed to load', [errMsg]);
+            }
+            return;
+        }
 
         var bodyEl = document.createElement('div');
         bodyEl.className = 'probler-popup-body';

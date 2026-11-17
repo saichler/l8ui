@@ -88,7 +88,28 @@ limitations under the License.
         } else {
             body = document.createElement('div');
             body.className = 'probler-popup-body';
-            body.innerHTML = config.content || '';
+            if (config.tabs && config.tabs.length > 0) {
+                var tabNav = document.createElement('div');
+                tabNav.className = 'probler-popup-tab-nav';
+                config.tabs.forEach(function(tab, i) {
+                    var btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'probler-popup-tab' + (i === 0 ? ' active' : '');
+                    btn.setAttribute('data-tab', tab.id);
+                    btn.textContent = tab.label;
+                    tabNav.appendChild(btn);
+                });
+                body.appendChild(tabNav);
+                config.tabs.forEach(function(tab, i) {
+                    var pane = document.createElement('div');
+                    pane.className = 'probler-popup-tab-pane' + (i === 0 ? ' active' : '');
+                    pane.setAttribute('data-pane', tab.id);
+                    pane.innerHTML = tab.content || '';
+                    body.appendChild(pane);
+                });
+            } else {
+                body.innerHTML = config.content || '';
+            }
         }
         if (config.noPadding) {
             body.style.padding = '0';
@@ -212,7 +233,6 @@ limitations under the License.
     // Close the topmost popup
     function close() {
         if (modalStack.length === 0) return;
-
         const modal = modalStack.pop();
 
         // Remove escape handler

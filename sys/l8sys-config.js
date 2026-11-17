@@ -26,7 +26,8 @@ limitations under the License.
         'health': {
             label: 'Health',
             icon: '💚',
-            services: []
+            services: [],
+            customContent: '<div id="health-table-container"></div>'
         },
         'security': {
             label: 'Security',
@@ -42,17 +43,27 @@ limitations under the License.
         'modules': {
             label: 'Modules',
             icon: '🧩',
-            services: []
+            services: [],
+            customContent: '<div id="modules-settings-container"></div>'
         },
         'logs': {
             label: 'Logs',
             icon: '📋',
-            services: []
+            services: [],
+            customContent: '<div id="logs-table-container"></div>'
         },
         'dataimport': {
             label: 'Data Import',
             icon: '📥',
-            services: []
+            services: [],
+            customContent: '<div id="dataimport-container"></div>'
+        },
+        'integrations': {
+            label: 'Integrations',
+            icon: '🔗',
+            services: [
+                { key: 'IntegCfg', label: 'Integration Configs', icon: '⚙️', endpoint: '/78/IntegCfg', model: 'IntegrationConfig' }
+            ]
         }
     };
 

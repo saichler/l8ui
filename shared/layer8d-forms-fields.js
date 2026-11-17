@@ -69,12 +69,12 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
                 const field2 = fields[i + 1];
                 if (field2 && field2.type !== 'inlineTable') {
                     html += '<div class="form-row">';
-                    html += generateFieldHtml(field1, getNestedValue(data, field1.key), readOnly);
-                    html += generateFieldHtml(field2, getNestedValue(data, field2.key), readOnly);
+                    html += generateFieldHtml(field1, getNestedValue(data, field1.key), readOnly, data);
+                    html += generateFieldHtml(field2, getNestedValue(data, field2.key), readOnly, data);
                     html += '</div>';
                     i++; // skip field2 since we consumed it
                 } else {
-                    html += generateFieldHtml(field1, getNestedValue(data, field1.key), readOnly);
+                    html += generateFieldHtml(field1, getNestedValue(data, field1.key), readOnly, data);
                 }
             }
 
@@ -85,7 +85,17 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
         return html;
     }
 
-    function generateFieldHtml(field, value, formReadOnly) {
+    function generateFieldHtml(field, value, formReadOnly, recordData) {
+        // If the field declares unavailableWhen and the condition is met, render "Unavailable"
+        if (typeof field.unavailableWhen === 'function' && field.unavailableWhen(recordData || {})) {
+            return `
+                <div class="form-group">
+                    <label>${escapeHtml(field.label)}</label>
+                    <span style="color: var(--layer8d-text-muted); font-style: italic;">Unavailable</span>
+                </div>
+            `;
+        }
+
         const required = field.required ? 'required' : '';
         const requiredMark = field.required ? ' <span style="color: var(--layer8d-error);">*</span>' : '';
         const isReadOnly = formReadOnly || field.readOnly;
@@ -109,6 +119,16 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
                 <div class="form-group">
                     <label for="field-${field.key}">${escapeHtml(field.label)}</label>
                     ${refInput}
+                </div>
+            `;
+        }
+
+        if (isReadOnly && field.type === 'textarea') {
+            const displayValue = formatFieldDisplayValue(field, value);
+            return `
+                <div class="form-group">
+                    <label for="field-${field.key}">${escapeHtml(field.label)}</label>
+                    <div class="form-display-value" style="white-space:pre-wrap;max-height:320px;overflow-y:auto;line-height:1.6;">${escapeHtml(displayValue)}</div>
                 </div>
             `;
         }
@@ -200,7 +220,7 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
                 break;
 
             case 'textarea':
-                inputHtml = `<textarea id="field-${field.key}" name="${field.key}" rows="3" ${required}>${escapeHtml(value || '')}</textarea>`;
+                inputHtml = `<textarea id="field-${field.key}" name="${field.key}" rows="${field.rows || 8}" style="resize:vertical;min-height:120px;" ${required}>${escapeHtml(value || '')}</textarea>`;
                 break;
 
             case 'select':

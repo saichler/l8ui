@@ -91,13 +91,35 @@ limitations under the License.
 
         // Navigation
         prevMonth() {
-            this.currentDate.setMonth(this.currentDate.getMonth() - 1);
+            if (this.viewMode === 'week') {
+                this.currentDate.setDate(this.currentDate.getDate() - 7);
+            } else {
+                this.currentDate.setMonth(this.currentDate.getMonth() - 1);
+            }
             this._render();
         }
 
         nextMonth() {
-            this.currentDate.setMonth(this.currentDate.getMonth() + 1);
+            if (this.viewMode === 'week') {
+                this.currentDate.setDate(this.currentDate.getDate() + 7);
+            } else {
+                this.currentDate.setMonth(this.currentDate.getMonth() + 1);
+            }
             this._render();
+        }
+
+        getWeekTitle() {
+            const dow = this.currentDate.getDay();
+            const weekStart = new Date(this.currentDate);
+            weekStart.setDate(this.currentDate.getDate() - dow);
+            const weekEnd = new Date(weekStart);
+            weekEnd.setDate(weekStart.getDate() + 6);
+            const fmt = (d) => `${MONTH_NAMES[d.getMonth()].slice(0, 3)} ${d.getDate()}`;
+            const year = weekEnd.getFullYear();
+            if (weekStart.getMonth() === weekEnd.getMonth()) {
+                return `${MONTH_NAMES[weekStart.getMonth()]} ${weekStart.getDate()}–${weekEnd.getDate()}, ${year}`;
+            }
+            return `${fmt(weekStart)} – ${fmt(weekEnd)}, ${year}`;
         }
 
         today() {
@@ -117,8 +139,9 @@ limitations under the License.
 
             return this.data.filter(item => {
                 const start = this._getTimestamp(item, this.startDateField);
-                const end = this._getTimestamp(item, this.endDateField) || start;
-                return start < dayEnd && end >= dayStart;
+                return start >= dayStart && start < dayEnd;
+            }).sort((a, b) => {
+                return this._getTimestamp(a, this.startDateField) - this._getTimestamp(b, this.startDateField);
             });
         }
 

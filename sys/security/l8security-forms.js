@@ -27,7 +27,8 @@ limitations under the License.
         L8Role: 'roleId',
         L8Credentials: 'id',
         EventRecord: 'eventId',
-        L8Portal: 'portalId'
+        L8Portal: 'portalId',
+        IntegrationConfig: 'integrationId'
     };
 
     // Minimal form definitions (used by details view / service registry)
@@ -84,6 +85,39 @@ limitations under the License.
                 title: 'Portal Info',
                 fields: [
                     { key: 'portalId', label: 'Portal ID', type: 'text', required: true }
+                ]
+            }]
+        },
+        IntegrationConfig: {
+            title: 'Integration Config',
+            sections: [{
+                title: 'Identity',
+                fields: [
+                    { key: 'name', label: 'Name (e.g. "smtp")', type: 'text', required: true },
+                    { key: 'type', label: 'Type', type: 'select', options: { 0: 'Unspecified', 1: 'SMTP', 2: 'Webhook', 3: 'Slack', 4: 'PagerDuty', 5: 'Custom' } }
+                ]
+            }, {
+                title: 'SMTP Settings',
+                fields: [
+                    { key: 'host', label: 'SMTP Host', type: 'text' },
+                    { key: 'port', label: 'SMTP Port', type: 'number' },
+                    { key: 'useTls', label: 'Use STARTTLS', type: 'checkbox' },
+                    { key: 'fromAddress', label: 'From Email Address', type: 'text' },
+                    { key: 'fromName', label: 'From Display Name', type: 'text' }
+                ]
+            }, {
+                title: 'Credentials',
+                fields: [
+                    { key: 'attributes.username', label: 'SMTP Username', type: 'text' },
+                    { key: 'attributes.password', label: 'SMTP Password', type: 'text' },
+                    { key: 'credentialKey', label: 'Credential Key (security store)', type: 'text' }
+                ]
+            }, {
+                title: 'Webhook / Advanced',
+                fields: [
+                    { key: 'url', label: 'URL', type: 'text' },
+                    { key: 'retryCount', label: 'Retry Count', type: 'number' },
+                    { key: 'timeoutMs', label: 'Timeout (ms)', type: 'number' }
                 ]
             }]
         },

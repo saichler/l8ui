@@ -71,17 +71,17 @@ Layer8DTable.prototype.render = function() {
 // Render pagination controls (above table)
 Layer8DTable.prototype.renderPagination = function(totalPages, startItem, endItem, totalItems) {
     const addButton = this.onAdd ?
-        `<button class="l8-btn l8-btn-primary" data-action="add">${Layer8DUtils.escapeHtml(this.addButtonText)}</button>` : '';
+        `<button type="button" class="l8-btn l8-btn-primary" data-action="add">${Layer8DUtils.escapeHtml(this.addButtonText)}</button>` : '';
     const exportButton = (this.endpoint && this.modelName) ?
         `<div class="l8-export-dropdown" style="display:inline-block;position:relative;">
-            <button class="l8-btn l8-btn-secondary l8-btn-small" data-action="export-menu" title="Export">Export &#9662;</button>
+            <button type="button" class="l8-btn l8-btn-secondary l8-btn-small" data-action="export-menu" title="Export">Export &#9662;</button>
             <div class="l8-export-menu" style="display:none;position:absolute;right:0;top:100%;background:var(--layer8d-bg-white,#fff);border:1px solid var(--layer8d-border,#ccc);border-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,0.15);z-index:100;min-width:120px;">
                 <div class="l8-export-option" data-action="export-csv" style="padding:6px 12px;cursor:pointer;white-space:nowrap;color:var(--layer8d-text-dark,#333);">CSV</div>
                 <div class="l8-export-option" data-action="export-excel" style="padding:6px 12px;cursor:pointer;white-space:nowrap;color:var(--layer8d-text-dark,#333);">Excel</div>
                 <div class="l8-export-option" data-action="export-pdf" style="padding:6px 12px;cursor:pointer;white-space:nowrap;color:var(--layer8d-text-dark,#333);">PDF</div>
             </div>
         </div>` : '';
-    const printButton = '<button class="l8-btn l8-btn-secondary l8-btn-small" data-action="print" title="Print">Print</button>';
+    const printButton = '<button type="button" class="l8-btn l8-btn-secondary l8-btn-small" data-action="print" title="Print">Print</button>';
 
     if (totalItems === 0) {
         return `<div class="l8-pagination"><div class="l8-pagination-info"></div><div class="l8-pagination-controls">${printButton}${exportButton}${addButton}</div></div>`;
@@ -102,25 +102,25 @@ Layer8DTable.prototype.renderPagination = function(totalPages, startItem, endIte
                     </select>
                 </div>
                 <div class="l8-page-nav">
-                    <button class="l8-page-btn" data-action="first" ${this.currentPage === 1 ? 'disabled' : ''}>
+                    <button type="button" class="l8-page-btn" data-action="first" ${this.currentPage === 1 ? 'disabled' : ''}>
                         &laquo;
                     </button>
-                    <button class="l8-page-btn" data-action="prev" ${this.currentPage === 1 ? 'disabled' : ''}>
+                    <button type="button" class="l8-page-btn" data-action="prev" ${this.currentPage === 1 ? 'disabled' : ''}>
                         &lsaquo;
                     </button>
                     <span class="l8-page-current">
                         Page ${this.currentPage} of ${totalPages || 1}
                     </span>
-                    <button class="l8-page-btn" data-action="next" ${this.currentPage >= totalPages ? 'disabled' : ''}>
+                    <button type="button" class="l8-page-btn" data-action="next" ${this.currentPage >= totalPages ? 'disabled' : ''}>
                         &rsaquo;
                     </button>
-                    <button class="l8-page-btn" data-action="last" ${this.currentPage >= totalPages ? 'disabled' : ''}>
+                    <button type="button" class="l8-page-btn" data-action="last" ${this.currentPage >= totalPages ? 'disabled' : ''}>
                         &raquo;
                     </button>
                 </div>
                 ${printButton}
                 ${exportButton}
-                ${this.onAdd ? `<button class="l8-btn l8-btn-primary" data-action="add">${Layer8DUtils.escapeHtml(this.addButtonText)}</button>` : ''}
+                ${this.onAdd ? `<button type="button" class="l8-btn l8-btn-primary" data-action="add">${Layer8DUtils.escapeHtml(this.addButtonText)}</button>` : ''}
             </div>
         </div>
     `;

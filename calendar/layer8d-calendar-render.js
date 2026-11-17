@@ -51,7 +51,7 @@ limitations under the License.
             return `<div class="layer8d-calendar-header">
                 <div class="layer8d-calendar-nav">
                     <button class="layer8d-calendar-nav-btn" data-action="prev">&lsaquo;</button>
-                    <span class="layer8d-calendar-title">${cal.getMonthName()} ${cal.getYear()}</span>
+                    <span class="layer8d-calendar-title">${cal.viewMode === 'week' ? cal.getWeekTitle() : cal.getMonthName() + ' ' + cal.getYear()}</span>
                     <button class="layer8d-calendar-nav-btn" data-action="next">&rsaquo;</button>
                 </div>
                 <div class="layer8d-calendar-controls">
@@ -103,7 +103,7 @@ limitations under the License.
                 });
 
                 if (events.length > maxShow) {
-                    html += `<div class="layer8d-calendar-more">+${events.length - maxShow} more</div>`;
+                    html += `<div class="layer8d-calendar-more" style="cursor:pointer;" data-date="${year}-${month + 1}-${d}">+${events.length - maxShow} more</div>`;
                 }
 
                 html += '</div></div>';

@@ -277,6 +277,7 @@ ${this._generateInitScript(config)}
         <div class="l8-module-content${activeClass}" data-module="${mod.key}">
             ${this._generateSubnav(mod)}
             ${this._generateServiceViews(mod)}
+            ${mod.customContent || ''}
         </div>`;
             }).join('');
         },

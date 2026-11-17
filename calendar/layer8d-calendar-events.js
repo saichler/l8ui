@@ -60,7 +60,67 @@ limitations under the License.
                     });
                 });
             }
+
+            // "+X more" click — show popup with all events for that day
+            container.querySelectorAll('.layer8d-calendar-more').forEach(el => {
+                el.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const dateParts = (el.dataset.date || '').split('-');
+                    if (dateParts.length < 3) return;
+                    const date = new Date(parseInt(dateParts[0]), parseInt(dateParts[1]) - 1, parseInt(dateParts[2]));
+                    const events = cal.getEventsForDate(date);
+                    _showOverflowPopup(cal, el, events);
+                });
+            });
         }
     };
+
+    function _showOverflowPopup(cal, anchor, events) {
+        const existing = document.querySelector('.layer8d-calendar-overflow-popup');
+        if (existing) existing.remove();
+
+        const colorVars = [
+            '--layer8d-chart-1', '--layer8d-chart-2', '--layer8d-chart-3',
+            '--layer8d-chart-4', '--layer8d-chart-5', '--layer8d-chart-6'
+        ];
+
+        const popup = document.createElement('div');
+        popup.className = 'layer8d-calendar-overflow-popup';
+        popup.style.cssText = 'position:fixed;z-index:9999;background:var(--layer8d-bg-white,#fff);border:1px solid var(--layer8d-border,#ddd);border-radius:6px;box-shadow:0 4px 16px var(--layer8d-shadow,rgba(0,0,0,0.18));padding:6px;min-width:160px;max-width:260px;';
+
+        events.forEach((item, i) => {
+            const title = typeof cal.viewConfig.formatEventLabel === 'function'
+                ? cal.viewConfig.formatEventLabel(item)
+                : (cal._getNestedValue(item, cal.titleField) || 'Event');
+            const color = Layer8DChart.readThemeColor(colorVars[i % colorVars.length], '#0ea5e9');
+            const id = cal._getItemId(item);
+            const pill = document.createElement('div');
+            pill.style.cssText = `background:${color};color:var(--layer8d-text-on-color,#fff);padding:3px 8px;border-radius:4px;margin-bottom:3px;cursor:pointer;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;`;
+            pill.textContent = title;
+            pill.addEventListener('click', (e) => {
+                e.stopPropagation();
+                popup.remove();
+                if (cal.onItemClick) cal.onItemClick(item, String(id));
+            });
+            popup.appendChild(pill);
+        });
+
+        document.body.appendChild(popup);
+        const rect = anchor.getBoundingClientRect();
+        let top = rect.bottom + 4;
+        let left = rect.left;
+        if (left + 260 > window.innerWidth) left = window.innerWidth - 268;
+        if (top + popup.offsetHeight > window.innerHeight) top = rect.top - popup.offsetHeight - 4;
+        popup.style.top = top + 'px';
+        popup.style.left = left + 'px';
+
+        const close = (e) => {
+            if (!popup.contains(e.target)) {
+                popup.remove();
+                document.removeEventListener('click', close);
+            }
+        };
+        setTimeout(() => document.addEventListener('click', close), 0);
+    }
 
 })();

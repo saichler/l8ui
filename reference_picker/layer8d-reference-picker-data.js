@@ -32,8 +32,11 @@ limitations under the License.
      */
     internal.buildQuery = function(config, state) {
         const whereConditions = [];
-        if (config.baseWhereClause) {
-            whereConditions.push(config.baseWhereClause);
+        const baseWhere = typeof config.baseWhereClause === 'function'
+            ? config.baseWhereClause()
+            : config.baseWhereClause;
+        if (baseWhere) {
+            whereConditions.push(baseWhere);
         }
         if (state.filterValue && state.filterValue.trim()) {
             const filterKey = config.filterColumn || config.displayColumn;

@@ -89,4 +89,20 @@ limitations under the License.
         }, { sortKey: false }),
     ];
 
+    var INTEGRATION_TYPE_NAMES = { 0: 'Unspecified', 1: 'SMTP', 2: 'Webhook', 3: 'Slack', 4: 'PagerDuty', 5: 'Custom' };
+
+    // IntegrationConfig columns
+    L8Security.columns.IntegrationConfig = [
+        ...col.id('integrationId'),
+        ...col.col('name', 'Name'),
+        ...col.custom('type', 'Type', function(item) {
+            return INTEGRATION_TYPE_NAMES[item.type] || String(item.type || '');
+        }),
+        ...col.col('host', 'Host'),
+        ...col.custom('port', 'Port', function(item) { return item.port ? String(item.port) : ''; }),
+        ...col.custom('useTls', 'TLS', function(item) { return item.useTls ? 'Yes' : 'No'; }),
+        ...col.col('fromAddress', 'From Address'),
+        ...col.col('fromName', 'From Name'),
+    ];
+
 })();
