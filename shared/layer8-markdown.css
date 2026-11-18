@@ -74,21 +74,74 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
     margin: 12px 0;
 }
 
+.l8md-list .l8md-list {
+    margin: 2px 0 2px 0;
+}
+
+/* Blockquote */
+.l8md-quote {
+    margin: 8px 0;
+    padding: 4px 12px;
+    border-left: 3px solid var(--layer8d-border);
+    color: var(--layer8d-text-medium);
+}
+
+/* Tables: a wide table scrolls inside its own box */
+.l8md-table-wrap {
+    max-width: 100%;
+    overflow-x: auto;
+    margin: 8px 0;
+}
+
+.l8md-table {
+    border-collapse: collapse;
+    font-size: 0.95em;
+    line-height: 1.4;
+}
+
+.l8md-table th,
+.l8md-table td {
+    border: 1px solid var(--layer8d-border);
+    padding: 4px 10px;
+    text-align: left;
+    vertical-align: top;
+    white-space: nowrap;
+}
+
+.l8md-table th {
+    background: var(--layer8d-bg-light);
+    color: var(--layer8d-text-dark);
+    font-weight: 600;
+}
+
+.l8md-table tbody tr:nth-child(even) td {
+    background: var(--layer8d-bg-light);
+}
+
+.l8md-table .l8md-align-left { text-align: left; }
+.l8md-table .l8md-align-right { text-align: right; font-variant-numeric: tabular-nums; }
+.l8md-table .l8md-align-center { text-align: center; }
+
 /* Links inside markdown */
 .l8md-p a,
-.l8md-list a {
+.l8md-list a,
+.l8md-table a,
+.l8md-quote a {
     color: var(--layer8d-primary);
     text-decoration: none;
 }
 
 .l8md-p a:hover,
-.l8md-list a:hover {
+.l8md-list a:hover,
+.l8md-table a:hover,
+.l8md-quote a:hover {
     text-decoration: underline;
 }
 
 /* Strong and emphasis */
 .l8md-p strong,
-.l8md-list strong {
+.l8md-list strong,
+.l8md-table strong {
     font-weight: 600;
     color: var(--layer8d-text-dark);
 }

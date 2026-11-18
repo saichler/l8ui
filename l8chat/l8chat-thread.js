@@ -6,9 +6,10 @@
 //     http://www.apache.org/licenses/LICENSE-2.0
 
 // L8ChatThread - the open conversation (plan §6.4): the newest 10 messages,
-// "load older" at the top-left, Tanto's answers rendered as markdown,
-// attachments, my pending messages, and for Tanto conversations the LLM
-// profile selector and a typing indicator while a turn runs.
+// "load older" at the top-left, messages rendered as markdown (system
+// notices as plain text), a copy button on each message, attachments, my
+// pending messages, and for Tanto conversations the LLM profile selector and
+// a typing indicator while a turn runs.
 
 (function() {
     'use strict';
@@ -16,6 +17,65 @@
     var KIND_SYSTEM = 2;
     var KIND_AGENT = 3;
     var AGENT_RUNNING = 2;
+
+    var COPY_SVG = '<svg viewBox="0 0 24 24" width="14" height="14" xmlns="http://www.w3.org/2000/svg">' +
+        '<path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" fill="currentColor"/></svg>';
+    var COPIED_SVG = '<svg viewBox="0 0 24 24" width="14" height="14" xmlns="http://www.w3.org/2000/svg">' +
+        '<path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="currentColor"/></svg>';
+
+    // copyMessage puts a message on the clipboard as its markdown text and,
+    // where the browser allows, as formatted HTML too (a table pastes as a
+    // table into a document, as markdown into a plain editor).
+    function copyMessage(text, html) {
+        if (navigator.clipboard && window.ClipboardItem && html) {
+            return navigator.clipboard.write([new ClipboardItem({
+                'text/plain': new Blob([text], { type: 'text/plain' }),
+                'text/html': new Blob([html], { type: 'text/html' })
+            })]).catch(function() { return navigator.clipboard.writeText(text); });
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(text);
+        // Not a secure context: the old way.
+        return new Promise(function(resolve, reject) {
+            var area = document.createElement('textarea');
+            area.value = text;
+            area.setAttribute('readonly', '');
+            area.style.position = 'fixed';
+            area.style.opacity = '0';
+            document.body.appendChild(area);
+            area.select();
+            var ok = false;
+            try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+            document.body.removeChild(area);
+            if (ok) resolve(); else reject(new Error('the browser refused to copy'));
+        });
+    }
+
+    function copyButton(m, body) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'l8chat-msg-copy';
+        btn.title = 'Copy';
+        btn.setAttribute('aria-label', 'Copy message');
+        btn.innerHTML = COPY_SVG;
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            var html = Number(m.kind) === KIND_SYSTEM ? '' : body.innerHTML;
+            copyMessage(m.body || '', html).then(function() {
+                btn.innerHTML = COPIED_SVG;
+                btn.title = 'Copied';
+                btn.classList.add('l8chat-msg-copied');
+                clearTimeout(btn._reset);
+                btn._reset = setTimeout(function() {
+                    btn.innerHTML = COPY_SVG;
+                    btn.title = 'Copy';
+                    btn.classList.remove('l8chat-msg-copied');
+                }, 1500);
+            }).catch(function() {
+                btn.title = 'Copy failed';
+            });
+        });
+        return btn;
+    }
 
     function Thread(container, session) {
         this.el = container;
@@ -149,11 +209,15 @@
             (m._pending ? ' · sending…' : m.sentAt ? ' · ' + new Date(Number(m.sentAt) * 1000).toLocaleTimeString() : '');
         var body = document.createElement('div');
         body.className = 'l8chat-msg-body';
-        if (kind === KIND_AGENT) Layer8Markdown.renderInto(body, m.body || '');
-        else body.textContent = m.body || '';
+        if (kind === KIND_SYSTEM) body.textContent = m.body || '';
+        else {
+            body.classList.add('l8chat-msg-md');
+            Layer8Markdown.renderInto(body, m.body || '');
+        }
         div.appendChild(meta);
         div.appendChild(body);
         if (m.attachments && m.attachments.length) div.appendChild(L8ChatFiles.chips(m.attachments));
+        if (m.body) div.appendChild(copyButton(m, body));
         return div;
     };
 

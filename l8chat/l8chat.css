@@ -91,6 +91,12 @@
 
 .l8chat-panel-header .l8chat-icon-btn { color: var(--layer8d-on-primary, white); }
 
+/* the header moves the panel (not while maximized) */
+.l8chat-bubble-panel .l8chat-panel-header { cursor: move; touch-action: none; user-select: none; }
+.l8chat-bubble-panel.l8chat-bubble-max .l8chat-panel-header { cursor: default; }
+.l8chat-bubble-panel .l8chat-panel-header .l8chat-icon-btn { cursor: pointer; }
+.l8chat-bubble-panel.l8chat-dragging { user-select: none; opacity: 0.95; }
+
 .l8chat-panel-actions { display: flex; align-items: center; gap: var(--layer8d-space-xs, 4px); }
 
 .l8chat-panel-title { font-weight: var(--layer8d-font-weight-semibold); }
@@ -425,7 +431,57 @@
 
 .l8chat-msg-body { font-size: var(--layer8d-font-sm); white-space: pre-wrap; word-break: break-word; }
 
-.l8chat-msg-agent .l8chat-msg-body { white-space: normal; }
+/* markdown messages: the renderer makes the line breaks */
+.l8chat-msg-body.l8chat-msg-md { white-space: normal; }
+.l8chat-msg-md .l8md-p { margin-bottom: 6px; }
+.l8chat-msg-md > :first-child { margin-top: 0; }
+.l8chat-msg-md > :last-child { margin-bottom: 0; }
+.l8chat-msg-md .l8md-table td,
+.l8chat-msg-md .l8md-table th { word-break: normal; }
+
+/* Tanto's answers (reports, tables) get more of the thread's width */
+.l8chat-msg-agent { max-width: 92%; }
+
+/* markdown inside my own (primary-colored) bubble */
+.l8chat-msg-mine .l8chat-msg-md strong,
+.l8chat-msg-mine .l8chat-msg-md a,
+.l8chat-msg-mine .l8chat-msg-md .l8md-h1, .l8chat-msg-mine .l8chat-msg-md .l8md-h2,
+.l8chat-msg-mine .l8chat-msg-md .l8md-h3, .l8chat-msg-mine .l8chat-msg-md .l8md-h4,
+.l8chat-msg-mine .l8chat-msg-md .l8md-h5, .l8chat-msg-mine .l8chat-msg-md .l8md-h6 { color: inherit; }
+.l8chat-msg-mine .l8chat-msg-md a { text-decoration: underline; }
+.l8chat-msg-mine .l8chat-msg-md .l8md-inline-code,
+.l8chat-msg-mine .l8chat-msg-md .l8md-code-block,
+.l8chat-msg-mine .l8chat-msg-md .l8md-table th,
+.l8chat-msg-mine .l8chat-msg-md .l8md-table tbody tr:nth-child(even) td {
+    background: rgba(255, 255, 255, 0.15);
+    color: inherit;
+    border-color: rgba(255, 255, 255, 0.35);
+}
+.l8chat-msg-mine .l8chat-msg-md .l8md-table td { border-color: rgba(255, 255, 255, 0.35); }
+.l8chat-msg-mine .l8chat-msg-md .l8md-quote { color: inherit; border-left-color: rgba(255, 255, 255, 0.5); }
+
+/* copy button: a small icon in the bottom-right corner of each message */
+.l8chat-msg { position: relative; padding-bottom: 18px; }
+.l8chat-msg-copy {
+    position: absolute;
+    right: 4px;
+    bottom: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 16px;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: inherit;
+    opacity: 0.45;
+}
+.l8chat-msg-copy:hover,
+.l8chat-msg-copy:focus-visible { opacity: 1; }
+.l8chat-msg-copy.l8chat-msg-copied { opacity: 1; color: var(--layer8d-success, inherit); }
+.l8chat-msg-mine .l8chat-msg-copy.l8chat-msg-copied { color: inherit; }
 
 .l8chat-typing { font-size: var(--layer8d-font-xs); color: var(--layer8d-text-light); font-style: italic; }
 

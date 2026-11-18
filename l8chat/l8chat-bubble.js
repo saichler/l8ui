@@ -6,7 +6,10 @@
 //     http://www.apache.org/licenses/LICENSE-2.0
 
 // L8ChatBubble - the desktop chat: a floating button and a panel with the
-// sidebar, a slide-out conversation list and the thread.
+// sidebar, a slide-out conversation list and the thread. The panel moves by
+// dragging its header (it stays inside the window and keeps its place across
+// close, reopen and reload), and maximizes to the window from the header's
+// button or a double-click on the header.
 //
 //   L8ChatBubble.init({ endpoints: { msg, conv, peer, sync, stat, group, users, llmProf },
 //                       tantoUserId: 'tanto' })
@@ -38,6 +41,20 @@
         try { localStorage.setItem('l8chat-collapsed-' + key, collapsed ? '1' : '0'); } catch (e) { /* ignore */ }
     }
 
+    // The dragged position of the panel, a per-viewer convenience.
+    function loadPosition() {
+        try {
+            var p = JSON.parse(localStorage.getItem('l8chat-position') || 'null');
+            return p && isFinite(p.left) && isFinite(p.top) ? { left: Number(p.left), top: Number(p.top) } : null;
+        } catch (e) { return null; }
+    }
+    function savePosition(pos) {
+        try {
+            if (pos) localStorage.setItem('l8chat-position', JSON.stringify(pos));
+            else localStorage.removeItem('l8chat-position');
+        } catch (e) { /* ignore */ }
+    }
+
     // collapsible makes a side column fold to the left, down to a strip that
     // still shows its status / unread dots (each row's name is its tooltip).
     function collapsible(col, key) {
@@ -62,6 +79,7 @@
         _panel: null,
         _open: false,
         _rendered: false,
+        _pos: null, // { left, top } once dragged; null: the default corner
 
         init: function(config) {
             if (this._session) return;
@@ -81,7 +99,11 @@
             document.body.appendChild(this._panel);
 
             var self = this;
+            this._pos = loadPosition();
             this._btn.addEventListener('click', function() { self.toggle(); });
+            window.addEventListener('resize', function() {
+                if (self._pos && self._open && !self.isMaximized()) self._place(self._pos);
+            });
             this._session.store.on('peers', function() { self._updateBadge(); });
             this._session.start();
         },
@@ -96,6 +118,7 @@
             this._open = true;
             if (!this._rendered) this._render();
             this._panel.classList.add('l8chat-bubble-open');
+            if (this._pos && !this.isMaximized()) this._place(this._pos);
             // Panel opened: the registrations may have been evicted by the page.
             this._session.live.registerConversations();
         },
@@ -114,10 +137,70 @@
         // normal size; the choice stays while the panel is closed and reopened.
         setMaximized: function(max) {
             this._panel.classList.toggle('l8chat-bubble-max', max);
+            // Maximized fills the window; restored goes back where it was dragged.
+            if (max) this._clearPlacement();
+            else if (this._pos && this._open) this._place(this._pos);
             if (this._maxBtn) {
                 this._maxBtn.innerHTML = max ? RESTORE_SVG : MAXIMIZE_SVG;
                 this._maxBtn.title = max ? 'Restore' : 'Maximize';
             }
+        },
+
+        // resetPosition puts the panel back in its default corner.
+        resetPosition: function() {
+            this._pos = null;
+            savePosition(null);
+            this._clearPlacement();
+        },
+
+        // _place moves the panel to pos, kept fully inside the window, and
+        // returns where it went.
+        _place: function(pos) {
+            var w = this._panel.offsetWidth, h = this._panel.offsetHeight;
+            var left = Math.min(Math.max(0, pos.left), Math.max(0, window.innerWidth - w));
+            var top = Math.min(Math.max(0, pos.top), Math.max(0, window.innerHeight - h));
+            var st = this._panel.style;
+            st.left = left + 'px';
+            st.top = top + 'px';
+            st.right = 'auto';
+            st.bottom = 'auto';
+            return { left: left, top: top };
+        },
+
+        _clearPlacement: function() {
+            var st = this._panel.style;
+            st.left = st.top = st.right = st.bottom = '';
+        },
+
+        // _draggable moves the panel by its header (not its buttons).
+        _draggable: function(header) {
+            var self = this;
+            var drag = null;
+            header.addEventListener('pointerdown', function(e) {
+                if (e.button !== 0 || self.isMaximized() || e.target.closest('button, select, input, a')) return;
+                var r = self._panel.getBoundingClientRect();
+                drag = { dx: e.clientX - r.left, dy: e.clientY - r.top, id: e.pointerId };
+                header.setPointerCapture(e.pointerId);
+                self._panel.classList.add('l8chat-dragging');
+                e.preventDefault();
+            });
+            header.addEventListener('pointermove', function(e) {
+                if (!drag || e.pointerId !== drag.id) return;
+                self._pos = self._place({ left: e.clientX - drag.dx, top: e.clientY - drag.dy });
+            });
+            var end = function(e) {
+                if (!drag || e.pointerId !== drag.id) return;
+                drag = null;
+                self._panel.classList.remove('l8chat-dragging');
+                if (header.hasPointerCapture(e.pointerId)) header.releasePointerCapture(e.pointerId);
+                if (self._pos) savePosition(self._pos);
+            };
+            header.addEventListener('pointerup', end);
+            header.addEventListener('pointercancel', end);
+            header.addEventListener('dblclick', function(e) {
+                if (e.target.closest('button, select, input, a')) return;
+                self.setMaximized(!self.isMaximized());
+            });
         },
 
         _render: function() {
@@ -141,6 +224,7 @@
             this._maxBtn = this._panel.querySelector('.l8chat-maximize');
             this._maxBtn.addEventListener('click', function() { self.setMaximized(!self.isMaximized()); });
             this.setMaximized(false);
+            this._draggable(this._panel.querySelector('.l8chat-panel-header'));
             var convCol = this._panel.querySelector('.l8chat-col-convs');
             L8ChatSidebar.render(this._panel.querySelector('.l8chat-col-sidebar'), session, {
                 onPeer: function(peer) {
