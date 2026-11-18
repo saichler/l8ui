@@ -25,6 +25,11 @@
     var EXPAND_SVG = '<svg viewBox="0 0 24 24" width="16" height="16" xmlns="http://www.w3.org/2000/svg">' +
         '<path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" fill="currentColor"/></svg>';
 
+    var MAXIMIZE_SVG = '<svg viewBox="0 0 24 24" width="18" height="18" xmlns="http://www.w3.org/2000/svg">' +
+        '<path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z" fill="currentColor"/></svg>';
+    var RESTORE_SVG = '<svg viewBox="0 0 24 24" width="18" height="18" xmlns="http://www.w3.org/2000/svg">' +
+        '<path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z" fill="currentColor"/></svg>';
+
     // Per-viewer convenience only; storage may be unavailable (private window).
     function loadCollapsed(key) {
         try { return localStorage.getItem('l8chat-collapsed-' + key) === '1'; } catch (e) { return false; }
@@ -101,6 +106,20 @@
             this._panel.classList.remove('l8chat-bubble-open');
         },
 
+        isMaximized: function() {
+            return this._panel.classList.contains('l8chat-bubble-max');
+        },
+
+        // setMaximized fills the window with the panel, or restores its
+        // normal size; the choice stays while the panel is closed and reopened.
+        setMaximized: function(max) {
+            this._panel.classList.toggle('l8chat-bubble-max', max);
+            if (this._maxBtn) {
+                this._maxBtn.innerHTML = max ? RESTORE_SVG : MAXIMIZE_SVG;
+                this._maxBtn.title = max ? 'Restore' : 'Maximize';
+            }
+        },
+
         _render: function() {
             var self = this;
             var session = this._session;
@@ -108,7 +127,10 @@
             this._panel.innerHTML =
                 '<div class="l8chat-panel">' +
                     '<div class="l8chat-panel-header"><span class="l8chat-panel-title">Chat</span>' +
-                        '<button class="l8chat-icon-btn l8chat-close" title="Close">' + CLOSE_SVG + '</button></div>' +
+                        '<span class="l8chat-panel-actions">' +
+                            '<button class="l8chat-icon-btn l8chat-maximize"></button>' +
+                            '<button class="l8chat-icon-btn l8chat-close" title="Close">' + CLOSE_SVG + '</button>' +
+                        '</span></div>' +
                     '<div class="l8chat-panel-body">' +
                         '<div class="l8chat-col-sidebar"></div>' +
                         '<div class="l8chat-col-convs"></div>' +
@@ -116,6 +138,9 @@
                     '</div>' +
                 '</div>';
             this._panel.querySelector('.l8chat-close').addEventListener('click', function() { self.close(); });
+            this._maxBtn = this._panel.querySelector('.l8chat-maximize');
+            this._maxBtn.addEventListener('click', function() { self.setMaximized(!self.isMaximized()); });
+            this.setMaximized(false);
             var convCol = this._panel.querySelector('.l8chat-col-convs');
             L8ChatSidebar.render(this._panel.querySelector('.l8chat-col-sidebar'), session, {
                 onPeer: function(peer) {

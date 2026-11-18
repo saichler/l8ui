@@ -64,6 +64,20 @@
 
 .l8chat-bubble-panel.l8chat-bubble-open { display: flex; }
 
+/* maximized: the panel fills the window */
+.l8chat-bubble-panel.l8chat-bubble-max {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: auto;
+    height: auto;
+    max-width: none;
+    max-height: none;
+    border: none;
+    border-radius: 0;
+}
+
 .l8chat-panel { display: flex; flex-direction: column; width: 100%; height: 100%; }
 
 .l8chat-panel-header {
@@ -76,6 +90,8 @@
 }
 
 .l8chat-panel-header .l8chat-icon-btn { color: var(--layer8d-on-primary, white); }
+
+.l8chat-panel-actions { display: flex; align-items: center; gap: var(--layer8d-space-xs, 4px); }
 
 .l8chat-panel-title { font-weight: var(--layer8d-font-weight-semibold); }
 
