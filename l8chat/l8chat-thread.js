@@ -90,9 +90,12 @@
         api.names(unknown).then(function() { store.emit('thread'); });
     };
 
-    // profileLabel is "name · model", marking the profile l8secure falls back to.
+    // profileLabel is "name · model", marking the profile l8secure falls back to
+    // (unless its name already says so).
     function profileLabel(p) {
-        return (p.name || p.profileId) + (p.modelId ? ' · ' + p.modelId : '') + (p.isDefault ? ' (default)' : '');
+        var name = p.name || p.profileId;
+        var mark = p.isDefault && !/default/i.test(name) ? ' (default)' : '';
+        return name + (p.modelId ? ' · ' + p.modelId : '') + mark;
     }
 
     // updateProfiles shows the profile this conversation actually uses: its own,

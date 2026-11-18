@@ -88,3 +88,10 @@
 .l8chat-m .l8chat-group-moves { flex-direction: row; justify-content: center; }
 
 .l8chat-m .l8chat-group-box { height: 160px; }
+
+/* Collapsing the side columns is a desktop affordance; mobile drills down instead. */
+.l8chat-m .l8chat-collapse { display: none; }
+
+/* Profile picker: touch-sized, and 16px so iOS does not zoom on focus. */
+.l8chat-m .l8chat-profile-wrap { min-width: 0; flex-shrink: 1; }
+.l8chat-m .l8chat-profile { font-size: var(--layer8d-font-base); min-width: 0; max-width: 100%; min-height: 36px; }
