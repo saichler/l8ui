@@ -32,6 +32,7 @@
                     '<button class="l8chat-me-status" title="Set your status"></button>' +
                     '<span class="l8chat-me-name"></span>' +
                     '<button class="l8chat-icon-btn l8chat-new-group" title="New group">+</button>' +
+                    '<button class="l8chat-icon-btn l8chat-collapse"></button>' +
                 '</div>' +
                 '<div class="l8chat-divider"></div>' +
                 '<input type="search" class="l8chat-search" placeholder="Search users">' +
@@ -112,7 +113,7 @@
         list.innerHTML = rows.map(function(r, i) {
             var badge = r.group ? '<span class="l8chat-group-icon" title="Group">#</span>' : L8ChatStatus.dot(r.status);
             return '<div class="l8chat-peer' + (r.peer.peerKey === selected ? ' l8chat-peer-selected' : '') +
-                '" data-index="' + i + '">' + badge +
+                '" data-index="' + i + '" title="' + L8ChatApi.escape(r.name) + '">' + badge +
                 '<div class="l8chat-peer-text"><div class="l8chat-peer-name">' + L8ChatApi.escape(r.name) + '</div>' +
                 (r.preview ? '<div class="l8chat-peer-preview">' + L8ChatApi.escape(r.preview) + '</div>' : '') +
                 '</div>' + (r.unread ? '<span class="l8chat-unread"></span>' : '') + '</div>';

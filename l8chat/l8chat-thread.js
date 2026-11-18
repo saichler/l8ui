@@ -28,7 +28,8 @@
             '<div class="l8chat-thread">' +
                 '<div class="l8chat-thread-header">' +
                     '<span class="l8chat-thread-title"></span>' +
-                    '<select class="l8chat-profile" title="LLM profile"></select>' +
+                    '<label class="l8chat-profile-wrap">Model' +
+                        '<select class="l8chat-profile" title="The LLM profile (model) Tanto answers with"></select></label>' +
                 '</div>' +
                 '<div class="l8chat-messages">' +
                     '<button class="layer8d-btn layer8d-btn-small l8chat-older">Load older</button>' +
@@ -89,16 +90,44 @@
         api.names(unknown).then(function() { store.emit('thread'); });
     };
 
+    // profileLabel is "name · model", marking the profile l8secure falls back to.
+    function profileLabel(p) {
+        return (p.name || p.profileId) + (p.modelId ? ' · ' + p.modelId : '') + (p.isDefault ? ' (default)' : '');
+    }
+
+    // updateProfiles shows the profile this conversation actually uses: its own,
+    // else l8secure's default one. Profiles are re-read on opening a conversation.
     Thread.prototype.updateProfiles = function(agent, conv) {
+        var self = this;
         var select = this.el.querySelector('.l8chat-profile');
-        select.style.display = agent ? '' : 'none';
+        this.el.querySelector('.l8chat-profile-wrap').style.display = agent ? '' : 'none';
         if (!agent) return;
-        this.s.loadProfiles().then(function(profiles) {
+        var openId = this.s.store.thread.conversationId;
+        var force = this._profilesFor !== openId;
+        this._profilesFor = openId;
+        var setOptions = function(html, disabled) {
+            // Re-render only on change, so a new message does not close an open dropdown.
+            if (self._profilesHtml !== html) {
+                self._profilesHtml = html;
+                select.innerHTML = html;
+            }
+            select.disabled = disabled;
+        };
+        this.s.loadProfiles(force).then(function(profiles) {
+            if (!profiles.length) {
+                setOptions('<option value="">No LLM profiles configured</option>', true);
+                return;
+            }
             var current = conv.llmProfileId || '';
-            select.innerHTML = '<option value="">Default</option>' + profiles.map(function(p) {
+            var chosen = profiles.filter(function(p) { return p.profileId === current; })[0] ||
+                profiles.filter(function(p) { return p.isDefault; })[0];
+            setOptions((chosen ? '' : '<option value="" selected>Choose a profile…</option>') + profiles.map(function(p) {
                 return '<option value="' + L8ChatApi.escape(p.profileId) + '"' +
-                    (p.profileId === current ? ' selected' : '') + '>' + L8ChatApi.escape(p.name) + '</option>';
-            }).join('');
+                    (chosen && p.profileId === chosen.profileId ? ' selected' : '') + '>' +
+                    L8ChatApi.escape(profileLabel(p)) + '</option>';
+            }).join(''), false);
+        }).catch(function() {
+            setOptions('<option value="">LLM profiles unavailable</option>', true);
         });
     };
 

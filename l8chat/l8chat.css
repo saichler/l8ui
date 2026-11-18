@@ -83,7 +83,9 @@
 
 .l8chat-col-sidebar {
     width: 240px;
+    flex-shrink: 0;
     border-right: 1px solid var(--layer8d-border);
+    transition: width 0.2s;
     display: flex;
     flex-direction: column;
     min-height: 0;
@@ -99,6 +101,42 @@
 }
 
 .l8chat-col-convs.l8chat-col-convs-open { width: 220px; }
+
+/* ---- collapsed side columns: fold left to a strip that keeps the dots ---- */
+
+.l8chat-col-sidebar.l8chat-col-collapsed,
+.l8chat-col-convs.l8chat-col-convs-open.l8chat-col-collapsed { width: 40px; }
+
+.l8chat-col-collapsed .l8chat-convlist { min-width: 0; }
+
+.l8chat-col-collapsed .l8chat-me-name,
+.l8chat-col-collapsed .l8chat-new-group,
+.l8chat-col-collapsed .l8chat-search,
+.l8chat-col-collapsed .l8chat-peer-text,
+.l8chat-col-collapsed .l8chat-convlist-title,
+.l8chat-col-collapsed .l8chat-new-conv,
+.l8chat-col-collapsed .l8chat-conv-text { display: none; }
+
+.l8chat-col-collapsed .l8chat-me,
+.l8chat-col-collapsed .l8chat-convlist-header {
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--layer8d-space-xs);
+    padding: var(--layer8d-space-sm) 0;
+}
+
+.l8chat-col-collapsed .l8chat-peers,
+.l8chat-col-collapsed .l8chat-convs { overflow-x: hidden; scrollbar-width: none; }
+
+.l8chat-col-collapsed .l8chat-peer,
+.l8chat-col-collapsed .l8chat-conv {
+    flex-direction: column;
+    justify-content: center;
+    gap: 3px;
+    padding: 8px 0;
+}
+
+.l8chat-collapse { display: flex; align-items: center; padding: 2px; }
 
 .l8chat-col-thread { flex: 1; display: flex; flex-direction: column; min-width: 0; min-height: 0; }
 
@@ -320,7 +358,15 @@
 
 .l8chat-thread-title { font-weight: var(--layer8d-font-weight-semibold); color: var(--layer8d-text-dark); }
 
-.l8chat-profile { font-size: var(--layer8d-font-xs); max-width: 180px; }
+.l8chat-profile-wrap {
+    display: flex;
+    align-items: center;
+    gap: var(--layer8d-space-xs);
+    font-size: var(--layer8d-font-xs);
+    color: var(--layer8d-text-medium);
+}
+
+.l8chat-profile { font-size: var(--layer8d-font-xs); max-width: 260px; }
 
 .l8chat-messages {
     flex: 1;

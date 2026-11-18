@@ -24,6 +24,7 @@
                 '<div class="l8chat-convlist-header">' +
                     '<span class="l8chat-convlist-title"></span>' +
                     '<button class="l8chat-icon-btn l8chat-new-conv" title="New conversation">+</button>' +
+                    '<button class="l8chat-icon-btn l8chat-collapse"></button>' +
                 '</div>' +
                 '<div class="l8chat-convs"></div>' +
             '</div>';
@@ -46,7 +47,8 @@
         var list = this.el.querySelector('.l8chat-convs');
         list.innerHTML = convs.map(function(c) {
             return '<div class="l8chat-conv' + (c.conversationId === open ? ' l8chat-conv-open' : '') +
-                '" data-id="' + L8ChatApi.escape(c.conversationId) + '">' +
+                '" data-id="' + L8ChatApi.escape(c.conversationId) + '" title="' +
+                L8ChatApi.escape(c.title || 'Conversation') + '">' +
                 '<span class="l8chat-conv-dot ' + (store.isUnread(c) ? 'l8chat-conv-unread' : 'l8chat-conv-read') + '"></span>' +
                 '<div class="l8chat-conv-text"><div class="l8chat-conv-title">' + L8ChatApi.escape(c.title || 'Conversation') +
                 '</div><div class="l8chat-conv-preview">' + L8ChatApi.escape(c.lastPreview || '') + '</div></div></div>';

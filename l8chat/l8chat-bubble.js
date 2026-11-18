@@ -20,6 +20,36 @@
         '<path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z" fill="currentColor"/></svg>';
     var CLOSE_SVG = '<svg viewBox="0 0 24 24" width="18" height="18" xmlns="http://www.w3.org/2000/svg">' +
         '<path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="currentColor"/></svg>';
+    var COLLAPSE_SVG = '<svg viewBox="0 0 24 24" width="16" height="16" xmlns="http://www.w3.org/2000/svg">' +
+        '<path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="currentColor"/></svg>';
+    var EXPAND_SVG = '<svg viewBox="0 0 24 24" width="16" height="16" xmlns="http://www.w3.org/2000/svg">' +
+        '<path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" fill="currentColor"/></svg>';
+
+    // Per-viewer convenience only; storage may be unavailable (private window).
+    function loadCollapsed(key) {
+        try { return localStorage.getItem('l8chat-collapsed-' + key) === '1'; } catch (e) { return false; }
+    }
+    function saveCollapsed(key, collapsed) {
+        try { localStorage.setItem('l8chat-collapsed-' + key, collapsed ? '1' : '0'); } catch (e) { /* ignore */ }
+    }
+
+    // collapsible makes a side column fold to the left, down to a strip that
+    // still shows its status / unread dots (each row's name is its tooltip).
+    function collapsible(col, key) {
+        var btn = col.querySelector('.l8chat-collapse');
+        var apply = function(collapsed) {
+            col.classList.toggle('l8chat-col-collapsed', collapsed);
+            btn.innerHTML = collapsed ? EXPAND_SVG : COLLAPSE_SVG;
+            btn.title = collapsed ? 'Expand' : 'Collapse';
+        };
+        apply(loadCollapsed(key));
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            var collapsed = !col.classList.contains('l8chat-col-collapsed');
+            apply(collapsed);
+            saveCollapsed(key, collapsed);
+        });
+    }
 
     window.L8ChatBubble = {
         _session: null,
@@ -101,6 +131,8 @@
                 onOpen: function(conversationId) { session.openConversation(conversationId); }
             });
             L8ChatThread.render(this._panel.querySelector('.l8chat-col-thread'), session);
+            collapsible(this._panel.querySelector('.l8chat-col-sidebar'), 'sidebar');
+            collapsible(convCol, 'convs');
         },
 
         _updateBadge: function() {

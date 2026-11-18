@@ -153,9 +153,11 @@
 
     // ---- Tanto ----
 
-    Session.prototype.loadProfiles = function() {
+    // loadProfiles caches the profiles; force re-reads them (profiles added in
+    // l8secure show up the next time a Tanto conversation is opened).
+    Session.prototype.loadProfiles = function(force) {
         var self = this;
-        if (this.profiles) return Promise.resolve(this.profiles);
+        if (this.profiles && !force) return Promise.resolve(this.profiles);
         return this.api.query('llmProf', 'select * from L8LlmProfile').then(function(list) {
             self.profiles = list;
             return list;
