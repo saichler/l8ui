@@ -20,23 +20,22 @@ limitations under the License.
 
     if (typeof Layer8MTable === 'undefined') return;
 
-    // Apply a pushed change to the page of cards in place and re-render. In
-    // server mode the page lives in config.data (see _getPageData). Only a
-    // change that arrives without its record falls back to re-fetching.
+    // Apply a pushed change to the page of cards (see
+    // Layer8DWebSocket.applyChange). In server mode the page lives in
+    // config.data (see _getPageData). An update of a card on the page is
+    // applied in place and re-rendered; an add or an on-page delete re-fetches
+    // the page; a change to a card not on the page is ignored.
     Layer8MTable.prototype._handleChangeNotification = function(msg) {
         var getItemId = this.config.getItemId || function(item) { return item.id; };
         var change = Layer8DWebSocket.applyChange(this.config.data, msg, {
             getId: getItemId,
-            transform: this.config.transformData,
-            pageSize: this.config.rowsPerPage,
-            firstPage: this.currentPage === 1
+            transform: this.config.transformData
         });
-        if (change.missingRecord) {
+        if (change.refetch) {
             this.fetchData(this.currentPage);
             return;
         }
-        if (change.index < 0 && change.totalDelta === 0) return;
-        this.config.totalCount = Math.max(0, (this.config.totalCount || 0) + change.totalDelta);
+        if (change.index < 0) return;
         this.render();
     };
 

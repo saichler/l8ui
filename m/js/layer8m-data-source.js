@@ -208,23 +208,20 @@ limitations under the License.
         }
 
         _handleChangeNotification(msg) {
-            // Apply the change to the loaded items in place and hand the view
-            // its updated items through the same callback a fetch uses, so
-            // every view re-renders live without a re-fetch. Only a change that
-            // arrives without its record falls back to re-fetching.
+            // An update of a loaded item is applied in place and handed to the
+            // view through the same callback a fetch uses; an add or a delete
+            // of a loaded item re-fetches; a change to an item not loaded is
+            // ignored (see Layer8DWebSocket.applyChange).
             var pk = this.primaryKey;
             var change = Layer8DWebSocket.applyChange(this.data, msg, {
                 getId: function(item) { return item[pk]; },
-                transform: this.transformData,
-                pageSize: this.pageSize,
-                firstPage: this.currentPage === 1
+                transform: this.transformData
             });
-            if (change.missingRecord) {
+            if (change.refetch) {
                 this.fetchData(this.currentPage);
                 return;
             }
-            if (change.index < 0 && change.totalDelta === 0) return;
-            this.totalItems = Math.max(0, this.totalItems + change.totalDelta);
+            if (change.index < 0) return;
             if (this._onDataLoaded) {
                 this._onDataLoaded({
                     items: this.data, totalCount: this.totalItems, metadata: null, invalidFilters: []

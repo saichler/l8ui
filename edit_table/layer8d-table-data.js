@@ -226,24 +226,18 @@ Layer8DTable.prototype.getNestedValue = function(obj, key) {
     return value !== null && value !== undefined ? value : '';
 };
 
-// Handle incoming WebSocket change notification: apply it to the page in
-// place from the pushed record. Only a change that arrives without its record
-// (the server could not reconstruct it) falls back to re-fetching the page.
+// Handle incoming WebSocket change notification (see
+// Layer8DWebSocket.applyChange): an update of a row on the page replaces just
+// that row; an add or an on-page delete re-fetches the page; anything else is
+// ignored -- a change to a row not on the page never re-renders the table.
 Layer8DTable.prototype._handleChangeNotification = function(msg) {
     var self = this;
     var change = Layer8DWebSocket.applyChange(this.data, msg, {
         getId: function(item) { return self.getItemId(item); },
-        transform: this.transformData,
-        pageSize: this.pageSize,
-        firstPage: this.currentPage === 1
+        transform: this.transformData
     });
-    if (change.missingRecord) {
+    if (change.refetch) {
         this.fetchData(this.currentPage, this.pageSize);
-        return;
-    }
-    if (change.totalDelta !== 0) {
-        this.totalItems = Math.max(0, (this.totalItems || 0) + change.totalDelta);
-        this.render();
     } else if (change.index >= 0) {
         this.updateRow(change.index, this.data[change.index]);
     }
