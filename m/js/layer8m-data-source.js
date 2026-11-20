@@ -218,7 +218,7 @@ limitations under the License.
                 transform: this.transformData
             });
             if (change.refetch) {
-                this.fetchData(this.currentPage);
+                this._refetchLive();
                 return;
             }
             if (change.index < 0) return;
@@ -227,6 +227,17 @@ limitations under the License.
                     items: this.data, totalCount: this.totalItems, metadata: null, invalidFilters: []
                 });
             }
+        }
+
+        /**
+         * Re-fetch the current page for a pushed change or a reconnect: it
+         * registers again without becoming the newest live component (see
+         * Layer8DWebSocket.registerQuery). _queryBody runs synchronously at
+         * the start of fetchData, so it reads the flag.
+         */
+        _refetchLive() {
+            this._liveRefetch = true;
+            this.fetchData(this.currentPage);
         }
 
         _isLive() {
@@ -239,9 +250,12 @@ limitations under the License.
          */
         _queryBody(query) {
             if (!this._isLive()) return { text: query };
+            const keepPosition = this._liveRefetch === true;
+            this._liveRefetch = false;
             return Layer8DWebSocket.registerQuery(this.registerId, this, this.endpoint, query, {
                 onDetach: () => { this._wsUnsubscribe = null; },
-                onReconnect: () => { this.fetchData(this.currentPage); }
+                onReconnect: () => { this._refetchLive(); },
+                keepPosition: keepPosition
             });
         }
 

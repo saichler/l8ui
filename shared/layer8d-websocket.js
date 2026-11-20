@@ -139,14 +139,26 @@
          *   the same id (a revisit) takes the slot over and detaches the old one
          * @param {string} endpoint - resolved endpoint the query is sent to
          * @param {string} text - the L8QL query text
-         * @param {{onDetach: ?function(), onReconnect: ?function()}} hooks -
+         * @param {{onDetach: ?function(), onReconnect: ?function(),
+         *          keepPosition: ?boolean}} hooks -
          *   onDetach: the component's listeners were removed (evicted or taken
          *   over), so it is no longer live; onReconnect: fetch again after the
-         *   websocket reconnected
+         *   websocket reconnected; keepPosition: a re-fetch the user did not
+         *   ask for (a pushed change, a reconnect) -- a component already live
+         *   keeps its place instead of becoming the newest, so background
+         *   updates never reorder which components stay live
          * @returns {{text: string, register: string, registerId: string}}
          */
         registerQuery: function(id, owner, endpoint, text, hooks) {
             var index = liveIndex(id);
+            if (hooks && hooks.keepPosition && index >= 0 && live[index].owner === owner) {
+                var kept = live[index];
+                kept.onDetach = hooks.onDetach;
+                kept.onReconnect = hooks.onReconnect;
+                kept.queries = kept.queries.filter(function(q) { return q.endpoint !== endpoint; });
+                kept.queries.push({ endpoint: endpoint, text: text });
+                return { text: text, register: 'L8_REGISTER_REGISTER', registerId: id };
+            }
             var entry;
             if (index >= 0) {
                 entry = live.splice(index, 1)[0];

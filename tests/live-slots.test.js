@@ -137,6 +137,32 @@ socket.onclose();
 socket.onopen();
 check('reconnect asks live components to fetch again', reconnected, ['r']);
 
+// A re-fetch the user did not ask for (a pushed change, a reconnect) passes
+// keepPosition: a live component re-registers in its place instead of becoming
+// the newest, so background updates never reorder which components stay live.
+// (probler/plans/websocket-page-scoped-notifications.md)
+{
+    const ids = ['k1', 'k2', 'k3', 'k4', 'k5'];
+    const owners = {};
+    for (const id of ids) {
+        owners[id] = {};
+        WS.registerQuery(id, owners[id], '/erp/40/K', 'select * from K page 0', {});
+    }
+    check('keepPosition setup', WS.liveIds(), ids);
+    const body = WS.registerQuery('k1', owners.k1, '/erp/40/K', 'select * from K page 1', { keepPosition: true });
+    check('keepPosition keeps the slot order', WS.liveIds(), ids);
+    check('keepPosition still registers', body, { text: 'select * from K page 1', register: 'L8_REGISTER_REGISTER', registerId: 'k1' });
+    WS.registerQuery('k1', owners.k1, '/erp/40/K', 'select * from K page 1', {});
+    check('a user fetch still makes it the newest', WS.liveIds(), ['k2', 'k3', 'k4', 'k5', 'k1']);
+    // keepPosition does not apply to a component that is not live (or whose
+    // slot another instance took): it registers as the newest, evicting the oldest.
+    WS.registerQuery('k6', {}, '/erp/40/K', 'select * from K', { keepPosition: true });
+    check('keepPosition of a new component appends it', WS.liveIds(), ['k3', 'k4', 'k5', 'k1', 'k6']);
+    WS.registerQuery('k3', {}, '/erp/40/K', 'select * from K', { keepPosition: true });
+    check('keepPosition by another instance takes the slot over as the newest', WS.liveIds(), ['k4', 'k5', 'k1', 'k6', 'k3']);
+    sentBodies();
+}
+
 if (failures.length) {
     console.error('FAIL\n  ' + failures.join('\n  '));
     process.exit(1);

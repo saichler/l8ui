@@ -62,10 +62,21 @@ Layer8DTable.prototype._isLive = function() {
 Layer8DTable.prototype._queryBody = function(query) {
     if (!this._isLive()) return { text: query };
     var self = this;
+    var keepPosition = this._liveRefetch === true;
+    this._liveRefetch = false;
     return Layer8DWebSocket.registerQuery(this._registerId, this, this.endpoint, query, {
         onDetach: function() { self._wsUnsubscribe = null; },
-        onReconnect: function() { self.fetchData(self.currentPage, self.pageSize); }
+        onReconnect: function() { self._refetchLive(); },
+        keepPosition: keepPosition
     });
+};
+
+// Re-fetch the current page for a pushed change or a reconnect: it registers
+// again without becoming the newest live component (see registerQuery).
+// _queryBody runs synchronously at the start of fetchData, so it reads the flag.
+Layer8DTable.prototype._refetchLive = function() {
+    this._liveRefetch = true;
+    this.fetchData(this.currentPage, this.pageSize);
 };
 
 // Shown again (switching back to this service): a live table becomes the
@@ -237,7 +248,7 @@ Layer8DTable.prototype._handleChangeNotification = function(msg) {
         transform: this.transformData
     });
     if (change.refetch) {
-        this.fetchData(this.currentPage, this.pageSize);
+        this._refetchLive();
     } else if (change.index >= 0) {
         this.updateRow(change.index, this.data[change.index]);
     }

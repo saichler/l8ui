@@ -32,11 +32,20 @@ limitations under the License.
             transform: this.config.transformData
         });
         if (change.refetch) {
-            this.fetchData(this.currentPage);
+            this._refetchLive();
             return;
         }
         if (change.index < 0) return;
         this.render();
+    };
+
+    // Re-fetch the current page for a pushed change or a reconnect: it
+    // registers again without becoming the newest live component (see
+    // Layer8DWebSocket.registerQuery). _queryBody runs synchronously at the
+    // start of fetchData, so it reads the flag.
+    Layer8MTable.prototype._refetchLive = function() {
+        this._liveRefetch = true;
+        this.fetchData(this.currentPage);
     };
 
     Layer8MTable.prototype._isLive = function() {
@@ -48,9 +57,12 @@ limitations under the License.
     Layer8MTable.prototype._queryBody = function(query) {
         if (!this._isLive()) return { text: query };
         var self = this;
+        var keepPosition = this._liveRefetch === true;
+        this._liveRefetch = false;
         return Layer8DWebSocket.registerQuery(this._registerId, this, this.config.endpoint, query, {
             onDetach: function() { self._wsUnsubscribe = null; },
-            onReconnect: function() { self.fetchData(self.currentPage); }
+            onReconnect: function() { self._refetchLive(); },
+            keepPosition: keepPosition
         });
     };
 
