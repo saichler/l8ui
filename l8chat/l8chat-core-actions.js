@@ -28,7 +28,7 @@
     Session.prototype.start = function() {
         if (this.started) return;
         this.started = true;
-        this.api.names([this.store.me]).catch(function() {});
+        this.api.names([this.store.me]);
         this.live.start();
     };
 

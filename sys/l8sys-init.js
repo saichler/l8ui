@@ -51,7 +51,7 @@ limitations under the License.
             L8SysCredentialsCRUD.openAdd(service);
         } else if (service.model === 'IntegrationConfig') {
             L8SysIntegrationCRUD.openAdd(service);
-        } else if (origOpenAdd) {
+        } else {
             origOpenAdd.call(L8Sys, service);
         }
     };
@@ -66,7 +66,7 @@ limitations under the License.
             L8SysCredentialsCRUD.openEdit(service, id);
         } else if (service.model === 'IntegrationConfig') {
             L8SysIntegrationCRUD.openEdit(service, id);
-        } else if (origOpenEdit) {
+        } else {
             origOpenEdit.call(L8Sys, service, id);
         }
     };
@@ -81,7 +81,7 @@ limitations under the License.
             L8SysCredentialsCRUD.confirmDelete(service, id);
         } else if (service.model === 'IntegrationConfig') {
             L8SysIntegrationCRUD.confirmDelete(service, id);
-        } else if (origConfirmDelete) {
+        } else {
             origConfirmDelete.call(L8Sys, service, id);
         }
     };

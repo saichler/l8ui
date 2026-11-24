@@ -30,7 +30,23 @@ limitations under the License.
      * shared/layer8-query-builder.js used by every other L8Query builder in
      * this codebase.
      */
-    internal.buildQuery = function(config, state) {
+    // Client-side filtering (clientFilter / postFilter) must see EVERY candidate
+    // row, not one server page: filtering a single page silently drops the
+    // matches on the other pages and leaves the total wrong. A picker that uses
+    // them loads its whole base set (in server pages of FULL_SET_PAGE rows),
+    // filters it and pages it locally -- meant for small reference sets; a
+    // large one must filter server-side (filterColumn).
+    const FULL_SET_PAGE = 500;
+
+    internal.isClientFiltered = function(config) {
+        return !!(config.clientFilter || config.postFilter);
+    };
+
+    /**
+     * @param {Object} [paging] - {pageSize, pageIndex} overriding the picker's
+     *   own paging (used to load the full base set of a client-filtered picker)
+     */
+    internal.buildQuery = function(config, state, paging) {
         const whereConditions = [];
         const baseWhere = typeof config.baseWhereClause === 'function'
             ? config.baseWhereClause()
@@ -47,8 +63,8 @@ limitations under the License.
             modelName: config.modelName,
             selectClause: config.selectColumns.join(','),
             whereConditions,
-            pageSize: config.pageSize,
-            pageIndex: state.currentPage,
+            pageSize: paging ? paging.pageSize : config.pageSize,
+            pageIndex: paging ? paging.pageIndex : state.currentPage,
             sortClause: config.sortColumn || config.displayColumn,
             sortDescending: state.sortDirection === 'desc',
             realtime: false
@@ -64,39 +80,17 @@ limitations under the License.
             return { data: [], totalItems: 0 };
         }
 
-        const query = internal.buildQuery(config, state);
-
         try {
-            const body = encodeURIComponent(JSON.stringify({ text: query }));
-            const response = await fetch(config.endpoint + '?body=' + body, {
-                method: 'GET',
-                headers: typeof getAuthHeaders === 'function'
-                    ? getAuthHeaders()
-                    : { 'Content-Type': 'application/json' }
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to fetch data');
+            if (internal.isClientFiltered(config)) {
+                return await fetchClientFiltered(config, state);
             }
-
-            const data = await response.json();
+            const data = await fetchPage(config, internal.buildQuery(config, state));
 
             // Extract total count from metadata — see Layer8QueryBuilder.resolvePageTotal
             // for why this must only be read on the first page.
             const totalCount = Layer8QueryBuilder.resolvePageTotal(state.currentPage === 0, data.metadata, state.totalItems);
-
-            // Get items list; apply optional client-side postFilter
-            const rawItems = data.list || [];
-            let items = config.postFilter ? rawItems.filter(config.postFilter) : rawItems;
-
-            // Client-side filter: used when server-side filtering is not feasible
-            // (e.g. searching a computed display value like a formatted date).
-            if (config.clientFilter && state.filterValue && state.filterValue.trim()) {
-                items = items.filter(item => config.clientFilter(item, state.filterValue.trim()));
-            }
-
             return {
-                data: items,
+                data: data.list || [],
                 totalItems: totalCount
             };
         } catch (error) {
@@ -104,6 +98,49 @@ limitations under the License.
             return { data: [], totalItems: 0 };
         }
     };
+
+    /** One GET of the picker's endpoint; throws on a failed response. */
+    async function fetchPage(config, query) {
+        const body = encodeURIComponent(JSON.stringify({ text: query }));
+        const response = await fetch(config.endpoint + '?body=' + body, {
+            method: 'GET',
+            headers: typeof getAuthHeaders === 'function'
+                ? getAuthHeaders()
+                : { 'Content-Type': 'application/json' }
+        });
+        if (!response.ok) {
+            throw new Error('Failed to fetch data');
+        }
+        return response.json();
+    }
+
+    /**
+     * A client-filtered picker: load the whole base set, apply postFilter and
+     * clientFilter to all of it, then return the current page of the result
+     * with its true total.
+     */
+    async function fetchClientFiltered(config, state) {
+        let rows = [];
+        for (let pageIndex = 0; ; pageIndex++) {
+            const data = await fetchPage(config,
+                internal.buildQuery(config, state, { pageSize: FULL_SET_PAGE, pageIndex: pageIndex }));
+            const list = data.list || [];
+            rows = rows.concat(list);
+            if (list.length < FULL_SET_PAGE) break;
+        }
+        if (config.postFilter) {
+            rows = rows.filter(config.postFilter);
+        }
+        const term = state.filterValue ? state.filterValue.trim() : '';
+        if (config.clientFilter && term) {
+            rows = rows.filter(item => config.clientFilter(item, term));
+        }
+        const start = state.currentPage * config.pageSize;
+        return {
+            data: rows.slice(start, start + config.pageSize),
+            totalItems: rows.length
+        };
+    }
 
     /**
      * Refresh picker data and re-render
