@@ -65,11 +65,18 @@
     // ---- registrations ----
 
     // registerConversations registers "my conversations" on every instance.
-    // The fetch itself is limited to one row: the sidebar comes from ChatPeer.
+    // It must receive EVERY change to any of the user's conversations (a new
+    // one, a header update), so it registers a count: the server scopes the
+    // pushes of a paged registration to its displayed page (l8utils
+    // Subscription.wants), but never pages an aggregate. A paged query here
+    // (it was 'limit 1 page 0') got only changes to that one row, so new
+    // conversations stopped appearing live once the user had any. The count
+    // also keeps the fetch to one number; the sidebar comes from ChatPeer.
+    // Pinned by tests/l8chat-registrations.test.js.
     Live.prototype.registerConversations = function() {
         var s = this.s;
         var self = this;
-        return s.api.query('conv', 'select * from ChatConversation where members.userId=' + s.store.me + ' limit 1 page 0',
+        return s.api.query('conv', 'select count(conversationId) from ChatConversation where members.userId=' + s.store.me,
             { id: REG_CONV, owner: this, hooks: this.hooks(this.registerConversations) })
             .then(function() { self.listen(REG_CONV, 'ChatConversation', self.onConversationPush); });
     };
