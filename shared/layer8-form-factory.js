@@ -161,7 +161,7 @@ limitations under the License.
          * @param {boolean} [required] - Whether required
          * @returns {Array} - Single field in array format
          */
-        reference: function(key, label, lookupModel, required) {
+        reference: function(key, label, lookupModel, required, referenceConfig) {
             const field = {
                 key: key,
                 label: label,
@@ -169,6 +169,7 @@ limitations under the License.
                 lookupModel: lookupModel
             };
             if (required) field.required = true;
+            if (referenceConfig) field.referenceConfig = referenceConfig;
             return [field];
         },
 

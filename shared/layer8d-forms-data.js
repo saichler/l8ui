@@ -297,7 +297,7 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
 
     async function fetchRecord(endpoint, primaryKey, id, modelName) {
         const query = encodeURIComponent(JSON.stringify({
-            text: `select * from ${modelName} where ${primaryKey}=${id}`
+            text: `select * from ${modelName} where ${primaryKey}='${id}'`
         }));
 
         const response = await fetch(`${endpoint}?body=${query}`, {
@@ -338,7 +338,7 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
 
     async function deleteRecord(endpoint, id, primaryKey, modelName) {
         const query = {
-            text: `select * from ${modelName} where ${primaryKey}=${id}`
+            text: `select * from ${modelName} where ${primaryKey}='${id}'`
         };
 
         const response = await fetch(endpoint, {

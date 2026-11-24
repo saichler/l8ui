@@ -65,6 +65,12 @@ limitations under the License.
                 if (registryConfig.baseWhereClause && !config.baseWhereClause) {
                     config.baseWhereClause = registryConfig.baseWhereClause;
                 }
+                if (registryConfig.clientFilter && !config.clientFilter) {
+                    config.clientFilter = registryConfig.clientFilter;
+                }
+                if (registryConfig.pageSize && !config.pageSize) {
+                    config.pageSize = registryConfig.pageSize;
+                }
             }
         }
 

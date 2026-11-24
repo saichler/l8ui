@@ -38,7 +38,7 @@ limitations under the License.
         if (baseWhere) {
             whereConditions.push(baseWhere);
         }
-        if (state.filterValue && state.filterValue.trim()) {
+        if (state.filterValue && state.filterValue.trim() && !config.clientFilter) {
             const filterKey = config.filterColumn || config.displayColumn;
             whereConditions.push(`${filterKey}=${state.filterValue.trim()}*`);
         }
@@ -85,8 +85,15 @@ limitations under the License.
             // for why this must only be read on the first page.
             const totalCount = Layer8QueryBuilder.resolvePageTotal(state.currentPage === 0, data.metadata, state.totalItems);
 
-            // Get items list
-            const items = data.list || [];
+            // Get items list; apply optional client-side postFilter
+            const rawItems = data.list || [];
+            let items = config.postFilter ? rawItems.filter(config.postFilter) : rawItems;
+
+            // Client-side filter: used when server-side filtering is not feasible
+            // (e.g. searching a computed display value like a formatted date).
+            if (config.clientFilter && state.filterValue && state.filterValue.trim()) {
+                items = items.filter(item => config.clientFilter(item, state.filterValue.trim()));
+            }
 
             return {
                 data: items,

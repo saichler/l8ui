@@ -41,8 +41,8 @@
 
     Live.prototype.start = function() {
         var self = this;
-        this.registerConversations();
-        this.refreshPeers();
+        this.registerConversations().catch(function() {});
+        this.refreshPeers().catch(function() {});
         this.heartbeat();
         ['mousemove', 'keydown', 'focus', 'touchstart'].forEach(function(evt) {
             window.addEventListener(evt, function() { self.activity(); }, { passive: true });

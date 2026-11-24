@@ -171,6 +171,12 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
                     if (fieldDef.referenceConfig.selectColumns) {
                         config.selectColumns = fieldDef.referenceConfig.selectColumns;
                     }
+                    if (fieldDef.referenceConfig.baseWhereClause) {
+                        config.baseWhereClause = fieldDef.referenceConfig.baseWhereClause;
+                    }
+                    if (fieldDef.referenceConfig.postFilter) {
+                        config.postFilter = fieldDef.referenceConfig.postFilter;
+                    }
                 }
             }
 

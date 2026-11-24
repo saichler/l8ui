@@ -131,8 +131,12 @@ function isMobileDevice() {
 function getRedirectUrl(portalSuffix) {
     var suffix = portalSuffix || '';
     if (suffix) {
-        // Portal suffix from server — use it directly
+        // Portal suffix from server — use it directly.
+        // Mobile portals live at <dir>/m/app.html, not /m/<dir>/app.html.
         if (isMobileDevice()) {
+            if (suffix.endsWith('app.html')) {
+                return '/' + suffix.replace('app.html', 'm/app.html');
+            }
             return '/m/' + suffix;
         }
         return '/' + suffix;

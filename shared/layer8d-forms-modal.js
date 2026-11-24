@@ -175,7 +175,7 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
 
         var bodyEl = document.createElement('div');
         bodyEl.className = 'probler-popup-body';
-        renderFormIntoBody(bodyEl, formDef, record, serviceConfig, {
+        renderFormIntoBody(bodyEl, formDef, record || {}, serviceConfig, {
             isEdit: true, recordId: recordId, onSuccess: onSuccess
         });
 

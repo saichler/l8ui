@@ -83,7 +83,9 @@ limitations under the License.
             title: options.title || `Select ${options.modelName}`,
             displayLabel: options.displayLabel || options.displayColumn,
             filterColumn: options.filterColumn || options.displayColumn,
-            sortColumn: options.sortColumn || options.displayColumn
+            sortColumn: options.sortColumn || options.displayColumn,
+            clientFilter: options.clientFilter || null,
+            postFilter: options.postFilter || null
         };
 
         internal.attachedInputs.set(inputElement, config);
