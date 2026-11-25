@@ -57,4 +57,29 @@ limitations under the License.
         L8Security.enums.ACCOUNT_STATUS_CLASSES = ACCOUNT_STATUS.classes;
     }
 
+    // L8ApiKey L8ApiKeyStatus enum
+    var API_KEY_STATUS = Layer8EnumFactory.create([
+        ['Unspecified', null, ''],
+        ['Active', 'active', 'layer8d-status-active'],
+        ['Revoked', 'revoked', 'layer8d-status-terminated']
+    ]);
+    L8Security.enums.API_KEY_STATUS = API_KEY_STATUS.enum;
+    L8Security.enums.API_KEY_STATUS_CLASSES = API_KEY_STATUS.classes;
+    L8Security.enums.API_KEY_STATUS_ACTIVE = API_KEY_STATUS.values.active;
+    L8Security.enums.API_KEY_STATUS_REVOKED = API_KEY_STATUS.values.revoked;
+
+    // Shared renderers (desktop and mobile)
+    L8Security.render = L8Security.render || {};
+
+    // apiKeyStatus shows Expired for an ACTIVE key whose expiresAt (Unix seconds) has passed.
+    L8Security.render.apiKeyStatus = function(value, item) {
+        var status = Number(value);
+        var expiresAt = Number(item && item.expiresAt) || 0;
+        if (status === L8Security.enums.API_KEY_STATUS_ACTIVE && expiresAt > 0 && expiresAt < Date.now() / 1000) {
+            return Layer8DRenderers.createStatusRenderer({ 1: 'Expired' }, { 1: 'layer8d-status-inactive' })(1);
+        }
+        return Layer8DRenderers.createStatusRenderer(L8Security.enums.API_KEY_STATUS,
+            L8Security.enums.API_KEY_STATUS_CLASSES)(status);
+    };
+
 })();

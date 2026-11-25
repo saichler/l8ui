@@ -36,6 +36,7 @@ limitations under the License.
                 { key: 'users', label: 'Users', icon: '👤', endpoint: '/73/users', model: 'L8User' },
                 { key: 'roles', label: 'Roles', icon: '🛡️', endpoint: '/74/roles', model: 'L8Role' },
                 { key: 'credentials', label: 'Credentials', icon: '🔑', endpoint: '/75/Creds', model: 'L8Credentials' },
+                { key: 'apikeys', label: 'API Keys', icon: '🗝️', endpoint: '/71/ApiKeys', model: 'L8ApiKey', defaultSort: { column: 'createdAt', direction: 'desc' } },
                 { key: 'events', label: 'Events', icon: '📝', endpoint: '/76/Events', model: 'EventRecord', readOnly: true, defaultSort: { column: 'occurredAt', direction: 'desc' } },
                 { key: 'portals', label: 'Portals', icon: '🚪', endpoint: '/77/L8Portal', model: 'L8Portal' }
             ]

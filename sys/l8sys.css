@@ -205,3 +205,31 @@ limitations under the License.
     background: var(--layer8d-bg-secondary, #edf2f7);
     color: var(--layer8d-text, #2d3748);
 }
+
+/* API key show-once box */
+.l8sys-apikey-box {
+    font-family: monospace;
+    font-size: 13px;
+    word-break: break-all;
+    padding: 10px 12px;
+    background: var(--layer8d-bg-input);
+    color: var(--layer8d-text-dark);
+    border: 1px solid var(--layer8d-border);
+    border-radius: 6px;
+    user-select: all;
+}
+
+.l8sys-apikey-warning {
+    margin: 10px 0;
+    padding: 8px 12px;
+    border-left: 3px solid var(--layer8d-warning);
+    color: var(--layer8d-text-dark);
+    font-size: 13px;
+}
+
+.l8sys-apikey-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    margin-top: 12px;
+}

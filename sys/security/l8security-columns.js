@@ -89,6 +89,19 @@ limitations under the License.
         }, { sortKey: false }),
     ];
 
+    // L8ApiKey columns (no column for secretHash or key)
+    L8Security.columns.L8ApiKey = [
+        ...col.id('keyId'),
+        ...col.col('name', 'Name'),
+        ...col.col('userId', 'User ID'),
+        ...col.custom('status', 'Status', function(item) {
+            return L8Security.render.apiKeyStatus(item.status, item);
+        }),
+        ...col.date('createdAt', 'Created'),
+        ...col.date('expiresAt', 'Expires'),
+        ...col.date('lastUsedAt', 'Last Used'),
+    ];
+
     var INTEGRATION_TYPE_NAMES = { 0: 'Unspecified', 1: 'SMTP', 2: 'Webhook', 3: 'Slack', 4: 'PagerDuty', 5: 'Custom' };
 
     // IntegrationConfig columns

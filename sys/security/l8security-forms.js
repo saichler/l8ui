@@ -28,7 +28,8 @@ limitations under the License.
         L8Credentials: 'id',
         EventRecord: 'eventId',
         L8Portal: 'portalId',
-        IntegrationConfig: 'integrationId'
+        IntegrationConfig: 'integrationId',
+        L8ApiKey: 'keyId'
     };
 
     // Minimal form definitions (used by details view / service registry)
@@ -76,6 +77,28 @@ limitations under the License.
                 fields: [
                     { key: 'id', label: 'ID', type: 'text', required: true },
                     { key: 'name', label: 'Name', type: 'text', required: true }
+                ]
+            }]
+        },
+        L8ApiKey: {
+            title: 'API Key',
+            sections: [{
+                title: 'API Key',
+                fields: [
+                    { key: 'name', label: 'Name', type: 'text', required: true },
+                    { key: 'description', label: 'Description', type: 'textarea' },
+                    { key: 'keyId', label: 'Key ID', type: 'text', readOnly: true },
+                    { key: 'userId', label: 'User ID', type: 'text', readOnly: true },
+                    { key: 'status', label: 'Status', type: 'select', options: enums.API_KEY_STATUS || {}, readOnly: true }
+                ]
+            }, {
+                title: 'Activity',
+                fields: [
+                    { key: 'createdAt', label: 'Created', type: 'date', readOnly: true },
+                    { key: 'expiresAt', label: 'Expires', type: 'date', readOnly: true },
+                    { key: 'lastUsedAt', label: 'Last Used', type: 'date', readOnly: true },
+                    { key: 'revokedAt', label: 'Revoked', type: 'date', readOnly: true },
+                    { key: 'revokedBy', label: 'Revoked By', type: 'text', readOnly: true }
                 ]
             }]
         },
