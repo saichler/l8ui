@@ -33,21 +33,7 @@
                 'text/html': new Blob([html], { type: 'text/html' })
             })]).catch(function() { return navigator.clipboard.writeText(text); });
         }
-        if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(text);
-        // Not a secure context: the old way.
-        return new Promise(function(resolve, reject) {
-            var area = document.createElement('textarea');
-            area.value = text;
-            area.setAttribute('readonly', '');
-            area.style.position = 'fixed';
-            area.style.opacity = '0';
-            document.body.appendChild(area);
-            area.select();
-            var ok = false;
-            try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
-            document.body.removeChild(area);
-            if (ok) resolve(); else reject(new Error('the browser refused to copy'));
-        });
+        return Layer8Clipboard.copyText(text);
     }
 
     function copyButton(m, body) {
