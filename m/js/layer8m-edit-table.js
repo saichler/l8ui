@@ -200,9 +200,7 @@ limitations under the License.
             html += '</div>';
 
             if (this.config.statusField) {
-                const statusValue = Layer8MUtils.getNestedValue(item, this.config.statusField);
-                const statusClass = this.config.getStatusClass(statusValue);
-                html += `<span class="status-badge status-${statusClass}">${Layer8MUtils.escapeHtml(Layer8MUtils.formatStatus(statusValue))}</span>`;
+                html += this._renderStatusBadge(item, index);
             }
 
             html += '</div>';

@@ -378,8 +378,7 @@ limitations under the License.
             secondaryCols.forEach(col => { html += `<p class="mobile-table-card-subtitle">${getValue(col)}</p>`; });
             html += '</div>';
             if (this.config.statusField) {
-                const sv = Layer8MUtils.getNestedValue(item, this.config.statusField);
-                html += `<span class="status-badge status-${this.config.getStatusClass(sv)}">${Layer8MUtils.escapeHtml(Layer8MUtils.formatStatus(sv))}</span>`;
+                html += this._renderStatusBadge(item, index);
             }
             html += '</div>';
             if (bodyCols.length > 0) {
@@ -388,6 +387,16 @@ limitations under the License.
                 html += '</div>';
             }
             return html + '</div>';
+        }
+
+        // The card's status badge. When the model's columns define the status
+        // field, the badge is that column's render, so it shows the model's own
+        // status labels; the generic status map applies only to models without one.
+        _renderStatusBadge(item, index) {
+            const statusCol = this.config.columns.find(c => c.key === this.config.statusField && c.render);
+            if (statusCol) return statusCol.render(item, index);
+            const sv = Layer8MUtils.getNestedValue(item, this.config.statusField);
+            return `<span class="status-badge status-${this.config.getStatusClass(sv)}">${Layer8MUtils.escapeHtml(Layer8MUtils.formatStatus(sv))}</span>`;
         }
 
         _renderExportBar() {

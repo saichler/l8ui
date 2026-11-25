@@ -73,10 +73,11 @@ limitations under the License.
         };
     }
 
-    // Card columns for Layer8MTable
+    // Card columns for Layer8MTable. Status is hidden: the card's status badge
+    // renders it (Active, Revoked, Expired), so it is not repeated in the card.
     var columns = [
         { key: 'name', label: 'Name', primary: true },
-        { key: 'status', label: 'Status', secondary: true,
+        { key: 'status', label: 'Status', hidden: true,
             render: function(item) { return L8Security.render.apiKeyStatus(item.status, item); } },
         { key: 'expiresAt', label: 'Expires', render: function(item) { return esc(formatTime(item.expiresAt)); } },
         { key: 'lastUsedAt', label: 'Last Used', render: function(item) { return esc(formatTime(item.lastUsedAt)); } }
