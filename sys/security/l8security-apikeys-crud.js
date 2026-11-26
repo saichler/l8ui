@@ -47,11 +47,11 @@ limitations under the License.
     function nameFieldsHtml(name, description) {
         return '<div class="form-group">' +
             '<label for="l8sys-apikey-name">Name</label>' +
-            '<input type="text" id="l8sys-apikey-name" name="l8sys-apikey-name" maxlength="64" value="' + escAttr(name) + '" required>' +
+            '<input type="text" id="l8sys-apikey-name" name="name" maxlength="64" value="' + escAttr(name) + '" required>' +
             '</div>' +
             '<div class="form-group">' +
             '<label for="l8sys-apikey-description">Description</label>' +
-            '<textarea id="l8sys-apikey-description" name="l8sys-apikey-description" maxlength="512">' + esc(description) + '</textarea>' +
+            '<textarea id="l8sys-apikey-description" name="description" maxlength="512">' + esc(description) + '</textarea>' +
             '</div>';
     }
 
@@ -75,8 +75,8 @@ limitations under the License.
 
     function readNameFields(body) {
         return {
-            name: (body.querySelector('#l8sys-apikey-name').value || '').trim(),
-            description: (body.querySelector('#l8sys-apikey-description').value || '').trim()
+            name: (body.querySelector('[name="name"]').value || '').trim(),
+            description: (body.querySelector('[name="description"]').value || '').trim()
         };
     }
 
@@ -94,10 +94,12 @@ limitations under the License.
 
     // ===== Create =====
 
+    // The Add form is the model's form (L8Security.forms.L8ApiKey): Name and
+    // Description are inputs, the server-set fields render display-only and empty.
     function openAdd(service) {
         Layer8DPopup.show({
             title: 'Add API Key',
-            content: nameFieldsHtml('', '') + lifetimeHtml(),
+            content: Layer8DFormsFields.generateFormHtml(L8Security.forms.L8ApiKey, {}) + lifetimeHtml(),
             size: 'medium',
             showFooter: true,
             saveButtonText: 'Create',

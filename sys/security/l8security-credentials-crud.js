@@ -103,8 +103,8 @@ limitations under the License.
     function getFormValues() {
         var body = Layer8DPopup.getBody();
         if (!body) return { id: '', name: '' };
-        var idEl = body.querySelector('#sys-cred-id');
-        var nameEl = body.querySelector('#sys-cred-name');
+        var idEl = body.querySelector('#l8sys-cred-id');
+        var nameEl = body.querySelector('#l8sys-cred-name');
         return {
             id: idEl ? idEl.value : '',
             name: nameEl ? nameEl.value : ''
@@ -194,8 +194,8 @@ limitations under the License.
         var body = Layer8DPopup.getBody();
         if (!body) return;
 
-        var idEl = body.querySelector('#sys-cred-id');
-        var nameEl = body.querySelector('#sys-cred-name');
+        var idEl = body.querySelector('#l8sys-cred-id');
+        var nameEl = body.querySelector('#l8sys-cred-name');
         var id = idEl ? idEl.value.trim() : '';
         var name = nameEl ? nameEl.value.trim() : '';
 
@@ -289,10 +289,10 @@ limitations under the License.
         var body = Layer8DPopup.getBody();
         if (!body) return;
 
-        var key = (body.querySelector('#sys-cred-item-key') || {}).value || '';
-        var aside = (body.querySelector('#sys-cred-item-aside') || {}).value || '';
-        var yside = (body.querySelector('#sys-cred-item-yside') || {}).value || '';
-        var zside = (body.querySelector('#sys-cred-item-zside') || {}).value || '';
+        var key = (body.querySelector('#l8sys-cred-item-key') || {}).value || '';
+        var aside = (body.querySelector('#l8sys-cred-item-aside') || {}).value || '';
+        var yside = (body.querySelector('#l8sys-cred-item-yside') || {}).value || '';
+        var zside = (body.querySelector('#l8sys-cred-item-zside') || {}).value || '';
 
         key = key.trim();
         if (!key) {
