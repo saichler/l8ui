@@ -16,6 +16,7 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
 
     function buildForm(record) {
         record = record || {};
+        var attrs = record.attributes || {};
         var typeOptions = Object.keys(INTEGRATION_TYPES).map(function(k) {
             var sel = String(record.type || 0) === k ? ' selected' : '';
             return '<option value="' + k + '"' + sel + '>' + INTEGRATION_TYPES[k] + '</option>';
@@ -41,8 +42,20 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
             '<input type="text" data-field="fromName" value="' + esc(record.fromName || '') + '" class="layer8d-input" placeholder="Zumba with Erika"/></div>' +
             '</div>' +
             '<div class="layer8d-form-section"><div class="layer8d-form-section-title">Credentials</div>' +
+            '<div class="layer8d-form-row"><label>SMTP Username</label>' +
+            '<input type="text" data-field="attributes.username" value="' + esc(attrs.username || '') + '" class="layer8d-input"/></div>' +
+            '<div class="layer8d-form-row"><label>SMTP Password</label>' +
+            '<input type="text" data-field="attributes.password" value="' + esc(attrs.password || '') + '" class="layer8d-input"/></div>' +
             '<div class="layer8d-form-row"><label>Credential Key (security store)</label>' +
             '<input type="text" data-field="credentialKey" value="' + esc(record.credentialKey || '') + '" class="layer8d-input" placeholder="smtp"/></div>' +
+            '</div>' +
+            '<div class="layer8d-form-section"><div class="layer8d-form-section-title">Webhook / Advanced</div>' +
+            '<div class="layer8d-form-row"><label>URL</label>' +
+            '<input type="text" data-field="url" value="' + esc(record.url || '') + '" class="layer8d-input"/></div>' +
+            '<div class="layer8d-form-row"><label>Retry Count</label>' +
+            '<input type="number" data-field="retryCount" value="' + (record.retryCount || '') + '" class="layer8d-input"/></div>' +
+            '<div class="layer8d-form-row"><label>Timeout (ms)</label>' +
+            '<input type="number" data-field="timeoutMs" value="' + (record.timeoutMs || '') + '" class="layer8d-input"/></div>' +
             '</div>' +
             '</div>';
     }
@@ -51,18 +64,29 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
         return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
     }
 
-    function collectData(container) {
+    // attributes is a map on the model: attributes.<k> inputs go into it, on
+    // top of the record's other attribute entries so an edit keeps them.
+    function collectData(container, record) {
         var data = {};
+        var attrs = Object.assign({}, (record && record.attributes) || {});
         container.querySelectorAll('[data-field]').forEach(function(el) {
             var key = el.getAttribute('data-field');
+            var value;
             if (el.type === 'checkbox') {
-                data[key] = el.checked;
+                value = el.checked;
             } else if (el.type === 'number') {
-                data[key] = el.value ? parseInt(el.value, 10) : 0;
+                value = el.value ? parseInt(el.value, 10) : 0;
             } else {
-                data[key] = el.value;
+                value = el.value;
+            }
+            if (key.indexOf('attributes.') === 0) {
+                var k = key.substring('attributes.'.length);
+                if (value) attrs[k] = value; else delete attrs[k];
+            } else {
+                data[key] = value;
             }
         });
+        data.attributes = attrs;
         return data;
     }
 
@@ -108,7 +132,7 @@ Layer 8 Ecosystem is licensed under the Apache License, Version 2.0.
                 saveButtonText: 'Save',
                 cancelButtonText: 'Cancel',
                 onSave: function() {
-                    var data = collectData(bodyEl);
+                    var data = collectData(bodyEl, record);
                     data.integrationId = id;
                     if (!data.name) {
                         Layer8DNotification.error('Name is required');
